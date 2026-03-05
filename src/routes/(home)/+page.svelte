@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import * as styles from './home.css';
+  import { CardCarousel, type CardCarouselItem } from '$lib/components/atoms';
 
   let heroVideoEl: HTMLVideoElement | null = null;
 
@@ -23,28 +24,30 @@
   let showGridABreak = false;
   let showGridWorks = false;
 
-  type CarouselItem = {
-    src: string;
-    alt: string;
-    title: string;
-  };
-
-  //カルーセル用データ
-  const carouselItems: CarouselItem[] = [
+  const carouselItems: CardCarouselItem[] = [
     {
       src: '/images/work/work-1.webp',
       alt: 'work-1',
-      title: 'work-1'
+      title: 'work-1',
+      href: '/test1'
     },
     {
       src: '/images/work/work-1.webp',
       alt: 'work-2',
-      title: 'work-2'
+      title: 'work-2',
+      href: '/test2'
     },
     {
       src: '/images/work/work-1.webp',
       alt: 'work-3',
-      title: 'work-3'
+      title: 'work-3',
+      href: '/test3'
+    },
+    {
+      src: '/images/work/work-1.webp',
+      alt: 'work-4',
+      title: 'work-4',
+      href: '/test4'
     }
   ];
 
@@ -297,6 +300,20 @@
   </section>
 
   <section class={styles.sectionBottom}>
-    <div class={styles.contentInner}>カルーセルを追記予定</div>
+    <div class={styles.contentInner}>
+      <div class={styles.headerRow}>
+        <h1>Works</h1>
+        <button>List</button>
+      </div>
+      <CardCarousel items={carouselItems} />
+    </div>
+  </section>
+
+  <section>
+    <div class={styles.contentInner}>News実装予定</div>
+  </section>
+
+  <section>
+    <div class={styles.contentInner}>お問い合わせフォーム実装予定</div>
   </section>
 </main>
