@@ -8,6 +8,25 @@ globalStyle('html, body', {
   background: '#050b16'
 });
 
+/* Common */
+export const sectionBottom = style({
+  marginBottom: '300px'
+});
+
+export const contentInner = style({
+  width: '100%',
+  maxWidth: '1100px',
+  padding: '0 clamp(20px, 5vw, 60px)',
+  margin: '0 auto',
+  color: 'white'
+});
+
+export const headerRow = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between'
+});
+
 /* intro */
 export const openingOverlay = style({
   position: 'fixed',
@@ -68,19 +87,6 @@ export const heroCover = style({
   willChange: 'transform'
 });
 
-/* Section */
-export const sectionBottom = style({
-  paddingBottom: '300px'
-});
-
-export const contentInner = style({
-  width: '100%',
-  maxWidth: '1100px',
-  padding: '0 clamp(20px, 5vw, 60px)',
-  margin: '0 auto',
-  color: 'white'
-});
-
 /* Msg */
 export const msgWrapper = style({
   position: 'relative',
@@ -128,7 +134,7 @@ export const showMsg = style({
   transform: 'translateY(0)'
 });
 
-/* grid section */
+/* grid img*/
 export const grid = style({
   vars: {
     '--big': 'clamp(440px, 60vw, 540px)',
