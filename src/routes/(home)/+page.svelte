@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import * as styles from './home.css';
-  import { CardCarousel, type CardCarouselItem } from '$lib/components/atoms';
+  import { Button, CardCarousel, type CardCarouselItem } from '$lib/components/atoms';
 
   let heroVideoEl: HTMLVideoElement | null = null;
 
@@ -226,6 +226,7 @@
 
   <section class={styles.sectionBottom} bind:this={sectionGridEl}>
     <div class={styles.contentInner}>
+      <h1>Contents</h1>
       <div class={styles.grid}>
         <a
           href="/about-me"
@@ -303,7 +304,7 @@
     <div class={styles.contentInner}>
       <div class={styles.headerRow}>
         <h1>Works</h1>
-        <button>List</button>
+        <Button label={'Work List'} />
       </div>
       <CardCarousel items={carouselItems} />
     </div>

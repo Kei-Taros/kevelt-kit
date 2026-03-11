@@ -24,7 +24,8 @@ export const contentInner = style({
 export const headerRow = style({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  marginBottom: '24px'
 });
 
 /* intro */
