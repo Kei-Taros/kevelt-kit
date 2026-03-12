@@ -10,7 +10,11 @@ globalStyle('html, body', {
 
 /* Common */
 export const sectionBottom = style({
-  marginBottom: '300px'
+  marginBottom: '280px'
+});
+
+export const headingBottom = style({
+  marginBottom: '32px'
 });
 
 export const contentInner = style({
@@ -25,7 +29,7 @@ export const headerRow = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: '24px'
+  marginBottom: '32px'
 });
 
 /* intro */
