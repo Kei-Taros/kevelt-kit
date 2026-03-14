@@ -1,12 +1,18 @@
 <script lang="ts">
-  import favicon from '$lib/assets/favicon.ico';
+  import { Header, Footer } from '$lib/components/templates';
 
   let { children } = $props();
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href="/images/favicon/favicon.ico" />
   <title>KeveltKit</title>
 </svelte:head>
 
-{@render children()}
+<Header showOffset={1000} />
+
+<main>
+  {@render children()}
+</main>
+
+<Footer />
