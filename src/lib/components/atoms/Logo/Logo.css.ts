@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const logo = style({
   display: 'inline-flex',
@@ -16,7 +17,7 @@ export const image = style({
 export const label = style({
   fontSize: '24px',
   fontWeight: 'bold',
-  color: '#fff',
+  color: colors.text.primary,
   textDecoration: 'none'
 });
 

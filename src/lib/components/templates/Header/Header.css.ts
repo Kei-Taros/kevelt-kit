@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const header = style({
   position: 'fixed',
@@ -39,7 +40,7 @@ export const nav = style({
 });
 
 export const link = style({
-  color: '#fff',
+  color: colors.text.primary,
   textDecoration: 'none',
   fontSize: '16px',
   transition: 'opacity 0.2s',

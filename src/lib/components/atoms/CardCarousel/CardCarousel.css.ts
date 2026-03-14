@@ -1,4 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 globalStyle(':root', {
   vars: {
@@ -68,7 +69,7 @@ export const slideOverlayActive = style({
 });
 
 export const slideTitle = style({
-  color: '#fff',
+  color: colors.text.primary,
   fontSize: '2rem',
   letterSpacing: '0.06em',
   textTransform: 'uppercase'
@@ -109,7 +110,7 @@ export const button = style({
   borderColor: 'rgba(255, 255, 255, 0.6)',
   width: '3.6rem',
   height: '3.6rem',
-  color: '#ffffff',
+  color: colors.text.primary,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -168,12 +169,13 @@ globalStyle(`${dot}::before`, {
   border: '0.2rem solid rgba(255,255,255,0.25)',
   position: 'absolute'
 });
+
 globalStyle(`${dot}::after`, {
   content: '',
   width: '1.4rem',
   height: '1.4rem',
   borderRadius: '50%',
-  border: '0.2rem solid #fff',
+  border: `0.2rem solid ${colors.background.secondary}`,
   opacity: 0,
   transition: 'opacity 160ms ease',
   position: 'absolute'

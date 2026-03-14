@@ -1,11 +1,12 @@
 import { style, globalStyle } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 globalStyle('html, body', {
   margin: 0,
   padding: 0,
   width: '100%',
   height: '100%',
-  background: '#050b16'
+  background: colors.background.primary
 });
 
 /* Common */
@@ -37,7 +38,7 @@ export const openingOverlay = style({
   position: 'fixed',
   inset: 0,
   zIndex: 9999,
-  background: '#ffffff',
+  background: colors.background.secondary,
   opacity: 1,
   transition: 'opacity 1000ms ease',
   pointerEvents: 'auto',
@@ -190,7 +191,7 @@ export const gridLabel = style({
   position: 'absolute',
   left: '16px',
   bottom: '16px',
-  color: '#fff',
+  color: colors.text.primary,
   fontWeight: 700,
   fontSize: '22px',
   opacity: 0,

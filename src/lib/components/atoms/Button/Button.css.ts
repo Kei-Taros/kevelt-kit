@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const button = style({
   border: 'none',
@@ -37,8 +38,8 @@ export const button = style({
 
 /* primary */
 export const primary = style({
-  background: '#ffb13b',
-  color: '#ffffff',
+  background: colors.brand[500],
+  color: colors.text.primary,
   border: '4px solid transparent',
   transition: 'border-color 0.3s ease, color 0.3s ease',
 
@@ -50,7 +51,7 @@ export const primary = style({
       left: '-100%',
       width: '100%',
       height: '100%',
-      background: '#ff8c00',
+      background: colors.brand[600],
       transition: 'left 0.4s ease',
       zIndex: -1
     },
@@ -60,15 +61,15 @@ export const primary = style({
     },
 
     '&:hover': {
-      border: '4px solid #ffffff'
+      border: `4px solid ${colors.background.secondary}`
     }
   }
 });
 
 export const secondary = style({
-  background: '#ffffff',
-  color: '#ff8c00',
-  border: '4px solid #ff8c00',
+  background: colors.background.secondary,
+  color: colors.brand[600],
+  border: `4px solid ${colors.brand[600]}`,
   position: 'relative',
   overflow: 'hidden',
   transition: 'color 0.3s ease, border-color 0.3s ease',
@@ -81,7 +82,7 @@ export const secondary = style({
       left: '-100%',
       width: '100%',
       height: '100%',
-      background: '#ffb13b',
+      background: colors.brand[500],
       transition: 'left 0.4s ease',
       zIndex: -1
     },
@@ -91,8 +92,8 @@ export const secondary = style({
     },
 
     '&:hover': {
-      color: '#ffffff',
-      borderColor: '#ffb13b'
+      color: colors.text.primary,
+      borderColor: colors.brand[500]
     }
   }
 });
