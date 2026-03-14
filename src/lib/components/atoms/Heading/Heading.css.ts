@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const h1 = style({
   position: 'relative',
@@ -15,7 +16,7 @@ export const h1 = style({
       bottom: 0,
       width: '150%',
       height: '13px',
-      background: '#ff9500',
+      background: colors.brand[600],
       zIndex: -1
     }
   }
@@ -24,8 +25,8 @@ export const h1 = style({
 export const h2 = style({
   display: 'inline-block',
   padding: '0.3em 1.0em',
-  borderTop: '3px solid #ff9500',
-  borderBottom: '3px solid #ff9500',
+  borderTop: `3px solid ${colors.brand[600]}`,
+  borderBottom: `3px solid ${colors.brand[600]}`,
   fontSize: '28px'
 });
 
@@ -33,7 +34,7 @@ export const h3 = style({
   position: 'relative',
   padding: '0.2em 1.0em 0.2em 1.4em',
   background: 'transparent',
-  borderLeft: 'solid 3px #ff9500',
+  borderLeft: `3px solid ${colors.brand[600]}`,
   fontSize: '22px',
 
   selectors: {
@@ -44,7 +45,7 @@ export const h3 = style({
       top: 0,
       height: '100%',
       width: '3px',
-      background: '#ff9500'
+      background: colors.brand[600]
     },
 
     '&::after': {
@@ -54,7 +55,7 @@ export const h3 = style({
       top: 0,
       height: '100%',
       width: '3px',
-      background: '#ff9500'
+      background: colors.brand[600]
     }
   }
 });
