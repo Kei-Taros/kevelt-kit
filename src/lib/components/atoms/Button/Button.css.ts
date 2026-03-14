@@ -69,6 +69,9 @@ export const secondary = style({
   background: '#ffffff',
   color: '#ff8c00',
   border: '4px solid #ff8c00',
+  position: 'relative',
+  overflow: 'hidden',
+  transition: 'color 0.3s ease, border-color 0.3s ease',
 
   selectors: {
     '&::before': {
@@ -78,7 +81,7 @@ export const secondary = style({
       left: '-100%',
       width: '100%',
       height: '100%',
-      background: '##ffb13b',
+      background: '#ffb13b',
       transition: 'left 0.4s ease',
       zIndex: -1
     },
@@ -88,7 +91,8 @@ export const secondary = style({
     },
 
     '&:hover': {
-      color: '#ffffff'
+      color: '#ffffff',
+      borderColor: '#ffb13b'
     }
   }
 });
