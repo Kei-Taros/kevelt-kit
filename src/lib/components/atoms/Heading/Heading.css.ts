@@ -3,6 +3,7 @@ import { colors } from '$lib/styles/theme/colors.css';
 
 export const h1 = style({
   position: 'relative',
+  zIndex: 0,
   display: 'inline-block',
   lineHeight: 1.4,
   paddingBottom: '2px',
