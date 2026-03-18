@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Header, Footer } from '$lib/components/templates';
   import { page } from '$app/state';
+  import '$lib/styles/global.css';
 
   let { children } = $props();
 
