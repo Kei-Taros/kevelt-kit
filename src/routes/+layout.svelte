@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Header, Footer } from '$lib/components/templates';
+  import { Header, Footer, RouteTransition } from '$lib/components/templates';
   import { page } from '$app/state';
+  import * as spacing from '$lib/styles/spacing.css';
   import '$lib/styles/global.css';
 
   let { children } = $props();
@@ -13,14 +14,22 @@
   <title>KeveltKit</title>
 </svelte:head>
 
+<RouteTransition />
+
 {#if isHome}
   <Header showOffset={1000} />
 {:else}
   <Header />
 {/if}
 
-<main>
-  {@render children()}
-</main>
+{#if isHome}
+  <main>
+    {@render children()}
+  </main>
+{:else}
+  <main class={spacing.mtXXL}>
+    {@render children()}
+  </main>
+{/if}
 
 <Footer />
