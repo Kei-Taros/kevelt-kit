@@ -188,8 +188,8 @@
       playsinline
       preload="auto"
     >
-      <source src="/videos/intro.webm" type="video/webm" />
-      <source src="/videos/intro.mp4" type="video/mp4" />
+      <source src="/videos/intro/intro.webm" type="video/webm" />
+      <source src="/videos/intro/intro.mp4" type="video/mp4" />
     </video>
   </div>
 {/if}
@@ -197,8 +197,8 @@
 <section class={styles.sectionBottom}>
   <div class={styles.heroWrapper}>
     <video bind:this={heroVideoEl} class={styles.heroVideo} muted loop playsinline preload="auto">
-      <source src="/videos/hero-video.webm" type="video/webm" />
-      <source src="/videos/hero-video.mp4" type="video/mp4" />
+      <source src="/videos/hero-video/hero-video.webm" type="video/webm" />
+      <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
     </video>
     <img
       src="/images/hero-cover/hero-cover.webp"
