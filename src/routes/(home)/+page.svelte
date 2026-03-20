@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import * as styles from './home.css';
-  import { Button, CardCarousel, Heading, type CardCarouselItem } from '$lib/components/atoms';
+  import { Button, Heading } from '$lib/components/atoms';
+  import { CardCarousel, type CardCarouselItem } from '$lib/components/Molecule';
 
   let heroVideoEl: HTMLVideoElement | null = null;
 
