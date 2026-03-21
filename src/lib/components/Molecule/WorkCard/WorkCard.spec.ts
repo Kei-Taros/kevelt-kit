@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import { describe, test, expect, vi } from 'vitest';
 import WorkCard from './WorkCard.svelte';
-import * as styles from './WorkCard.css';
 import type { WorkCardItem } from './WorkCard.types';
 
 const mockItem: WorkCardItem = {
+  id: 1,
   src: '/images/works/test.jpg',
   alt: '案件画像',
   title: 'EC管理画面開発',
