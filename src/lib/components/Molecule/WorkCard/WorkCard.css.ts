@@ -4,6 +4,7 @@ export const card = style({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
+  height: '100%',
   padding: 0,
   border: '1px solid rgba(255, 255, 255, 0.08)',
   borderRadius: '14px',
