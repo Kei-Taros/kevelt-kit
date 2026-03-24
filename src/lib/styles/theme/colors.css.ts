@@ -8,6 +8,7 @@ export const colors = createGlobalTheme(':root', {
 
   text: {
     primary: '#ffffff',
+    secondary: '#000000',
     copyright: '#d3d3d3'
   },
 
