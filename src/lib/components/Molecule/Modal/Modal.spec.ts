@@ -116,4 +116,26 @@ describe('Modal', () => {
 
     expect(closeModal).not.toHaveBeenCalled();
   });
+
+  test('isOpen=trueの場合、bodyのスクロールが無効化される', () => {
+    render(Modal, {
+      props: {
+        isOpen: true,
+        closeModal: vi.fn()
+      }
+    });
+
+    expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  test('isOpen=falseの場合、bodyのスクロールが有効なままになる', () => {
+    render(Modal, {
+      props: {
+        isOpen: false,
+        closeModal: vi.fn()
+      }
+    });
+
+    expect(document.body.style.overflow).toBe('');
+  });
 });
