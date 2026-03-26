@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as styles from './WorkCard.css';
+  import { Tag } from '$lib/components/atoms';
   import type { HTMLButtonAttributes } from 'svelte/elements';
   import type { WorkCardItem } from './WorkCard.types';
 
@@ -21,7 +22,7 @@
 
     <div class={styles.tagList}>
       {#each item.tags as tag}
-        <span class={styles.tag}>{tag}</span>
+        <Tag label={tag} />
       {/each}
     </div>
   </div>
