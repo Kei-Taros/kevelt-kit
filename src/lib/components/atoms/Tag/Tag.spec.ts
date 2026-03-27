@@ -17,7 +17,7 @@ describe('Tag', () => {
 
   test('childrenが渡された場合、labelではなくchildrenが表示される', () => {
     const children = createRawSnippet(() => ({
-      render: () => 'GraphQL'
+      render: () => '<span>GraphQL</span>'
     }));
 
     render(Tag, {

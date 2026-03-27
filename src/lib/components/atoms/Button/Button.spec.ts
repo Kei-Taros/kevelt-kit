@@ -12,7 +12,7 @@ describe('Button', () => {
 
   test('childrenが渡された場合、labelではなくchildrenが表示される', () => {
     const children = createRawSnippet(() => ({
-      render: () => '子要素'
+      render: () => '<span>子要素</span>'
     }));
 
     render(Button, { props: { label: '保存', children } });
