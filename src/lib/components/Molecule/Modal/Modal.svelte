@@ -30,11 +30,29 @@
     closeModal();
   };
 
+  const toggleBodyScroll = (locked: boolean) => {
+    document.body.style.overflow = locked ? 'hidden' : '';
+  };
+
   onMount(() => {
     window.addEventListener('keydown', handleKeydown);
 
     return () => {
       window.removeEventListener('keydown', handleKeydown);
+      toggleBodyScroll(false);
+    };
+  });
+
+  $effect(() => {
+    if (!isOpen) {
+      toggleBodyScroll(false);
+      return;
+    }
+
+    toggleBodyScroll(true);
+
+    return () => {
+      toggleBodyScroll(false);
     };
   });
 </script>

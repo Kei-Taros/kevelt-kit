@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const card = style({
   display: 'flex',
@@ -62,7 +63,7 @@ export const body = style({
 
 export const title = style({
   margin: 0,
-  color: '#ffffff',
+  color: colors.text.primary,
   fontSize: '24px',
   fontWeight: 700,
   marginBottom: '12px'
@@ -81,18 +82,4 @@ export const tagList = style({
   display: 'flex',
   flexWrap: 'wrap',
   gap: '10px'
-});
-
-export const tag = style({
-  display: 'inline-flex',
-  alignItems: 'center',
-  minHeight: '32px',
-  padding: '0 12px',
-  border: '1px solid rgba(255, 255, 255, 0.06)',
-  borderRadius: '8px',
-  background: 'rgba(255, 255, 255, 0.09)',
-  color: '#ffffff',
-  fontSize: '15px',
-  fontWeight: 700,
-  whiteSpace: 'nowrap'
 });

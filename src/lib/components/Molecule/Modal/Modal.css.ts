@@ -1,4 +1,4 @@
-import { style, keyframes } from '@vanilla-extract/css';
+import { style, keyframes, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
 
 export const overlay = style({
@@ -15,7 +15,9 @@ export const overlay = style({
 export const content = style({
   position: 'relative',
   width: '100%',
-  maxWidth: '720px'
+  maxWidth: '1000px',
+  borderRadius: '16px',
+  overflow: 'hidden'
 });
 
 export const contentInner = style({
@@ -23,16 +25,18 @@ export const contentInner = style({
   maxHeight: 'calc(100vh - 48px)',
   overflowY: 'auto',
   borderRadius: '16px',
-  background: colors.background.secondary,
-  color: '#000000',
-  padding: '24px',
-  boxSizing: 'border-box'
+  background: '#1a2032',
+  color: '#ffffff',
+  padding: '40px 50px',
+  boxSizing: 'border-box',
+
+  scrollbarColor: 'rgba(255,255,255,0.5) #141928'
 });
 
 export const closeButton = style({
   position: 'absolute',
-  top: '10px',
-  right: '10px',
+  top: '20px',
+  right: '20px',
   width: '40px',
   height: '40px',
   border: 'none',
@@ -61,7 +65,7 @@ export const closeIcon = style({
   height: '40px',
   boxSizing: 'border-box',
   borderRadius: '50%',
-  border: '2px solid #666',
+  border: '2px solid #c0bfbf',
   transformOrigin: 'center',
 
   selectors: {
@@ -76,7 +80,7 @@ export const closeIcon = style({
       left: '50%',
       width: '18px',
       height: '2px',
-      background: '#666',
+      background: '#c0bfbf',
       transformOrigin: 'center'
     },
     '&::before': {
@@ -86,4 +90,24 @@ export const closeIcon = style({
       transform: 'translate(-50%, -50%) rotate(-45deg)'
     }
   }
+});
+
+// スクロールバー
+globalStyle(`${contentInner}::-webkit-scrollbar`, {
+  height: '8px',
+  width: '8px'
+});
+
+globalStyle(`${contentInner}::-webkit-scrollbar-track`, {
+  background: '#141928'
+});
+
+globalStyle(`${contentInner}::-webkit-scrollbar-thumb`, {
+  background: 'rgba(255,255,255,0.5)',
+  borderRadius: '9999px',
+  border: '2px solid #141928'
+});
+
+globalStyle(`${contentInner}::-webkit-scrollbar-thumb:hover`, {
+  background: 'rgba(255,255,255,0.9)'
 });

@@ -12,7 +12,7 @@ describe('Heading', () => {
 
   test('childrenが渡された場合、labelではなくchildrenが表示さる', () => {
     const children = createRawSnippet(() => ({
-      render: () => '子要素'
+      render: () => '<span>子要素</span>'
     }));
 
     render(Heading, { props: { label: 'Contents', children, as: 'h2' } });
