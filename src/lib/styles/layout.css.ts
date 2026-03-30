@@ -6,5 +6,5 @@ export const contentInner = style({
   padding: '0 clamp(20px, 5vw, 60px)',
   margin: '0 auto',
   color: 'white',
-  marginBottom: '280px'
+  marginBottom: '100px'
 });
