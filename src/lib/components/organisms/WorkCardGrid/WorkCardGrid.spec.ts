@@ -54,11 +54,11 @@ describe('WorkCardGrid', () => {
     render(WorkCardGrid, { props: { items: mockItems } });
 
     const allButton = screen.getByRole('button', { name: 'All' });
-    const filterList = allButton.parentElement;
+    const filterContainer = allButton.parentElement?.parentElement;
 
-    expect(filterList).not.toBeNull();
+    expect(filterContainer).not.toBeNull();
 
-    const filterButtons = within(filterList as HTMLDivElement).getAllByRole('button');
+    const filterButtons = within(filterContainer as HTMLDivElement).getAllByRole('button');
     const filterButtonNames = filterButtons.map((button) => button.textContent?.trim() ?? '');
 
     const allTags = Array.from(new Set(mockItems.flatMap((item) => item.tags)));
