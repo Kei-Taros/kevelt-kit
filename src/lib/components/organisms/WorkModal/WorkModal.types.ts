@@ -4,6 +4,7 @@ export interface WorkBadge {
 }
 
 export interface WorkDetail {
+  id: number;
   title: string;
   src: string;
   summary: string;

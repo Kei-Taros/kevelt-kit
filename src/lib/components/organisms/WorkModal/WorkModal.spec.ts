@@ -6,6 +6,7 @@ import type { WorkDetail } from './WorkModal.types';
 
 describe('WorkModal', () => {
   const workDetail: WorkDetail = {
+    id: 1,
     title: '会員向けWebサービス開発',
     src: '/images/works/work-01.jpg',
     summary: '会員向けWebサービスのフロントエンド開発を担当。',
@@ -28,6 +29,8 @@ describe('WorkModal', () => {
     });
 
   test('isOpenがtrueの場合、案件タイトルと概要が表示される', () => {
+    renderComponent();
+
     expect(
       screen.getByRole('heading', {
         level: 2,
