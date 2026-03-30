@@ -20,7 +20,10 @@
     </section>
 
     <section class={styles.summary}>
-      <img src={workDetail.src} alt={workDetail.title} class={styles.image} />
+      <picture>
+        <source srcset={workDetail.src.webp} type="image/webp" />
+        <img src={workDetail.src.png} alt={workDetail.title} class={styles.image} />
+      </picture>
       <div class={styles.descriptionBox}>
         <p class={styles.description}>{workDetail.summary}</p>
       </div>

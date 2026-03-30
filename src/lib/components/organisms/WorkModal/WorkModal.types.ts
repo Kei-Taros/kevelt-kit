@@ -1,3 +1,5 @@
+import type { ImgSrc } from '$lib/types/image.types';
+
 export interface WorkBadge {
   label: string;
   variant?: 'primary' | 'secondary';
@@ -6,7 +8,7 @@ export interface WorkBadge {
 export interface WorkDetail {
   id: number;
   title: string;
-  src: string;
+  src: ImgSrc;
   summary: string;
   period: string;
   role: string;
