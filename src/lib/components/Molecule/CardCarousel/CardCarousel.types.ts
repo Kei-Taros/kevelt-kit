@@ -1,6 +1,8 @@
+import type { ImgSrc } from '$lib/types/image.types';
+
 export interface CardCarouselItem {
-  src: string;
+  id: number;
+  src: ImgSrc;
   alt: string;
   title: string;
-  href: string;
 }

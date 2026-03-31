@@ -70,7 +70,8 @@ export const slideOverlayActive = style({
 
 export const slideTitle = style({
   color: colors.text.primary,
-  fontSize: '2rem',
+  fontSize: '32px',
+  fontWeight: 500,
   letterSpacing: '0.06em',
   textTransform: 'uppercase'
 });
@@ -190,7 +191,17 @@ export const slideLink = style({
   display: 'block',
   position: 'relative',
   textDecoration: 'none',
-  color: 'inherit'
+  color: 'inherit',
+
+  width: '100%',
+  padding: 0,
+  border: 'none',
+  background: 'transparent',
+  appearance: 'none',
+  WebkitAppearance: 'none',
+  textAlign: 'inherit',
+  font: 'inherit',
+  cursor: 'pointer'
 });
 
 export const slideInner = style({

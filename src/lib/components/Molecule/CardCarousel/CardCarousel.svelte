@@ -9,9 +9,10 @@
   interface Props {
     items: CardCarouselItem[];
     loop?: boolean;
+    onCardClick?: (item: CardCarouselItem) => void;
   }
 
-  let { items, loop = true }: Props = $props();
+  let { items, loop = true, onCardClick }: Props = $props();
   let viewportEl: HTMLDivElement | null = null;
   let embla: any = null;
 
@@ -76,19 +77,25 @@
           }}
         >
           {#if selectedIndex === index}
-            <a class={styles.slideLink} href={item.href} aria-label={item.title}>
-              <img class={styles.slideImg} src={item.src} alt={item.alt} />
+            <button type="button" class={styles.slideLink} onclick={() => onCardClick?.(item)}>
+              <picture>
+                <source srcset={item.src.webp} type="image/webp" />
+                <img class={styles.slideImg} src={item.src.png} alt={item.alt} />
+              </picture>
               <div class={`${styles.slideOverlay} ${styles.slideOverlayActive}`}>
                 <span class={styles.slideTitle}>{item.title}</span>
               </div>
-            </a>
+            </button>
           {:else}
             <div class={styles.slideInner}>
-              <img
-                class={`${styles.slideImg} ${styles.slideDimmed}`}
-                src={item.src}
-                alt={item.alt}
-              />
+              <picture>
+                <source srcset={item.src.webp} type="image/webp" />
+                <img
+                  class={`${styles.slideImg} ${styles.slideDimmed}`}
+                  src={item.src.png}
+                  alt={item.alt}
+                />
+              </picture>
               <div class={styles.slideOverlay}>
                 <span class={styles.slideTitle}>{item.title}</span>
               </div>
