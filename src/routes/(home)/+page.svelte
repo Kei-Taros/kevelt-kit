@@ -1,8 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import * as styles from './home.css';
+  import { goto } from '$app/navigation';
   import { Button, Heading } from '$lib/components/atoms';
-  import { CardCarousel, type CardCarouselItem } from '$lib/components/Molecule';
+  import { CardCarousel } from '$lib/components/Molecule';
+  import * as styles from './home.css';
+  import * as constants from './constants/home';
 
   let heroVideoEl: HTMLVideoElement | null = null;
 
@@ -24,33 +26,6 @@
   let showGridNews = false;
   let showGridABreak = false;
   let showGridWorks = false;
-
-  const carouselItems: CardCarouselItem[] = [
-    {
-      src: '/images/work/work-1.webp',
-      alt: 'work-1',
-      title: 'work-1',
-      href: '/test1'
-    },
-    {
-      src: '/images/work/work-1.webp',
-      alt: 'work-2',
-      title: 'work-2',
-      href: '/test2'
-    },
-    {
-      src: '/images/work/work-1.webp',
-      alt: 'work-3',
-      title: 'work-3',
-      href: '/test3'
-    },
-    {
-      src: '/images/work/work-1.webp',
-      alt: 'work-4',
-      title: 'work-4',
-      href: '/test4'
-    }
-  ];
 
   const setupHeroWheelZoom = () => {
     const zoomSpeed = 5.0;
@@ -177,7 +152,17 @@
       cleanups.forEach((fn) => fn());
     };
   });
+
+  const openWork = async (id: number) => {
+    await goto('/works', {
+      state: { selectedWorkId: id }
+    });
+  };
 </script>
+
+<svelte:head>
+  <title>KeveltKit</title>
+</svelte:head>
 
 {#if isOpeningVisible}
   <div class={`${styles.openingOverlay} ${isOpeningFading ? styles.openingFadeOut : ''}`}>
@@ -305,10 +290,10 @@
 <section class={styles.sectionBottom}>
   <div class={styles.contentInner}>
     <div class={styles.headerRow}>
-      <Heading label="Contents" />
-      <Button label={'Work List'} />
+      <Heading label="Works" />
+      <Button label="Work List" onclick={() => goto('/works')} />
     </div>
-    <CardCarousel items={carouselItems} />
+    <CardCarousel items={constants.CAROUSEL_ITEMS} onCardClick={(item) => openWork(item.id)} />
   </div>
 </section>
 
