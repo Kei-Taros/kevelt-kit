@@ -3,9 +3,33 @@ import { describe, test, expect, beforeEach } from 'vitest';
 import type { CardCarouselItem } from './CardCarousel.types';
 
 const mockItems: CardCarouselItem[] = [
-  { src: '/img/test1.jpg', alt: 'image1', title: 'Slide 1', href: '/page1' },
-  { src: '/img/test2.jpg', alt: 'image2', title: 'Slide 2', href: '/page2' },
-  { src: '/img/test3.jpg', alt: 'image3', title: 'Slide 3', href: '/page3' }
+  {
+    id: 1,
+    src: {
+      webp: '/img/test1.webp',
+      png: '/img/test1.jpg'
+    },
+    alt: 'image1',
+    title: 'Slide 1'
+  },
+  {
+    id: 2,
+    src: {
+      webp: '/img/test2.webp',
+      png: '/img/test2.jpg'
+    },
+    alt: 'image2',
+    title: 'Slide 2'
+  },
+  {
+    id: 3,
+    src: {
+      webp: '/img/test3.webp',
+      png: '/img/test3.jpg'
+    },
+    alt: 'image3',
+    title: 'Slide 3'
+  }
 ];
 
 describe('CardCarousel', () => {
@@ -30,12 +54,14 @@ describe('CardCarousel', () => {
     expect(actualAlts).toEqual(expectedAlts);
   });
 
-  test('初期表示の場合、1枚目のスライドがリンクとして表示される', () => {
-    const link = renderResult.container.querySelector('a[href]');
-    expect(link).toBeTruthy();
+  test('初期表示の場合、1枚目のスライドがクリック可能なボタンとして表示される', () => {
+    const activeButton = renderResult.container.querySelector('button');
+    expect(activeButton).toBeTruthy();
 
-    const href = link?.getAttribute('href');
-    expect(mockItems.map((i) => i.href)).toContain(href);
+    const activeImage = activeButton?.querySelector('img');
+    expect(activeImage).toBeTruthy();
+    expect(activeImage).toHaveAttribute('src', mockItems[0].src.png);
+    expect(activeImage).toHaveAttribute('alt', mockItems[0].alt);
   });
 
   test('コンポーネントが描画された場合、prev/nextボタンが表示される', () => {
@@ -47,19 +73,25 @@ describe('CardCarousel', () => {
     {
       label: 'prevボタンを押した場合、前の画像が表示される',
       buttonAriaLabel: 'Previous slide',
-      expectedHref: '/page3'
+      expectedItem: mockItems[2]
     },
     {
       label: 'nextボタンを押した場合、次の画像が表示される',
       buttonAriaLabel: 'Next slide',
-      expectedHref: '/page2'
+      expectedItem: mockItems[1]
     }
-  ])('$label', async ({ buttonAriaLabel, expectedHref }) => {
+  ])('$label', async ({ buttonAriaLabel, expectedItem }) => {
     const btn = screen.getByLabelText(buttonAriaLabel);
     await fireEvent.click(btn);
+
     await waitFor(() => {
-      const link = renderResult.container.querySelector(`a[href="${expectedHref}"]`);
-      expect(link).toBeTruthy();
+      const activeButton = renderResult.container.querySelector('button');
+      expect(activeButton).toBeTruthy();
+
+      const activeImage = activeButton?.querySelector('img');
+      expect(activeImage).toBeTruthy();
+      expect(activeImage).toHaveAttribute('src', expectedItem.src.png);
+      expect(activeImage).toHaveAttribute('alt', expectedItem.alt);
     });
   });
 

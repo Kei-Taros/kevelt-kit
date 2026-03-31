@@ -104,6 +104,16 @@ describe('RouteTransition', () => {
     expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
   });
 
+  test('クエリのみ変更された場合、オーバーレイが表示されない', () => {
+    const { container } = render(RouteTransition);
+
+    const navigateHandler = getNavigateHandler();
+    const result = navigateHandler(createNavigation('/works', '/works?work=6'));
+
+    expect(result).toBeUndefined();
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
+  });
+
   test('遷移中の場合、次の遷移処理が実行されない', async () => {
     const { container } = render(RouteTransition);
 

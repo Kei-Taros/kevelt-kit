@@ -60,12 +60,9 @@
     if (navigating) return;
     if (to.url.pathname === '/') return;
 
-    const isSamePage =
-      from.url.pathname === to.url.pathname &&
-      from.url.search === to.url.search &&
-      from.url.hash === to.url.hash;
-
-    if (isSamePage) return;
+    if (from.url.pathname === to.url.pathname) {
+      return;
+    }
 
     navigating = true;
     clearHideTimer();

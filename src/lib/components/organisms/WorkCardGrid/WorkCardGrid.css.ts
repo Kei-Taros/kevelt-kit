@@ -11,6 +11,12 @@ export const filterList = style({
   gap: '12px'
 });
 
+export const filterRow = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '12px'
+});
+
 export const filterButton = style({
   display: 'inline-flex',
   alignItems: 'center',

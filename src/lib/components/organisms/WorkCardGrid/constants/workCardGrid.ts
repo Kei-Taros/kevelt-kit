@@ -1,1 +1,1 @@
-export const CATEGORY_ORDER = ['Web', 'Frontend', 'Backend', 'Other'];
+export const CATEGORY_ORDER = ['Web', 'Frontend', 'Backend', 'Embedded', 'Other'];

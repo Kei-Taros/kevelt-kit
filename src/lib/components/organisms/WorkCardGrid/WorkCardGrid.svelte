@@ -13,12 +13,19 @@
 
   let activeCategories = $state<string[]>([]);
 
-  const categories = $derived.by(() => {
+  const { orderedCategories, otherCategories } = $derived.by(() => {
     const allTags = Array.from(new Set(items.flatMap((item) => item.tags)));
-    const ordered = constants.CATEGORY_ORDER.filter((category) => allTags.includes(category));
-    const others = allTags.filter((tag) => !constants.CATEGORY_ORDER.includes(tag));
 
-    return [...ordered, ...others];
+    const orderedCategories = constants.CATEGORY_ORDER.filter((category) =>
+      allTags.includes(category)
+    );
+
+    const otherCategories = allTags.filter((tag) => !constants.CATEGORY_ORDER.includes(tag));
+
+    return {
+      orderedCategories,
+      otherCategories
+    };
   });
 
   const filteredItems = $derived.by(() => {
@@ -51,25 +58,43 @@
 
 <div class={styles.container} {...props}>
   <div class={styles.filterList}>
-    <button
-      type="button"
-      class={`${styles.filterButton} ${activeCategories.length === 0 ? styles.activeFilterButton : ''}`}
-      aria-pressed={activeCategories.length === 0}
-      onclick={clearCategories}
-    >
-      All
-    </button>
-
-    {#each categories as category (category)}
+    <div class={styles.filterRow}>
       <button
         type="button"
-        class={`${styles.filterButton} ${activeCategories.includes(category) ? styles.activeFilterButton : ''}`}
-        aria-pressed={activeCategories.includes(category)}
-        onclick={() => handleCategoryClick(category)}
+        class={`${styles.filterButton} ${activeCategories.length === 0 ? styles.activeFilterButton : ''}`}
+        aria-pressed={activeCategories.length === 0}
+        onclick={clearCategories}
       >
-        {category}
+        All
       </button>
-    {/each}
+      {#each orderedCategories as category (category)}
+        <button
+          type="button"
+          class={`${styles.filterButton} ${
+            activeCategories.includes(category) ? styles.activeFilterButton : ''
+          }`}
+          aria-pressed={activeCategories.includes(category)}
+          onclick={() => handleCategoryClick(category)}
+        >
+          {category}
+        </button>
+      {/each}
+    </div>
+
+    <div class={styles.filterRow}>
+      {#each otherCategories as category (category)}
+        <button
+          type="button"
+          class={`${styles.filterButton} ${
+            activeCategories.includes(category) ? styles.activeFilterButton : ''
+          }`}
+          aria-pressed={activeCategories.includes(category)}
+          onclick={() => handleCategoryClick(category)}
+        >
+          {category}
+        </button>
+      {/each}
+    </div>
   </div>
 
   <div class={styles.grid}>

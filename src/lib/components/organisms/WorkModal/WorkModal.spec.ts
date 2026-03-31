@@ -6,8 +6,12 @@ import type { WorkDetail } from './WorkModal.types';
 
 describe('WorkModal', () => {
   const workDetail: WorkDetail = {
+    id: 1,
     title: '会員向けWebサービス開発',
-    src: '/images/works/work-01.jpg',
+    src: {
+      webp: '/images/works/work-01.webp',
+      png: '/images/works/work-01.png'
+    },
     summary: '会員向けWebサービスのフロントエンド開発を担当。',
     period: '2024.04 - 2025.03',
     role: 'フロントエンドエンジニア',
@@ -28,6 +32,8 @@ describe('WorkModal', () => {
     });
 
   test('isOpenがtrueの場合、案件タイトルと概要が表示される', () => {
+    renderComponent();
+
     expect(
       screen.getByRole('heading', {
         level: 2,
@@ -39,7 +45,16 @@ describe('WorkModal', () => {
 
     const image = screen.getByRole('img', { name: workDetail.title });
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', workDetail.src);
+    expect(image).toHaveAttribute('src', workDetail.src.png);
+  });
+
+  test('isOpenがtrueの場合、picture要素にwebpソースが設定される', () => {
+    const { container } = renderComponent();
+
+    const source = container.querySelector('source[type="image/webp"]');
+
+    expect(source).toBeInTheDocument();
+    expect(source).toHaveAttribute('srcset', workDetail.src.webp);
   });
 
   test.each([

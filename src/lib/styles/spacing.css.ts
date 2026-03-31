@@ -20,5 +20,5 @@ export const mbXL = style({
 });
 
 export const mtXXL = style({
-  marginTop: '120px'
+  marginTop: '80px'
 });

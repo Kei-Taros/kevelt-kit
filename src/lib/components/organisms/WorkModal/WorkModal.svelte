@@ -20,8 +20,13 @@
     </section>
 
     <section class={styles.summary}>
-      <img src={workDetail.src} alt={workDetail.title} class={styles.image} />
-      <p class={styles.description}>{workDetail.summary}</p>
+      <picture>
+        <source srcset={workDetail.src.webp} type="image/webp" />
+        <img src={workDetail.src.png} alt={workDetail.title} class={styles.image} />
+      </picture>
+      <div class={styles.descriptionBox}>
+        <p class={styles.description}>{workDetail.summary}</p>
+      </div>
 
       <div class={styles.summaryGrid}>
         <DataItem label="期間" value={workDetail.period} />
@@ -30,12 +35,16 @@
       </div>
 
       <div class={styles.tagList}>
-        {#each workDetail.categories as category}
-          <Tag label={category} variant="secondary" />
-        {/each}
-        {#each workDetail.techStack as tech}
-          <Tag label={tech} />
-        {/each}
+        <div class={styles.tagRow}>
+          {#each workDetail.categories as category}
+            <Tag label={category} variant="secondary" />
+          {/each}
+        </div>
+        <div class={styles.tagRow}>
+          {#each workDetail.techStack as tech}
+            <Tag label={tech} />
+          {/each}
+        </div>
       </div>
     </section>
 
