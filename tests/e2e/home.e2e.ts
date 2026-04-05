@@ -75,7 +75,7 @@ test.describe('Home page', () => {
     await expect(page.getByRole('heading', { name: 'Works' })).toBeVisible();
   });
 
-  test('Worksカルーセルのカードを押すとWorksページへ遷移する', async ({ page }) => {
+  test('Worksカルーセルのカードを押した場合、Worksページへ遷移する', async ({ page }) => {
     await page.goto('/?e2e=1');
     await page.waitForTimeout(5500);
 
