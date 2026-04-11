@@ -1,12 +1,61 @@
 <script lang="ts">
-  import { Heading } from '$lib/components/atoms';
-
+  import { Heading, SkillIcon } from '$lib/components/atoms';
   import * as styles from './about-me.css';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
+  import * as constants from './constants/about-me';
 </script>
 
+<svelte:head>
+  <title>About Me | KeveltKit</title>
+</svelte:head>
+
 <section class={layout.contentInner}>
-  <div class={spacing.mbM}><Heading label="About Me" /></div>
-  <div>test</div>
+  <div class={spacing.mbL}>
+    <Heading label="About Me" />
+  </div>
+
+  <div class={`${styles.aboutProfile} ${spacing.mbXL}`}>
+    <div class={styles.aboutProfileDetails}>
+      <div class={styles.profileData}>
+        <span class={styles.profileLabel}>NAME:</span>
+        <p class={styles.profileValue}>keitarou kase</p>
+      </div>
+      <div class={styles.profileData}>
+        <span class={styles.profileLabel}>BIRTH:</span>
+        <p class={styles.profileValue}>1996</p>
+      </div>
+    </div>
+    <div class={styles.aboutProfileImg}>
+      <div class={styles.torchGlow}></div>
+      <picture>
+        <source srcset={'/images/about-me/profile.webp'} type="image/webp" />
+        <img class={styles.profileImg} src={'/images/about-me/profile.png'} alt="profile" />
+      </picture>
+    </div>
+  </div>
+  <div class={styles.aboutText}>
+    <div class={styles.warningText}>
+      {#each constants.WARNING_TEXTS as text}
+        <p>{text}</p>
+      {/each}
+    </div>
+    <div class={styles.profileText}>
+      {#each constants.PROFILE_TEXTS as text}
+        <p>{@html text}</p>
+      {/each}
+    </div>
+  </div>
+</section>
+
+<section class={layout.contentInner}>
+  <div class={spacing.mbM}>
+    <Heading label="Skills" />
+  </div>
+
+  <div class={styles.skillIconList}>
+    {#each constants.SKILL_ICONS as name (name)}
+      <SkillIcon {name} />
+    {/each}
+  </div>
 </section>

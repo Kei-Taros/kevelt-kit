@@ -26,7 +26,7 @@ test.describe('error page', () => {
     await expect(page).toHaveTitle('404 | KeveltKit');
     await expect(homeButton).toBeVisible();
 
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
     await Promise.all([
       page.waitForURL((url) => url.pathname === '/', { timeout: 10000 }),
