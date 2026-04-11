@@ -14,6 +14,7 @@ export const colors = createGlobalTheme(':root', {
 
   brand: {
     500: '#ffb13b',
-    600: '#ff9500'
+    600: '#ff9500',
+    700: '#ff5e00'
   }
 });
