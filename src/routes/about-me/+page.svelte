@@ -19,7 +19,7 @@
     <div class={styles.aboutProfileDetails}>
       <div class={styles.profileData}>
         <span class={styles.profileLabel}>NAME:</span>
-        <p class={styles.profileValue}>keitarou kase</p>
+        <p class={styles.profileValue}>Keitarou Kase</p>
       </div>
       <div class={styles.profileData}>
         <span class={styles.profileLabel}>BIRTH:</span>
