@@ -1,0 +1,25 @@
+<script lang="ts">
+  import { Heading } from '$lib/components/atoms';
+  import { NewsCard, type NewsCardItem } from '$lib/components/Molecule';
+  import * as styles from './LatestNewsGrid.css';
+
+  interface Props {
+    items: NewsCardItem[];
+  }
+
+  let { items }: Props = $props();
+
+  const latestItems = $derived(items.slice(0, 3));
+</script>
+
+<section>
+  <div class={styles.headingContainer}>
+    <Heading label="Latest" as="h2" class={styles.heading} />
+  </div>
+
+  <div class={styles.grid}>
+    {#each latestItems as item (item.href)}
+      <NewsCard {item} />
+    {/each}
+  </div>
+</section>
