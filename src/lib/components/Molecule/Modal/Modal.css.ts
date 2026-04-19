@@ -26,7 +26,7 @@ export const contentInner = style({
   overflowY: 'auto',
   borderRadius: '16px',
   background: '#1a2032',
-  color: '#ffffff',
+  color: colors.text.primary,
   padding: '40px 50px',
   boxSizing: 'border-box',
 
