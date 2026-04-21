@@ -13,6 +13,7 @@ export const colors = createGlobalTheme(':root', {
   },
 
   brand: {
+    400: '#ffc56f',
     500: '#ffb13b',
     600: '#ff9500',
     700: '#ff5e00'
