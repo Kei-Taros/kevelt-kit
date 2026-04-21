@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/svelte';
 import { describe, test, expect } from 'vitest';
 import NewsCard from './NewsCard.svelte';
-import type { NewsCardItem } from './NewsCard.types';
+import type { NewsData } from '$lib/types/news.types';
 
-const mockItem: NewsCardItem = {
+const mockItem: NewsData = {
   title: 'KeveltKitを公開しました',
   date: '2026.04.11',
   src: {
@@ -39,7 +39,7 @@ describe('NewsCard', () => {
   });
 
   test('srcが未指定の場合、no-data画像が表示される', () => {
-    const itemWithoutSrc: NewsCardItem = {
+    const itemWithoutSrc: NewsData = {
       title: 'お知らせタイトル',
       date: '2026.04.19',
       href: '/news/20260419'

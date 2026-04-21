@@ -1,10 +1,12 @@
 <script lang="ts">
   import { Heading } from '$lib/components/atoms';
-  import { NewsCard, type NewsCardItem } from '$lib/components/Molecule';
+  import { NewsCard } from '$lib/components/Molecule';
+  import type { NewsData } from '$lib/types/news.types';
+
   import * as styles from './LatestNewsGrid.css';
 
   interface Props {
-    items: NewsCardItem[];
+    items: NewsData[];
   }
 
   let { items }: Props = $props();

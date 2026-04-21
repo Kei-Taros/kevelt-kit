@@ -2,10 +2,10 @@
   import * as styles from './NewsCard.css';
   import { Heading } from '$lib/components/atoms';
   import type { HTMLAnchorAttributes } from 'svelte/elements';
-  import type { NewsCardItem } from './NewsCard.types';
+  import type { NewsData } from '$lib/types/news.types';
 
   interface Props extends HTMLAnchorAttributes {
-    item: NewsCardItem;
+    item: NewsData;
   }
 
   let { item, ...props }: Props = $props();

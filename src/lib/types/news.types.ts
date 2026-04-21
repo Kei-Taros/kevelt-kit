@@ -1,6 +1,6 @@
 import type { ImgSrc } from '$lib/types/image.types';
 
-export type NewsCardItem = {
+export type NewsData = {
   title: string;
   date: string;
   src?: ImgSrc;

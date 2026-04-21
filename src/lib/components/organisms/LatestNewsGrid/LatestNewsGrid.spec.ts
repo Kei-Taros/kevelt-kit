@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/svelte';
 import { describe, test, expect } from 'vitest';
 import LatestNewsGrid from './LatestNewsGrid.svelte';
-import type { NewsCardItem } from '$lib/components/Molecule';
+import type { NewsData } from '$lib/types/news.types';
 
-const mockItems: NewsCardItem[] = [
+const mockItems: NewsData[] = [
   {
     title: 'KeveltKitを公開しました',
     date: '2026.04.11',
