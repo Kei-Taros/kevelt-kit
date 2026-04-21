@@ -1,17 +1,16 @@
 <script lang="ts">
   import * as styles from './NewsCard.css';
   import { Heading } from '$lib/components/atoms';
-  import type { HTMLAnchorAttributes } from 'svelte/elements';
   import type { NewsData } from '$lib/types/news.types';
 
-  interface Props extends HTMLAnchorAttributes {
+  interface Props {
     item: NewsData;
   }
 
-  let { item, ...props }: Props = $props();
+  let { item }: Props = $props();
 </script>
 
-<a class={styles.card} href={item.href} {...props}>
+<a class={styles.card} href={item.href}>
   <div class={styles.imageContainer}>
     <picture>
       <source srcset={item.src?.webp ?? '/images/news/no-data/no-data.webp'} type="image/webp" />
