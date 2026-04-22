@@ -36,6 +36,7 @@
     "eslint-plugin-svelte": "^3.14.0",
     "globals": "^17.3.0",
     "jsdom": "^28.1.0",
+    "mdsvex": "^0.12.7",
     "playwright": "^1.58.1",
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.4.1",
