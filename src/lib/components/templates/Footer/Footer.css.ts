@@ -59,5 +59,5 @@ export const copyright = style({
   marginTop: '30px',
   textAlign: 'center',
   fontSize: '14px',
-  color: colors.text.copyright
+  color: colors.text.muted
 });

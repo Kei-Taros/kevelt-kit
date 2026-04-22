@@ -1,0 +1,9 @@
+---
+title: 'Newsタイトル'
+date: 'yyyy-mm-dd'
+thumbnail: '/images/news/no-data/no-data'
+tags: ['tag1', 'tag2']
+published: false
+---
+
+サンプル文章

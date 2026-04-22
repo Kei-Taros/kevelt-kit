@@ -9,10 +9,11 @@ export const colors = createGlobalTheme(':root', {
   text: {
     primary: '#ffffff',
     secondary: '#000000',
-    copyright: '#d3d3d3'
+    muted: '#d3d3d3'
   },
 
   brand: {
+    400: '#ffc56f',
     500: '#ffb13b',
     600: '#ff9500',
     700: '#ff5e00'

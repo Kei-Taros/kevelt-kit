@@ -19,6 +19,14 @@ export const mbXL = style({
   marginBottom: '64px'
 });
 
+export const mbXXL = style({
+  marginBottom: '80px'
+});
+
+export const mbXXXL = style({
+  marginBottom: '120px'
+});
+
 export const mtXXL = style({
   marginTop: '80px'
 });

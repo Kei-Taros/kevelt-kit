@@ -13,7 +13,7 @@ export const contentInner = style({
   width: '100%',
   maxWidth: '1100px',
   margin: '0 auto',
-  padding: '80px clamp(20px, 5vw, 64px)',
+  padding: '0 clamp(20px, 5vw, 64px)',
   display: 'grid',
   alignItems: 'center',
   color: colors.text.primary

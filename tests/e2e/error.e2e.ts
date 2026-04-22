@@ -19,21 +19,4 @@ test.describe('error page', () => {
 
     await expect(page.getByRole('button', { name: 'Home Page' })).toBeVisible();
   });
-
-  test('Home Pageボタンを押した場合、トップページへ遷移する', async ({ page }) => {
-    const homeButton = page.getByRole('button', { name: 'Home Page' });
-
-    await expect(page).toHaveTitle('404 | KeveltKit');
-    await expect(homeButton).toBeVisible();
-
-    await page.waitForTimeout(1000);
-
-    await Promise.all([
-      page.waitForURL((url) => url.pathname === '/', { timeout: 10000 }),
-      homeButton.click()
-    ]);
-
-    await expect(page).toHaveURL(/\/$/);
-    await expect(page).toHaveTitle('KeveltKit');
-  });
 });

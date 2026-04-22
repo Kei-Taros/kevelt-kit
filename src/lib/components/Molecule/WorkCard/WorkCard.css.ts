@@ -71,7 +71,7 @@ export const title = style({
 
 export const period = style({
   margin: 0,
-  color: 'rgba(255, 255, 255, 0.72)',
+  color: colors.text.muted,
   fontSize: '16px',
   lineHeight: 1.4,
   fontWeight: 500,
