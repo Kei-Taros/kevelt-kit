@@ -64,6 +64,13 @@
       return;
     }
 
+    const isWorksInternalNavigation =
+      from.url.pathname.startsWith('/news') && to.url.pathname.startsWith('/news');
+
+    if (isWorksInternalNavigation) {
+      return;
+    }
+
     navigating = true;
     clearHideTimer();
 

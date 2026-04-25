@@ -127,4 +127,14 @@ describe('RouteTransition', () => {
     expect(secondResult).toBeUndefined();
     expect(container.querySelectorAll(`.${styles.transitionOverlay}`)).toHaveLength(1);
   });
+
+  test('/news配下同士で遷移する場合、オーバーレイが表示されない', () => {
+    const { container } = render(RouteTransition);
+
+    const navigateHandler = getNavigateHandler();
+    const result = navigateHandler(createNavigation('/news', '/news/2024'));
+
+    expect(result).toBeUndefined();
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
+  });
 });
