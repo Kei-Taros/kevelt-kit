@@ -38,16 +38,28 @@ describe('NewsCard', () => {
     expect(source).toHaveAttribute('srcset', mockItem.src!.webp);
   });
 
-  test('srcが未指定の場合、no-data画像が表示される', () => {
-    const itemWithoutSrc: NewsData = {
-      title: 'お知らせタイトル',
-      date: '2026.04.19',
-      href: '/news/20260419'
-    };
+  test.each([
+    [
+      '未指定',
+      {
+        title: 'お知らせタイトル',
+        date: '2026.04.19',
+        href: '/news/20260419'
+      }
+    ],
+    [
+      'null',
+      {
+        title: 'お知らせタイトル',
+        date: '2026.04.19',
+        href: '/news/20260419',
+        src: null
+      }
+    ]
+  ])('srcが%sの場合、no-data画像が表示される', (_case, item) => {
+    render(NewsCard, { props: { item } });
 
-    render(NewsCard, { props: { item: itemWithoutSrc } });
-
-    const image = screen.getByRole('img', { name: itemWithoutSrc.title });
+    const image = screen.getByRole('img', { name: item.title });
     const source = document.querySelector('source[type="image/webp"]');
 
     expect(image).toHaveAttribute('src', '/images/news/no-data/no-data.png');

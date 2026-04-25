@@ -2,7 +2,6 @@
   import { Heading } from '$lib/components/atoms';
   import { NewsCard } from '$lib/components/Molecule';
   import type { NewsData } from '$lib/types/news.types';
-
   import * as styles from './LatestNewsGrid.css';
 
   interface Props {

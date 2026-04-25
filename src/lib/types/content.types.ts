@@ -3,7 +3,7 @@ import type { Component } from 'svelte';
 export interface NewsMetadata {
   title: string;
   date: string;
-  thumbnail: string;
+  thumbnail: string | null;
   tags: string[];
   published: boolean;
 }
