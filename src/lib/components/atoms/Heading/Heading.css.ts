@@ -15,10 +15,16 @@ export const h1 = style({
       position: 'absolute',
       left: 0,
       bottom: 0,
-      width: '150%',
+      width: '160%',
       height: '13px',
-      background: colors.brand[600],
-      zIndex: -1
+      zIndex: -1,
+
+      background: `linear-gradient(
+        90deg,
+        ${colors.brand[600]} 0%,
+        ${colors.brand[600]} 20%,
+        transparent 100%
+      )`
     }
   }
 });
