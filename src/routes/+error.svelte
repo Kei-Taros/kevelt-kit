@@ -1,8 +1,9 @@
 <script lang="ts">
-  import * as styles from './error.css';
-  import * as spacing from '$lib/styles/spacing.css';
   import { Button, Heading } from '$lib/components/atoms';
   import { goto } from '$app/navigation';
+  import { ERROR_IMAGE } from '$lib/constants/images';
+  import * as styles from './error.css';
+  import * as spacing from '$lib/styles/spacing.css';
 
   const handleClick = () => {
     goto('/');
@@ -19,7 +20,10 @@
       <Heading label="404 Not Found" as="h1" />
     </div>
     <div class={`${styles.imageWrapper} ${spacing.mbXL}`}>
-      <img src="/images/error/error.webp" alt="error" class={styles.image} />
+      <picture>
+        <source srcset={ERROR_IMAGE.webp} type="image/webp" />
+        <img src={ERROR_IMAGE.png} alt="error" class={styles.image} />
+      </picture>
 
       <div class={styles.torchGlow}></div>
       <div class={styles.overlayText}>
