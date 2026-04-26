@@ -10,12 +10,7 @@ export const headingContainer = style({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  marginBottom: '32px'
-});
-
-export const heading = style({
-  width: '70%',
-  textAlign: 'center'
+  marginBottom: '48px'
 });
 
 export const divider = style({

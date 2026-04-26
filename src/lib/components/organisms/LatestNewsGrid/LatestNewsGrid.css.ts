@@ -12,10 +12,5 @@ export const headingContainer = style({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  marginBottom: '12px'
-});
-
-export const heading = style({
-  width: '70%',
-  textAlign: 'center'
+  marginBottom: '48px'
 });

@@ -22,7 +22,7 @@
 
 <section>
   <div class={styles.headingContainer}>
-    <Heading label="News List" as="h2" class={styles.heading} />
+    <Heading label="News List" as="h2" variant="news" />
   </div>
 
   <div class={styles.list}>

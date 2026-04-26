@@ -15,7 +15,7 @@
 
 <section>
   <div class={styles.headingContainer}>
-    <Heading label="Latest" as="h2" class={styles.heading} />
+    <Heading label="Latest" as="h2" variant="news" />
   </div>
 
   <div class={styles.grid}>
