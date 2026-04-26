@@ -15,20 +15,95 @@ export const h1 = style({
       position: 'absolute',
       left: 0,
       bottom: 0,
-      width: '150%',
+      width: '160%',
       height: '13px',
-      background: colors.brand[600],
-      zIndex: -1
+      zIndex: -1,
+
+      background: `linear-gradient(
+        90deg,
+        ${colors.brand[600]} 0%,
+        ${colors.brand[600]} 20%,
+        transparent 100%
+      )`
     }
   }
 });
 
 export const h2 = style({
+  position: 'relative',
   display: 'inline-block',
-  padding: '0.3em 1.0em',
-  borderTop: `3px solid ${colors.brand[600]}`,
-  borderBottom: `3px solid ${colors.brand[600]}`,
-  fontSize: '28px'
+  padding: '12px',
+  fontSize: '28px',
+  textAlign: 'center',
+
+  selectors: {
+    '&::before, &::after': {
+      content: '',
+      position: 'absolute',
+      left: 0,
+      width: '100%',
+      height: '3px',
+      background: `linear-gradient(
+        90deg,
+        transparent,
+        ${colors.brand[600]} 30%,
+        ${colors.brand[600]} 70%,
+        transparent
+      )`
+    },
+
+    '&::before': {
+      top: 0
+    },
+
+    '&::after': {
+      bottom: 0
+    }
+  }
+});
+
+export const h2News = style({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '38px',
+
+  padding: 0,
+  fontSize: '28px',
+  textAlign: 'center',
+
+  selectors: {
+    '&::before': {
+      content: '""',
+      position: 'static',
+      width: '200px',
+      height: '3px',
+      flexShrink: 0,
+
+      background: `linear-gradient(
+        90deg,
+        transparent,
+        ${colors.brand[600]} 40%,
+        ${colors.brand[600]} 0%
+      )`
+    },
+
+    '&::after': {
+      content: '""',
+      position: 'static',
+      width: '200px',
+      height: '3px',
+      flexShrink: 0,
+
+      background: `linear-gradient(
+        90deg,
+        ${colors.brand[600]} 0%,
+        ${colors.brand[600]} 40%,
+        transparent
+      )`
+    }
+  }
 });
 
 export const h3 = style({

@@ -7,11 +7,30 @@
     label?: string;
     children?: Snippet;
     as?: 'h1' | 'h2' | 'h3';
+    variant?: 'default' | 'news';
   }
 
-  let { label = '', children, as = 'h1', class: className = '', ...props }: Props = $props();
+  let {
+    label = '',
+    children,
+    as = 'h1',
+    variant = 'default',
+    class: className = '',
+    ...props
+  }: Props = $props();
 
-  const headingClass = $derived(as === 'h1' ? styles.h1 : as === 'h2' ? styles.h2 : styles.h3);
+  const getHeadingClass = () => {
+    if (as === 'h1') return styles.h1;
+
+    if (as === 'h2') {
+      if (variant === 'news') return styles.h2News;
+      return styles.h2;
+    }
+
+    return styles.h3;
+  };
+
+  const headingClass = $derived(getHeadingClass());
 </script>
 
 <svelte:element this={as} class={`${headingClass} ${className}`} {...props}>

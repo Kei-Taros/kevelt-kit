@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Heading, SkillIcon } from '$lib/components/atoms';
-  import * as styles from './about-me.css';
+  import * as styles from './aboutMe.css';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
-  import * as constants from './constants/about-me';
+  import * as constants from './constants/aboutMe';
 </script>
 
 <svelte:head>
