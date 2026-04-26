@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/svelte';
 import { describe, test, expect } from 'vitest';
 import NewsCard from './NewsCard.svelte';
 import type { NewsData } from '$lib/types/news.types';
+import { NO_DATA_IMAGE } from '$lib/constants/images';
 
 const mockItem: NewsData = {
   title: 'KeveltKitを公開しました',
@@ -62,7 +63,7 @@ describe('NewsCard', () => {
     const image = screen.getByRole('img', { name: item.title });
     const source = document.querySelector('source[type="image/webp"]');
 
-    expect(image).toHaveAttribute('src', '/images/news/no-data/no-data.png');
-    expect(source).toHaveAttribute('srcset', '/images/news/no-data/no-data.webp');
+    expect(image).toHaveAttribute('src', NO_DATA_IMAGE.png);
+    expect(source).toHaveAttribute('srcset', NO_DATA_IMAGE.webp);
   });
 });
