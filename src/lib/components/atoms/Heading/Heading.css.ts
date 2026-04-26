@@ -30,11 +30,37 @@ export const h1 = style({
 });
 
 export const h2 = style({
+  position: 'relative',
   display: 'inline-block',
-  padding: '0.3em 1.0em',
-  borderTop: `3px solid ${colors.brand[600]}`,
-  borderBottom: `3px solid ${colors.brand[600]}`,
-  fontSize: '28px'
+  padding: '12px',
+  fontSize: '28px',
+  textAlign: 'center',
+
+  selectors: {
+    '&::before, &::after': {
+      content: '',
+      position: 'absolute',
+      left: 0,
+      width: '100%',
+      height: '3px',
+      background: `linear-gradient(
+        90deg,
+        transparent,
+        ${colors.brand[600]} 30%,
+        ${colors.brand[600]} 70%,
+        transparent
+      )`
+    },
+
+    '&::before': {
+      top: 0
+    },
+
+    '&::after': {
+      bottom: 0
+    }
+  }
+});
 });
 
 export const h3 = style({
