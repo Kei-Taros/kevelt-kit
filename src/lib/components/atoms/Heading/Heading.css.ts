@@ -61,6 +61,49 @@ export const h2 = style({
     }
   }
 });
+
+export const h2News = style({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '38px',
+
+  padding: 0,
+  fontSize: '28px',
+  textAlign: 'center',
+
+  selectors: {
+    '&::before': {
+      content: '""',
+      position: 'static',
+      width: '200px',
+      height: '3px',
+      flexShrink: 0,
+
+      background: `linear-gradient(
+        90deg,
+        transparent,
+        ${colors.brand[600]} 40%,
+        ${colors.brand[600]} 0%
+      )`
+    },
+
+    '&::after': {
+      content: '""',
+      position: 'static',
+      width: '200px',
+      height: '3px',
+      flexShrink: 0,
+
+      background: `linear-gradient(
+        90deg,
+        ${colors.brand[600]} 0%,
+        ${colors.brand[600]} 40%,
+        transparent
+      )`
+    }
+  }
 });
 
 export const h3 = style({

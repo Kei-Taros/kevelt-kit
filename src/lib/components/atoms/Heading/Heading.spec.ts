@@ -71,4 +71,24 @@ describe('Heading', () => {
       'contents-heading'
     );
   });
+
+  test('as=h2かつvariant=newsの場合、h2タグとh2Newsのクラスが適用される', () => {
+    render(Heading, {
+      props: {
+        label: 'Latest',
+        as: 'h2',
+        variant: 'news'
+      }
+    });
+
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Latest'
+    });
+
+    expect(heading).toHaveClass(styles.h2News);
+    expect(heading).not.toHaveClass(styles.h2);
+    expect(heading).not.toHaveClass(styles.h1);
+    expect(heading).not.toHaveClass(styles.h3);
+  });
 });
