@@ -7,24 +7,30 @@ import * as constants from './constants/workCardGrid';
 const mockItems: WorkCardItem[] = [
   {
     id: 1,
-    src: '/images/works/test1.jpg',
-    alt: '案件画像1',
+    src: {
+      webp: '/images/works/test1.webp',
+      png: '/images/works/test1.png'
+    },
     title: 'EC管理画面開発',
     period: '2026',
     tags: ['Web', 'Frontend']
   },
   {
     id: 2,
-    src: '/images/works/test2.jpg',
-    alt: '案件画像2',
+    src: {
+      webp: '/images/works/test2.webp',
+      png: '/images/works/test2.png'
+    },
     title: 'API基盤開発',
     period: '2025',
     tags: ['Backend', 'GraphQL']
   },
   {
     id: 3,
-    src: '/images/works/test3.jpg',
-    alt: '案件画像3',
+    src: {
+      webp: '/images/works/test3.webp',
+      png: '/images/works/test3.png'
+    },
     title: 'デザインシステム構築',
     period: '2024',
     tags: ['Frontend', 'Other']
@@ -33,7 +39,7 @@ const mockItems: WorkCardItem[] = [
 
 describe('WorkCardGrid', () => {
   test('itemsが渡された場合、全てのカードとカテゴリボタンが表示される', () => {
-    render(WorkCardGrid, { props: { items: mockItems } });
+    const { container } = render(WorkCardGrid, { props: { items: mockItems } });
 
     expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument();
 
@@ -45,8 +51,20 @@ describe('WorkCardGrid', () => {
 
     mockItems.forEach((item) => {
       expect(screen.getByRole('heading', { level: 3, name: item.title })).toBeInTheDocument();
-      expect(screen.getByRole('img', { name: item.alt })).toBeInTheDocument();
+
+      const image = screen.getByRole('img', { name: item.title });
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', item.src.png);
+
       expect(screen.getByText(item.period)).toBeInTheDocument();
+    });
+
+    const sources = container.querySelectorAll('source[type="image/webp"]');
+
+    expect(sources).toHaveLength(mockItems.length);
+
+    mockItems.forEach((item, index) => {
+      expect(sources[index]).toHaveAttribute('srcset', item.src.webp);
     });
   });
 
