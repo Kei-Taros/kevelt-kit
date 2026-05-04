@@ -58,7 +58,10 @@
   onNavigate(({ from, to }) => {
     if (!from || !to) return;
     if (navigating) return;
-    if (to.url.pathname === '/') return;
+
+    if (to.url.pathname === '/') {
+      sessionStorage.setItem('hasSeenOpening', 'true');
+    }
 
     if (from.url.pathname === to.url.pathname) {
       return;
