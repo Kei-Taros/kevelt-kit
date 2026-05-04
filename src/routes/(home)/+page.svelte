@@ -7,28 +7,30 @@
   import type { PageData } from './$types';
   import * as styles from './home.css';
   import * as constants from './constants/home';
+  import * as spacing from '$lib/styles/spacing.css';
+  import * as layout from '$lib/styles/layout.css';
 
   let { data }: { data: PageData } = $props();
   let heroVideoEl: HTMLVideoElement | null = null;
 
-  let coverScale = 1;
+  let coverScale = $state(1);
   let scrollProgress = 0;
 
-  let introVideoEl: HTMLVideoElement | null = null;
-  let isOpeningVisible = false; // TODO: trueにする
-  let isOpeningFading = false;
+  let introVideoEl = $state<HTMLVideoElement | null>(null);
+  let isOpeningVisible = $state(false); // TODO: trueにする
+  let isOpeningFading = $state(false);
 
   let sectionMsgEl: HTMLElement | null = null;
-  let showMsgTop = false;
-  let showMsgMiddle = false;
-  let showMsgBottom = false;
+  let showMsgTop = $state(false);
+  let showMsgMiddle = $state(false);
+  let showMsgBottom = $state(false);
 
   let sectionGridEl: HTMLElement | null = null;
-  let showGridAbout = false;
-  let showGridConcept = false;
-  let showGridNews = false;
-  let showGridABreak = false;
-  let showGridWorks = false;
+  let showGridAbout = $state(false);
+  let showGridConcept = $state(false);
+  let showGridNews = $state(false);
+  let showGridABreak = $state(false);
+  let showGridWorks = $state(false);
 
   const setupHeroWheelZoom = () => {
     const zoomSpeed = 5.0;
@@ -183,23 +185,26 @@
   </div>
 {/if}
 
-<section class={styles.sectionBottom}>
+<section class={spacing.mbXXXXXL}>
   <div class={styles.heroWrapper}>
     <video bind:this={heroVideoEl} class={styles.heroVideo} muted loop playsinline preload="auto">
       <source src="/videos/hero-video/hero-video.webm" type="video/webm" />
       <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
     </video>
-    <img
-      src="/images/hero-cover/hero-cover.webp"
-      alt="hero-cover"
-      class={styles.heroCover}
-      style={`transform: scale(${coverScale});`}
-    />
+    <picture>
+      <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
+      <img
+        src="/images/hero-cover/hero-cover.png"
+        alt="hero-cover"
+        class={styles.heroCover}
+        style={`transform: scale(${coverScale});`}
+      />
+    </picture>
   </div>
 </section>
 
-<section class={styles.sectionBottom} bind:this={sectionMsgEl}>
-  <div class={styles.contentInner}>
+<section class={spacing.mbXXXXL} bind:this={sectionMsgEl}>
+  <div class={layout.contentInner}>
     <div class={styles.msgWrapper}>
       <div class={`${styles.msgTop} ${showMsgTop ? styles.showMsg : ''}`}>一旦やってみる</div>
       <div class={`${styles.msgMiddle} ${showMsgMiddle ? styles.showMsg : ''}`}>
@@ -212,9 +217,9 @@
   </div>
 </section>
 
-<section class={styles.sectionBottom} bind:this={sectionGridEl}>
-  <div class={styles.contentInner}>
-    <div class={styles.headingBottom}>
+<section class={spacing.mbXXXXL} bind:this={sectionGridEl}>
+  <div class={layout.contentInner}>
+    <div class={spacing.mbM}>
       <Heading label="Contents" />
     </div>
     <div class={styles.grid}>
@@ -290,8 +295,8 @@
   </div>
 </section>
 
-<section class={styles.sectionBottom}>
-  <div class={styles.contentInner}>
+<section class={spacing.mbXXXL}>
+  <div class={layout.contentInner}>
     <div class={styles.headerRow}>
       <Heading label="Works" />
       <Button label="Work List" href="/works" />
