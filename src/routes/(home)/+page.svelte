@@ -291,7 +291,7 @@
   <div class={styles.contentInner}>
     <div class={styles.headerRow}>
       <Heading label="Works" />
-      <Button label="Work List" onclick={() => goto('/works')} />
+      <Button label="Work List" href="/works" />
     </div>
     <CardCarousel items={constants.CAROUSEL_ITEMS} onCardClick={(item) => openWork(item.id)} />
   </div>

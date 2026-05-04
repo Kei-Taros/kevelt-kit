@@ -7,7 +7,8 @@
     label?: string;
     children?: Snippet;
     type?: 'button' | 'submit' | 'reset';
-    variant?: 'primary' | 'secondary';
+    variant?: 'primary' | 'secondary' | 'newsSlug';
+    href?: string;
   }
 
   let {
@@ -15,19 +16,42 @@
     children,
     type = 'button',
     variant = 'primary',
+    href,
     class: className = '',
     ...props
   }: Props = $props();
 
-  const variantClass = $derived(
-    variant === 'primary' ? styles.primary : variant === 'secondary' ? styles.secondary : ''
-  );
+  const variantClass = $derived.by(() => {
+    switch (variant) {
+      case 'primary':
+        return styles.primary;
+
+      case 'secondary':
+        return styles.secondary;
+
+      case 'newsSlug':
+        return styles.newsSlug;
+
+      default:
+        return styles.primary;
+    }
+  });
 </script>
 
-<button class={`${styles.button} ${variantClass} ${className}`} {type} {...props}>
-  {#if children}
-    {@render children()}
-  {:else}
-    {label}
-  {/if}
-</button>
+{#if href}
+  <a class={`${styles.button} ${variantClass} ${className}`} {href}>
+    {#if children}
+      {@render children()}
+    {:else}
+      {label}
+    {/if}
+  </a>
+{:else}
+  <button class={`${styles.button} ${variantClass} ${className}`} {type} {...props}>
+    {#if children}
+      {@render children()}
+    {:else}
+      {label}
+    {/if}
+  </button>
+{/if}

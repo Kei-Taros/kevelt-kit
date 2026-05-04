@@ -36,12 +36,12 @@ export const button = style({
   }
 });
 
-/* primary */
 export const primary = style({
   background: colors.brand[500],
   color: colors.text.primary,
   border: '4px solid transparent',
   transition: 'border-color 0.3s ease, color 0.3s ease',
+  textDecoration: 'none',
 
   selectors: {
     '&::before': {
@@ -73,6 +73,7 @@ export const secondary = style({
   position: 'relative',
   overflow: 'hidden',
   transition: 'color 0.3s ease, border-color 0.3s ease',
+  textDecoration: 'none',
 
   selectors: {
     '&::before': {
@@ -94,6 +95,36 @@ export const secondary = style({
     '&:hover': {
       color: colors.text.primary,
       borderColor: colors.brand[500]
+    }
+  }
+});
+
+export const newsSlug = style({
+  position: 'relative',
+  padding: '6px',
+  fontSize: '22px',
+  letterSpacing: '0.04em',
+  textDecoration: 'none',
+
+  color: 'transparent',
+
+  backgroundImage: `linear-gradient(
+    to right,
+    ${colors.brand[500]} 50%,
+    ${colors.text.muted} 50%
+  )`,
+
+  backgroundSize: '200% 100%',
+  backgroundPosition: '100% 0',
+
+  WebkitBackgroundClip: 'text',
+  backgroundClip: 'text',
+
+  transition: 'background-position 0.3s ease',
+
+  selectors: {
+    '&:hover': {
+      backgroundPosition: '0 0'
     }
   }
 });
