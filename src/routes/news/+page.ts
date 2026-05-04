@@ -1,6 +1,7 @@
 import type { PageLoad } from './$types';
 import type { SvxModule } from '$lib/types/content.types';
 import type { NewsData } from '$lib/types/news.types';
+import { NO_DATA_IMAGE } from '$lib/constants/images';
 
 export const load: PageLoad = async () => {
   const modules = import.meta.glob<SvxModule>('/src/content/news/**/*.svx', {
@@ -27,7 +28,7 @@ export const load: PageLoad = async () => {
               webp: `${module.metadata.thumbnail}.webp`,
               png: `${module.metadata.thumbnail}.png`
             }
-          : undefined
+          : { webp: NO_DATA_IMAGE.webp, png: NO_DATA_IMAGE.png }
       };
     });
 
