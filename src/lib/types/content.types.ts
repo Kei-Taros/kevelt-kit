@@ -12,3 +12,9 @@ export interface SvxModule {
   default: Component;
   metadata: NewsMetadata;
 }
+
+export interface NewsEntry {
+  path: string;
+  slug: string;
+  metadata: NewsMetadata;
+}
