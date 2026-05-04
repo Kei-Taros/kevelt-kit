@@ -17,7 +17,7 @@
   let scrollProgress = 0;
 
   let introVideoEl = $state<HTMLVideoElement | null>(null);
-  let isOpeningVisible = $state(false); // TODO: trueにする
+  let isOpeningVisible = $state(false);
   let isOpeningFading = $state(false);
 
   let sectionMsgEl: HTMLElement | null = null;
@@ -67,6 +67,15 @@
   };
 
   const setupIntroSequence = () => {
+    const hasSeenOpening = sessionStorage.getItem('hasSeenOpening');
+
+    if (hasSeenOpening === 'true') return () => {};
+
+    sessionStorage.setItem('hasSeenOpening', 'true');
+
+    isOpeningVisible = true;
+    isOpeningFading = false;
+
     queueMicrotask(() => {
       introVideoEl?.play();
     });
@@ -86,9 +95,12 @@
   };
 
   const setupHeroVideoPlay = () => {
+    const hasSeenOpening = sessionStorage.getItem('hasSeenOpening');
+    const delay = hasSeenOpening === 'true' ? 0 : 3000;
+
     const timer = window.setTimeout(() => {
       heroVideoEl?.play();
-    }, 3000);
+    }, delay);
 
     return () => {
       window.clearTimeout(timer);
@@ -133,7 +145,7 @@
           gridObserver.disconnect();
         }
       },
-      { threshold: 0.6 }
+      { threshold: 0.45 }
     );
 
     gridObserver.observe(sectionGridEl);
@@ -142,9 +154,7 @@
   };
 
   onMount(() => {
-    // TODO: コメントアウト削除
-    // window.scrollTo(0, 0);
-
+    window.scrollTo(0, 0);
     const cleanups: Array<() => void> = [];
 
     cleanups.push(setupHeroWheelZoom());
