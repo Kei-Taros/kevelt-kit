@@ -93,4 +93,23 @@ test.describe('Home page', () => {
 
     await expect(page).toHaveURL(/\/works(\?.*)?$/);
   });
+
+  test('Newsセクションが表示され、ニュースが最大3件表示される', async ({ page }) => {
+    const newsHeading = page.getByRole('heading', { name: 'News', exact: true });
+
+    await newsHeading.scrollIntoViewIfNeeded();
+    await expect(newsHeading).toBeVisible();
+
+    const newsSection = page.locator('section').filter({
+      has: page.getByRole('heading', { name: 'News', exact: true })
+    });
+
+    const newsLinks = newsSection.locator('a[href^="/news/"]');
+
+    await expect(newsLinks.first()).toBeVisible();
+
+    const count = await newsLinks.count();
+    expect(count).toBeGreaterThan(0);
+    expect(count).toBeLessThanOrEqual(3);
+  });
 });

@@ -3,9 +3,12 @@
   import { goto } from '$app/navigation';
   import { Button, Heading } from '$lib/components/atoms';
   import { CardCarousel } from '$lib/components/Molecule';
+  import { NewsItemList } from '$lib/components/organisms';
+  import type { PageData } from './$types';
   import * as styles from './home.css';
   import * as constants from './constants/home';
 
+  let { data }: { data: PageData } = $props();
   let heroVideoEl: HTMLVideoElement | null = null;
 
   let coverScale = 1;
@@ -297,10 +300,12 @@
   </div>
 </section>
 
-<section>
-  <div class={styles.contentInner}>News実装予定</div>
-</section>
-
-<section>
-  <div class={styles.contentInner}>お問い合わせフォーム実装予定</div>
+<section class={spacing.mbXXXXL}>
+  <div class={layout.contentInner}>
+    <div class={styles.headerRow}>
+      <Heading label="News" />
+      <Button label="News List" href="/news" />
+    </div>
+    <NewsItemList items={data.newsList} variant="home" />
+  </div>
 </section>
