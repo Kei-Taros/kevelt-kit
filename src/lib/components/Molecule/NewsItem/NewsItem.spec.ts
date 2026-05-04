@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/svelte';
 import { describe, test, expect } from 'vitest';
 import NewsItem from './NewsItem.svelte';
 import type { NewsData } from '$lib/types/news.types';
-import { NO_DATA_IMAGE } from '$lib/constants/images';
 
 const mockItem: NewsData = {
   title: 'KeveltKitを公開しました',
@@ -35,23 +34,7 @@ describe('NewsItem', () => {
     const image = screen.getByRole('img', { name: mockItem.title });
     const source = document.querySelector('source[type="image/webp"]');
 
-    expect(image).toHaveAttribute('src', mockItem.src!.png);
-    expect(source).toHaveAttribute('srcset', mockItem.src!.webp);
-  });
-
-  test('srcが未指定の場合、no-data画像が表示される', () => {
-    const itemWithoutSrc: NewsData = {
-      title: 'お知らせタイトル',
-      date: '2026.04.19',
-      href: '/news/20260419'
-    };
-
-    render(NewsItem, { props: { item: itemWithoutSrc } });
-
-    const image = screen.getByRole('img', { name: itemWithoutSrc.title });
-    const source = document.querySelector('source[type="image/webp"]');
-
-    expect(image).toHaveAttribute('src', NO_DATA_IMAGE.png);
-    expect(source).toHaveAttribute('srcset', NO_DATA_IMAGE.webp);
+    expect(image).toHaveAttribute('src', mockItem.src.png);
+    expect(source).toHaveAttribute('srcset', mockItem.src.webp);
   });
 });
