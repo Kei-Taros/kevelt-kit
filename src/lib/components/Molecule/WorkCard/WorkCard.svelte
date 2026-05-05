@@ -13,7 +13,10 @@
 
 <button class={styles.card} type="button" {...props}>
   <div class={styles.imageWrapper}>
-    <img src={item.src} alt={item.alt} class={styles.image} />
+    <picture>
+      <source srcset={item.src.webp} type="image/webp" />
+      <img src={item.src.png} alt={item.title} class={styles.image} />
+    </picture>
   </div>
 
   <div class={styles.body}>

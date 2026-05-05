@@ -2,22 +2,6 @@ import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
 
 /* Common */
-export const sectionBottom = style({
-  marginBottom: '280px'
-});
-
-export const headingBottom = style({
-  marginBottom: '32px'
-});
-
-export const contentInner = style({
-  width: '100%',
-  maxWidth: '1100px',
-  padding: '0 clamp(20px, 5vw, 60px)',
-  margin: '0 auto',
-  color: 'white'
-});
-
 export const headerRow = style({
   display: 'flex',
   alignItems: 'center',

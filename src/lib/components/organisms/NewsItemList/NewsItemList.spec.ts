@@ -76,4 +76,16 @@ describe('NewsItemList', () => {
     expect(screen.queryByRole('heading', { level: 3 })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Load More' })).not.toBeInTheDocument();
   });
+
+  test('variant=homeの場合、見出しは表示されない', () => {
+    render(NewsItemList, { props: { items: mockItems, variant: 'home' } });
+
+    expect(screen.queryByRole('heading', { level: 2, name: 'News List' })).not.toBeInTheDocument();
+  });
+
+  test('variant=homeの場合、Load Moreボタンは表示されない', () => {
+    render(NewsItemList, { props: { items: mockItems, variant: 'home' } });
+
+    expect(screen.queryByRole('button', { name: 'Load More' })).not.toBeInTheDocument();
+  });
 });

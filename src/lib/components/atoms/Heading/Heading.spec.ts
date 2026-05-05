@@ -91,4 +91,29 @@ describe('Heading', () => {
     expect(heading).not.toHaveClass(styles.h1);
     expect(heading).not.toHaveClass(styles.h3);
   });
+
+  test('as=h2かつvariant=newsSlugの場合、h2タグにタイトルと日付が表示されてh2NewsSlugのクラスが適用される', () => {
+    render(Heading, {
+      props: {
+        label: 'ニュースタイトル',
+        date: '2026-04-11',
+        as: 'h2',
+        variant: 'newsSlug'
+      }
+    });
+
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: 'ニュースタイトル 2026-04-11'
+    });
+
+    expect(heading).toHaveClass(styles.h2NewsSlug);
+    expect(heading).not.toHaveClass(styles.h2);
+    expect(heading).not.toHaveClass(styles.h2News);
+    expect(heading).not.toHaveClass(styles.h1);
+    expect(heading).not.toHaveClass(styles.h3);
+
+    expect(screen.getByText('ニュースタイトル')).toBeInTheDocument();
+    expect(screen.getByText('2026-04-11')).toHaveClass(styles.date);
+  });
 });

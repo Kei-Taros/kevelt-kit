@@ -176,48 +176,60 @@ export const WORK_DETAILS: WorkDetail[] = [
 export const WORK_CARD: WorkCardItem[] = [
   {
     id: 6,
-    src: '/images/works/work-6.webp',
-    alt: 'ファッション向けECサイト開発',
+    src: {
+      webp: '/images/works/work-6.webp',
+      png: '/images/works/work-6.png'
+    },
     title: 'ファッション向けECサイト開発',
     period: '2025 - 2026',
     tags: ['Web', 'Frontend', 'Backend', 'TypeScript', 'SvelteKit', 'NestJS']
   },
   {
     id: 5,
-    src: '/images/works/work-5.webp',
-    alt: '法務業務向けWebサービス開発',
+    src: {
+      webp: '/images/works/work-5.webp',
+      png: '/images/works/work-5.png'
+    },
     title: '法務業務向けWebサービス開発',
     period: '2025',
     tags: ['Web', 'Frontend', 'TypeScript', 'React']
   },
   {
     id: 4,
-    src: '/images/works/work-4.webp',
-    alt: '自販機向け電子決済システム開発',
+    src: {
+      webp: '/images/works/work-4.webp',
+      png: '/images/works/work-4.png'
+    },
     title: '自販機向け電子決済システム開発',
     period: '2023 - 2024',
     tags: ['Web', 'Backend', 'Elixir']
   },
   {
     id: 3,
-    src: '/images/works/work-3.webp',
-    alt: '水道事業者向けコーポレートサイト開発',
+    src: {
+      webp: '/images/works/work-3.webp',
+      png: '/images/works/work-3.png'
+    },
     title: '水道事業者向けコーポレートサイト開発',
     period: '2022 - 2023',
     tags: ['Web', 'Frontend', 'TypeScript', 'React']
   },
   {
     id: 2,
-    src: '/images/works/work-2.webp',
-    alt: 'Bluetoothヘッドホン組込み開発',
+    src: {
+      webp: '/images/works/work-2.webp',
+      png: '/images/works/work-2.png'
+    },
     title: 'Bluetoothヘッドホン組込み開発',
     period: '2019 - 2020',
     tags: ['Embedded', 'C', 'FreeRTOS']
   },
   {
     id: 1,
-    src: '/images/works/work-1.webp',
-    alt: '動画制作',
+    src: {
+      webp: '/images/works/work-1.webp',
+      png: '/images/works/work-1.png'
+    },
     title: '動画制作',
     period: '2020 - 2023',
     tags: ['Other', 'Premiere Pro', 'Photoshop']

@@ -106,6 +106,49 @@ export const h2News = style({
   }
 });
 
+export const h2NewsSlug = style({
+  color: colors.text.primary,
+  fontSize: '26px',
+  padding: '20px 30px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'relative',
+  textAlign: 'center',
+
+  selectors: {
+    '&::before, &::after': {
+      content: "''",
+      width: '12px',
+      height: 'calc(100% - 6px)',
+      position: 'absolute',
+      top: 0
+    },
+
+    '&::before': {
+      borderLeft: `2px solid ${colors.brand[600]}`,
+      borderTop: `2px solid ${colors.brand[600]}`,
+      borderBottom: `2px solid ${colors.brand[600]}`,
+      left: 0
+    },
+
+    '&::after': {
+      borderRight: `2px solid ${colors.brand[600]}`,
+      borderTop: `2px solid ${colors.brand[600]}`,
+      borderBottom: `2px solid ${colors.brand[600]}`,
+      right: 0
+    }
+  }
+});
+
+export const date = style({
+  color: colors.text.muted,
+  fontSize: '16px',
+  opacity: 0.8,
+  marginTop: '6px'
+});
+
 export const h3 = style({
   position: 'relative',
   padding: '0.2em 1.0em 0.2em 1.4em',

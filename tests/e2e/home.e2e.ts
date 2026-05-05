@@ -54,7 +54,7 @@ test.describe('Home page', () => {
     await worksHeading.scrollIntoViewIfNeeded();
     await expect(worksHeading).toBeVisible();
 
-    await expect(page.getByRole('button', { name: 'Work List' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Work List', exact: true })).toBeVisible();
 
     const worksSection = page.locator('section').filter({
       has: page.getByRole('heading', { name: 'Works' }).last()
@@ -69,7 +69,7 @@ test.describe('Home page', () => {
     const worksHeading = page.getByRole('heading', { name: 'Works' }).last();
     await worksHeading.scrollIntoViewIfNeeded();
 
-    await page.getByRole('button', { name: 'Work List' }).click();
+    await page.getByRole('link', { name: 'Work List', exact: true }).click();
 
     await expect(page).toHaveURL(/\/works$/);
     await expect(page.getByRole('heading', { name: 'Works' })).toBeVisible();
@@ -86,11 +86,30 @@ test.describe('Home page', () => {
       has: page.getByRole('heading', { name: 'Works' }).last()
     });
 
-    const firstCard = worksSection.getByRole('button').first();
+    const firstCardLink = worksSection.locator('a[href^="/works"]').first();
 
-    await expect(firstCard).toBeVisible();
-    await firstCard.click();
+    await expect(firstCardLink).toBeVisible();
+    await firstCardLink.click();
 
-    await expect(page).toHaveURL(/\/works$/);
+    await expect(page).toHaveURL(/\/works(\?.*)?$/);
+  });
+
+  test('Newsセクションが表示され、ニュースが最大3件表示される', async ({ page }) => {
+    const newsHeading = page.getByRole('heading', { name: 'News', exact: true });
+
+    await newsHeading.scrollIntoViewIfNeeded();
+    await expect(newsHeading).toBeVisible();
+
+    const newsSection = page.locator('section').filter({
+      has: page.getByRole('heading', { name: 'News', exact: true })
+    });
+
+    const newsLinks = newsSection.locator('a[href^="/news/"]');
+
+    await expect(newsLinks.first()).toBeVisible();
+
+    const count = await newsLinks.count();
+    expect(count).toBeGreaterThan(0);
+    expect(count).toBeLessThanOrEqual(3);
   });
 });

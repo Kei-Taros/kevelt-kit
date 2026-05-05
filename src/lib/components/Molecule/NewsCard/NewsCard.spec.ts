@@ -34,35 +34,7 @@ describe('NewsCard', () => {
     const image = screen.getByRole('img', { name: mockItem.title });
     const source = document.querySelector('source[type="image/webp"]');
 
-    expect(image).toHaveAttribute('src', mockItem.src!.png);
-    expect(source).toHaveAttribute('srcset', mockItem.src!.webp);
-  });
-
-  test.each([
-    [
-      '未指定',
-      {
-        title: 'お知らせタイトル',
-        date: '2026.04.19',
-        href: '/news/20260419'
-      }
-    ],
-    [
-      'null',
-      {
-        title: 'お知らせタイトル',
-        date: '2026.04.19',
-        href: '/news/20260419',
-        src: null
-      }
-    ]
-  ])('srcが%sの場合、no-data画像が表示される', (_case, item) => {
-    render(NewsCard, { props: { item } });
-
-    const image = screen.getByRole('img', { name: item.title });
-    const source = document.querySelector('source[type="image/webp"]');
-
-    expect(image).toHaveAttribute('src', '/images/news/no-data/no-data.png');
-    expect(source).toHaveAttribute('srcset', '/images/news/no-data/no-data.webp');
+    expect(image).toHaveAttribute('src', mockItem.src.png);
+    expect(source).toHaveAttribute('srcset', mockItem.src.webp);
   });
 });

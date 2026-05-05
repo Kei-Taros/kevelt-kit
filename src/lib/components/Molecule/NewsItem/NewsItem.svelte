@@ -1,7 +1,7 @@
 <script lang="ts">
-  import * as styles from './NewsItem.css';
   import { Heading } from '$lib/components/atoms';
   import type { NewsData } from '$lib/types/news.types';
+  import * as styles from './NewsItem.css';
 
   interface Props {
     item: NewsData;
@@ -13,12 +13,8 @@
 <a class={styles.item} href={item.href}>
   <div class={styles.imageContainer}>
     <picture>
-      <source srcset={item.src?.webp ?? '/images/news/no-data/no-data.webp'} type="image/webp" />
-      <img
-        class={styles.image}
-        src={item.src?.png ?? '/images/news/no-data/no-data.png'}
-        alt={item.title}
-      />
+      <source srcset={item.src.webp} type="image/webp" />
+      <img class={styles.image} src={item.src.png} alt={item.title} />
     </picture>
   </div>
 

@@ -16,6 +16,7 @@ export const load: PageLoad = async () => {
       return module.metadata.published && slug !== 'yyyymmdd';
     })
     .sort(([pathA], [pathB]) => Number(getSlugFromPath(pathB)) - Number(getSlugFromPath(pathA)))
+    .slice(0, 3)
     .map(([path, module]) => {
       const slug = getSlugFromPath(path);
 

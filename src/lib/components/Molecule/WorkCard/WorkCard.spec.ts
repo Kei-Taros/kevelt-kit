@@ -5,8 +5,10 @@ import type { WorkCardItem } from './WorkCard.types';
 
 const mockItem: WorkCardItem = {
   id: 1,
-  src: '/images/works/test.jpg',
-  alt: '案件画像',
+  src: {
+    webp: '/images/works/test.webp',
+    png: '/images/works/test.png'
+  },
   title: 'EC管理画面開発',
   period: '2026',
   tags: ['SvelteKit', 'TypeScript', 'vanilla-extract']
@@ -14,10 +16,17 @@ const mockItem: WorkCardItem = {
 
 describe('WorkCard', () => {
   test('itemが渡された場合、画像・タイトル・期間・タグが表示される', () => {
-    render(WorkCard, { props: { item: mockItem } });
+    const { container } = render(WorkCard, { props: { item: mockItem } });
 
     expect(screen.getByRole('button')).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: mockItem.alt })).toBeInTheDocument();
+
+    const image = screen.getByRole('img', { name: mockItem.title });
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', mockItem.src.png);
+
+    const source = container.querySelector('source[type="image/webp"]');
+    expect(source).toHaveAttribute('srcset', mockItem.src.webp);
+
     expect(screen.getByRole('heading', { level: 3, name: mockItem.title })).toBeInTheDocument();
     expect(screen.getByText(mockItem.period)).toBeInTheDocument();
 

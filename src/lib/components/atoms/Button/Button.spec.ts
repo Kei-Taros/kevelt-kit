@@ -71,4 +71,30 @@ describe('Button', () => {
     render(Button, { props: { label: '保存', disabled: true } });
     expect(screen.getByRole('button', { name: '保存' })).toBeDisabled();
   });
+
+  test('hrefが渡された場合、aタグとして表示される', () => {
+    render(Button, { props: { label: '一覧へ戻る', href: '/news' } });
+
+    const link = screen.getByRole('link', { name: '一覧へ戻る' });
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/news');
+    expect(screen.queryByRole('button', { name: '一覧へ戻る' })).not.toBeInTheDocument();
+  });
+
+  test('hrefが渡された場合、button共通クラスとvariantクラスが適用される', () => {
+    render(Button, {
+      props: {
+        label: '一覧へ戻る',
+        href: '/news',
+        variant: 'secondary'
+      }
+    });
+
+    const link = screen.getByRole('link', { name: '一覧へ戻る' });
+
+    expect(link).toHaveClass(styles.button);
+    expect(link).toHaveClass(styles.secondary);
+    expect(link).not.toHaveClass(styles.primary);
+  });
 });

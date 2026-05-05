@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/svelte';
 import { describe, test, expect } from 'vitest';
 import LatestNewsGrid from './LatestNewsGrid.svelte';
 import type { NewsData } from '$lib/types/news.types';
+import { NO_DATA_IMAGE } from '$lib/constants/images';
 
 const mockItems: NewsData[] = [
   {
@@ -25,12 +26,20 @@ const mockItems: NewsData[] = [
   {
     title: 'Worksページを更新しました',
     date: '2026.04.18',
-    href: '/news/20260418'
+    href: '/news/20260418',
+    src: {
+      webp: '/images/news/20260418.webp',
+      png: '/images/news/20260418.png'
+    }
   },
   {
     title: 'PlaywrightのE2Eテストを追加しました',
     date: '2026.04.19',
-    href: '/news/20260419'
+    href: '/news/20260419',
+    src: {
+      webp: NO_DATA_IMAGE.webp,
+      png: NO_DATA_IMAGE.png
+    }
   }
 ];
 

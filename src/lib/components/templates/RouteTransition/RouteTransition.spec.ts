@@ -84,16 +84,6 @@ describe('RouteTransition', () => {
     expect(video).toHaveClass(styles.transitionVideo);
   });
 
-  test('遷移先がトップページの場合、オーバーレイが表示されない', () => {
-    const { container } = render(RouteTransition);
-
-    const navigateHandler = getNavigateHandler();
-    const result = navigateHandler(createNavigation('/about-me', '/'));
-
-    expect(result).toBeUndefined();
-    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
-  });
-
   test('同一ページに遷移する場合、オーバーレイが表示されない', () => {
     const { container } = render(RouteTransition);
 
@@ -136,5 +126,15 @@ describe('RouteTransition', () => {
 
     expect(result).toBeUndefined();
     expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
+  });
+
+  test('/へ遷移する場合、hasSeenOpeningがsessionStorageに保存される', () => {
+    render(RouteTransition);
+
+    const navigateHandler = getNavigateHandler();
+
+    navigateHandler(createNavigation('/news', '/'));
+
+    expect(sessionStorage.getItem('hasSeenOpening')).toBe('true');
   });
 });

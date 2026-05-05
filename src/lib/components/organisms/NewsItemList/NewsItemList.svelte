@@ -6,14 +6,16 @@
 
   interface Props {
     items: NewsData[];
+    variant?: 'default' | 'home';
   }
 
-  let { items }: Props = $props();
+  let { items, variant = 'default' }: Props = $props();
 
   let visibleCount = $state(10);
 
   const visibleItems = $derived(items.slice(0, visibleCount));
-  const hasMore = $derived(items.length > visibleCount);
+  const isHome = $derived(variant === 'home');
+  const hasMore = $derived(!isHome && items.length > visibleCount);
 
   const handleLoadMore = () => {
     visibleCount += 10;
@@ -21,9 +23,11 @@
 </script>
 
 <section>
-  <div class={styles.headingContainer}>
-    <Heading label="News List" as="h2" variant="news" />
-  </div>
+  {#if !isHome}
+    <div class={styles.headingContainer}>
+      <Heading label="News List" as="h2" variant="news" />
+    </div>
+  {/if}
 
   <div class={styles.list}>
     {#each visibleItems as item, index (item.href)}
