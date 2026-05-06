@@ -60,7 +60,7 @@
     if (navigating) return;
 
     if (to.url.pathname === '/') {
-      sessionStorage.setItem('hasSeenOpening', 'true');
+      sessionStorage.setItem('skipOpeningOnce', 'true');
     }
 
     if (from.url.pathname === to.url.pathname) {

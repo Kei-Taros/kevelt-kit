@@ -128,13 +128,13 @@ describe('RouteTransition', () => {
     expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
   });
 
-  test('/へ遷移する場合、hasSeenOpeningがsessionStorageに保存される', () => {
+  test('/へ遷移する場合、skipOpeningOnceがsessionStorageに保存される', () => {
     render(RouteTransition);
 
     const navigateHandler = getNavigateHandler();
 
     navigateHandler(createNavigation('/news', '/'));
 
-    expect(sessionStorage.getItem('hasSeenOpening')).toBe('true');
+    expect(sessionStorage.getItem('skipOpeningOnce')).toBe('true');
   });
 });
