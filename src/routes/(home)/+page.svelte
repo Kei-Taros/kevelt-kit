@@ -17,7 +17,7 @@
   let scrollProgress = 0;
 
   let introVideoEl = $state<HTMLVideoElement | null>(null);
-  let isOpeningVisible = $state(false);
+  let isOpeningVisible = $state(true);
   let isOpeningFading = $state(false);
 
   let sectionMsgEl: HTMLElement | null = null;
@@ -67,9 +67,33 @@
   };
 
   const setupIntroSequence = () => {
+    const skipOpeningOnce = sessionStorage.getItem('skipOpeningOnce') === 'true';
+
+    if (skipOpeningOnce) {
+      sessionStorage.removeItem('skipOpeningOnce');
+      isOpeningVisible = false;
+
+      return {
+        shouldShowOpening: false,
+        cleanup: () => {}
+      };
+    }
+
     const hasSeenOpening = sessionStorage.getItem('hasSeenOpening');
 
-    if (hasSeenOpening === 'true') return () => {};
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const isReload = navigation.type === 'reload';
+
+    const shouldShowOpening = hasSeenOpening !== 'true' || isReload;
+
+    if (!shouldShowOpening) {
+      isOpeningVisible = false;
+
+      return {
+        shouldShowOpening,
+        cleanup: () => {}
+      };
+    }
 
     sessionStorage.setItem('hasSeenOpening', 'true');
 
@@ -77,7 +101,7 @@
     isOpeningFading = false;
 
     queueMicrotask(() => {
-      introVideoEl?.play();
+      introVideoEl?.play().catch(() => {});
     });
 
     const fadeTimer = window.setTimeout(() => {
@@ -88,18 +112,20 @@
       isOpeningVisible = false;
     }, 5000);
 
-    return () => {
-      window.clearTimeout(fadeTimer);
-      window.clearTimeout(hideTimer);
+    return {
+      shouldShowOpening,
+      cleanup: () => {
+        window.clearTimeout(fadeTimer);
+        window.clearTimeout(hideTimer);
+      }
     };
   };
 
-  const setupHeroVideoPlay = () => {
-    const hasSeenOpening = sessionStorage.getItem('hasSeenOpening');
-    const delay = hasSeenOpening === 'true' ? 0 : 3000;
+  const setupHeroVideoPlay = (shouldShowOpening: boolean) => {
+    const delay = shouldShowOpening ? 5000 : 0;
 
     const timer = window.setTimeout(() => {
-      heroVideoEl?.play();
+      heroVideoEl?.play().catch(() => {});
     }, delay);
 
     return () => {
@@ -156,10 +182,10 @@
   onMount(() => {
     window.scrollTo(0, 0);
     const cleanups: Array<() => void> = [];
-
+    const intro = setupIntroSequence();
     cleanups.push(setupHeroWheelZoom());
-    cleanups.push(setupIntroSequence());
-    cleanups.push(setupHeroVideoPlay());
+    cleanups.push(intro.cleanup);
+    cleanups.push(setupHeroVideoPlay(intro.shouldShowOpening));
     cleanups.push(setupMsgReveal());
     cleanups.push(setupGridReveal());
 
