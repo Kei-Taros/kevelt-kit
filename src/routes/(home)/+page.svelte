@@ -122,7 +122,7 @@
   };
 
   const setupHeroVideoPlay = (shouldShowOpening: boolean) => {
-    const delay = shouldShowOpening ? 5000 : 0;
+    const delay = shouldShowOpening ? 3000 : 0;
 
     const timer = window.setTimeout(() => {
       heroVideoEl?.play().catch(() => {});
