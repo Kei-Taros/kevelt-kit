@@ -116,4 +116,26 @@ describe('Heading', () => {
     expect(screen.getByText('ニュースタイトル')).toBeInTheDocument();
     expect(screen.getByText('2026-04-11')).toHaveClass(styles.date);
   });
+
+  test('as=h3かつvariant=conceptの場合、番号とlabelが表示される', () => {
+    render(Heading, {
+      props: {
+        label: 'Architecture',
+        number: '01',
+        as: 'h3',
+        variant: 'concept'
+      }
+    });
+
+    const heading = screen.getByRole('heading', {
+      level: 3,
+      name: '01 Architecture'
+    });
+
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveClass(styles.h3);
+
+    expect(screen.getByText('01')).toHaveClass(styles.number);
+    expect(screen.getByText('Architecture')).toBeInTheDocument();
+  });
 });

@@ -178,3 +178,9 @@ export const h3 = style({
     }
   }
 });
+
+export const number = style({
+  color: colors.brand[500],
+  letterSpacing: '0.05em',
+  marginRight: '14px'
+});
