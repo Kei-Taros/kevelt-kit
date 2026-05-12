@@ -40,6 +40,12 @@ describe('Button', () => {
       props: { label: 'キャンセル', variant: 'secondary' as const },
       expectClass: styles.secondary,
       expectNotClass: styles.primary
+    },
+    {
+      label: 'variant=conceptの場合、conceptのクラスが適用される',
+      props: { label: 'SCROLL', variant: 'concept' as const },
+      expectClass: styles.concept,
+      expectNotClass: styles.primary
     }
   ])('$label', ({ props, expectClass, expectNotClass }) => {
     render(Button, { props });

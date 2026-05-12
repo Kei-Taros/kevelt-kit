@@ -128,3 +128,38 @@ export const newsSlug = style({
     }
   }
 });
+
+export const concept = style({
+  marginInline: 'auto',
+
+  width: '120px',
+  height: '120px',
+  borderRadius: '50%',
+
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '10px',
+
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  background: 'rgba(255, 255, 255, 0.03)',
+
+  color: colors.text.primary,
+  fontSize: '12px',
+  letterSpacing: '0.24em',
+
+  cursor: 'pointer',
+
+  transition: `
+    transform 0.2s ease,
+    border-color 0.2s ease
+  `,
+
+  selectors: {
+    '&:hover': {
+      transform: 'translateY(-4px)',
+      borderColor: colors.brand[600]
+    }
+  }
+});
