@@ -266,8 +266,8 @@
         }`}
       >
         <picture>
-          <source srcset="/images/grid-section/about-me.webp" type="image/webp" />
-          <img src="/images/grid-section/about-me.png" alt="About Me" class={styles.gridImg} />
+          <source srcset="/images/theme/about-me.webp" type="image/webp" />
+          <img src="/images/theme/about-me.png" alt="About Me" class={styles.gridImg} />
         </picture>
         <span class={styles.gridLabel}>About Me</span>
       </a>
@@ -279,8 +279,8 @@
         }`}
       >
         <picture>
-          <source srcset="/images/grid-section/consept.webp" type="image/webp" />
-          <img src="/images/grid-section/consept.png" alt="Concept" class={styles.gridImg} />
+          <source srcset="/images/theme/consept.webp" type="image/webp" />
+          <img src="/images/theme/consept.png" alt="Concept" class={styles.gridImg} />
         </picture>
         <span class={styles.gridLabel}>Concept</span>
       </a>
@@ -294,8 +294,8 @@
             }`}
           >
             <picture>
-              <source srcset="/images/grid-section/news.webp" type="image/webp" />
-              <img src="/images/grid-section/news.png" alt="News" class={styles.gridImg} />
+              <source srcset="/images/theme/news.webp" type="image/webp" />
+              <img src="/images/theme/news.png" alt="News" class={styles.gridImg} />
             </picture>
             <span class={styles.gridLabel}>News</span>
           </a>
@@ -307,8 +307,8 @@
             }`}
           >
             <picture>
-              <source srcset="/images/grid-section/a-break.webp" type="image/webp" />
-              <img src="/images/grid-section/a-break.png" alt="A Break" class={styles.gridImg} />
+              <source srcset="/images/theme/a-break.webp" type="image/webp" />
+              <img src="/images/theme/a-break.png" alt="A Break" class={styles.gridImg} />
             </picture>
             <span class={styles.gridLabel}>A Break</span>
           </a>
@@ -321,8 +321,8 @@
           }`}
         >
           <picture>
-            <source srcset="/images/grid-section/works.webp" type="image/webp" />
-            <img src="/images/grid-section/works.png" alt="Works" class={styles.gridImg} />
+            <source srcset="/images/theme/works.webp" type="image/webp" />
+            <img src="/images/theme/works.png" alt="Works" class={styles.gridImg} />
           </picture>
           <span class={styles.gridLabel}>Works</span>
         </a>
