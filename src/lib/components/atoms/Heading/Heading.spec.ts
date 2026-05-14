@@ -43,6 +43,13 @@ describe('Heading', () => {
       level: 3,
       expectClass: styles.h3,
       expectNotClasses: [styles.h1, styles.h2]
+    },
+    {
+      label: 'as=h4の場合、h4タグとh4のクラスが適用される',
+      props: { label: 'Small Title', as: 'h4' as const },
+      level: 4,
+      expectClass: styles.h4,
+      expectNotClasses: [styles.h1, styles.h2, styles.h3]
     }
   ])('$label', ({ props, level, expectClass, expectNotClasses }) => {
     render(Heading, { props });

@@ -8,7 +8,7 @@
     date?: string;
     number?: string;
     children?: Snippet;
-    as?: 'h1' | 'h2' | 'h3';
+    as?: 'h1' | 'h2' | 'h3' | 'h4';
     variant?: 'default' | 'concept' | 'news' | 'newsSlug';
   }
 
@@ -37,7 +37,9 @@
       }
     }
 
-    return styles.h3;
+    if (as === 'h3') return styles.h3;
+
+    return styles.h4;
   };
 
   const headingClass = $derived(getHeadingClass());
