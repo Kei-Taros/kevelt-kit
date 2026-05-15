@@ -14,7 +14,7 @@
     </nav>
 
     <div class={styles.nav}>
-      <a href="/privacy" class={styles.link}>プライバシーポリシー</a>
+      <a href="/privacy-policy" class={styles.link}>Privacy Policy</a>
     </div>
 
     <div class={styles.logo}>

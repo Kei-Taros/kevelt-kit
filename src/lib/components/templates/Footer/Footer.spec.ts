@@ -17,7 +17,7 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: 'Works' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'News' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'A Break' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'プライバシーポリシー' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Privacy Policy' })).toBeInTheDocument();
 
     expect(screen.getByText('KeveltKit')).toBeInTheDocument();
     expect(screen.getByText('© 2026 KeveltKit. All rights reserved.')).toBeInTheDocument();
@@ -31,9 +31,9 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: 'Works' })).toHaveAttribute('href', '/works');
     expect(screen.getByRole('link', { name: 'News' })).toHaveAttribute('href', '/news');
     expect(screen.getByRole('link', { name: 'A Break' })).toHaveAttribute('href', '/a-break');
-    expect(screen.getByRole('link', { name: 'プライバシーポリシー' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
       'href',
-      '/privacy'
+      '/privacy-policy'
     );
   });
 });
