@@ -3,13 +3,13 @@
   import { browser } from '$app/environment';
   import EmblaCarousel from 'embla-carousel';
   import Autoplay from 'embla-carousel-autoplay';
+  import type { CarouselItem } from '$lib/types/carousel.types';
   import * as styles from './CardCarousel.css';
-  import type { CardCarouselItem } from './CardCarousel.types';
 
   interface Props {
-    items: CardCarouselItem[];
+    items: CarouselItem[];
     loop?: boolean;
-    onCardClick?: (item: CardCarouselItem) => void;
+    onCardClick?: (item: CarouselItem) => void;
   }
 
   let { items, loop = true, onCardClick }: Props = $props();
@@ -80,7 +80,7 @@
             <button type="button" class={styles.slideLink} onclick={() => onCardClick?.(item)}>
               <picture>
                 <source srcset={item.src.webp} type="image/webp" />
-                <img class={styles.slideImg} src={item.src.png} alt={item.alt} />
+                <img class={styles.slideImg} src={item.src.png} alt={item.title} />
               </picture>
               <div class={`${styles.slideOverlay} ${styles.slideOverlayActive}`}>
                 <span class={styles.slideTitle}>{item.title}</span>
@@ -93,7 +93,7 @@
                 <img
                   class={`${styles.slideImg} ${styles.slideDimmed}`}
                   src={item.src.png}
-                  alt={item.alt}
+                  alt={item.title}
                 />
               </picture>
               <div class={styles.slideOverlay}>

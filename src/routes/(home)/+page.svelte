@@ -2,8 +2,7 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { Button, Heading } from '$lib/components/atoms';
-  import { CardCarousel } from '$lib/components/Molecule';
-  import { NewsItemList } from '$lib/components/organisms';
+  import { CardCarousel, NewsItemList } from '$lib/components/organisms';
   import type { PageData } from './$types';
   import * as styles from './home.css';
   import * as constants from './constants/home';

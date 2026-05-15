@@ -1,5 +1,3 @@
-export { default as CardCarousel } from './CardCarousel/CardCarousel.svelte';
-export type { CardCarouselItem } from './CardCarousel/CardCarousel.types';
 export { default as ConceptCraftCard } from './ConceptCraftCard/ConceptCraftCard.svelte';
 export { default as Modal } from './Modal/Modal.svelte';
 export { default as NewsCard } from './NewsCard/NewsCard.svelte';
