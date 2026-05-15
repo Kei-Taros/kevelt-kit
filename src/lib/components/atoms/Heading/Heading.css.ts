@@ -178,3 +178,37 @@ export const h3 = style({
     }
   }
 });
+
+export const number = style({
+  color: colors.brand[500],
+  letterSpacing: '0.05em',
+  marginRight: '14px'
+});
+
+export const h4 = style({
+  margin: 0,
+  position: 'relative',
+  display: 'inline-block',
+  paddingBottom: '6px',
+  fontSize: '20px',
+
+  selectors: {
+    '&::after': {
+      content: "''",
+      position: 'absolute',
+      left: 0,
+      bottom: 0,
+
+      width: '140px',
+      height: '7px',
+
+      background: `repeating-linear-gradient(
+        -45deg,
+        ${colors.brand[600]},
+        ${colors.brand[600]} 4px,
+        transparent 4px,
+        transparent 8px
+      )`
+    }
+  }
+});

@@ -6,13 +6,15 @@
   interface Props extends HTMLAttributes<HTMLElement> {
     label?: string;
     date?: string;
+    number?: string;
     children?: Snippet;
-    as?: 'h1' | 'h2' | 'h3';
-    variant?: 'default' | 'news' | 'newsSlug';
+    as?: 'h1' | 'h2' | 'h3' | 'h4';
+    variant?: 'default' | 'concept' | 'news' | 'newsSlug';
   }
 
   let {
     label = '',
+    number = '',
     date = '',
     children,
     as = 'h1',
@@ -35,7 +37,9 @@
       }
     }
 
-    return styles.h3;
+    if (as === 'h3') return styles.h3;
+
+    return styles.h4;
   };
 
   const headingClass = $derived(getHeadingClass());
@@ -45,6 +49,9 @@
   {#if variant === 'newsSlug'}
     <span>{label}</span>
     <span class={styles.date}>{date}</span>
+  {:else if variant === 'concept'}
+    <span class={styles.number}>{number}</span>
+    <span>{label}</span>
   {:else if children}
     {@render children()}
   {:else}

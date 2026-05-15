@@ -43,6 +43,13 @@ describe('Heading', () => {
       level: 3,
       expectClass: styles.h3,
       expectNotClasses: [styles.h1, styles.h2]
+    },
+    {
+      label: 'as=h4の場合、h4タグとh4のクラスが適用される',
+      props: { label: 'Small Title', as: 'h4' as const },
+      level: 4,
+      expectClass: styles.h4,
+      expectNotClasses: [styles.h1, styles.h2, styles.h3]
     }
   ])('$label', ({ props, level, expectClass, expectNotClasses }) => {
     render(Heading, { props });
@@ -115,5 +122,27 @@ describe('Heading', () => {
 
     expect(screen.getByText('ニュースタイトル')).toBeInTheDocument();
     expect(screen.getByText('2026-04-11')).toHaveClass(styles.date);
+  });
+
+  test('as=h3かつvariant=conceptの場合、番号とlabelが表示される', () => {
+    render(Heading, {
+      props: {
+        label: 'Architecture',
+        number: '01',
+        as: 'h3',
+        variant: 'concept'
+      }
+    });
+
+    const heading = screen.getByRole('heading', {
+      level: 3,
+      name: '01 Architecture'
+    });
+
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveClass(styles.h3);
+
+    expect(screen.getByText('01')).toHaveClass(styles.number);
+    expect(screen.getByText('Architecture')).toBeInTheDocument();
   });
 });

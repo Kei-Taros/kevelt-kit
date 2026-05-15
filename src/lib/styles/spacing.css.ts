@@ -1,4 +1,8 @@
 import { style } from '@vanilla-extract/css';
+export const mbXXS = style({
+  marginBottom: '8px'
+});
+
 export const mbXS = style({
   marginBottom: '16px'
 });
@@ -35,6 +39,22 @@ export const mbXXXXXL = style({
   marginBottom: '280px'
 });
 
+export const mtS = style({
+  marginTop: '24px'
+});
+
+export const mtM = style({
+  marginTop: '32px'
+});
+
+export const mtL = style({
+  marginTop: '48px'
+});
+
 export const mtXXL = style({
   marginTop: '80px'
+});
+
+export const mtXXXL = style({
+  marginTop: '120px'
 });

@@ -7,6 +7,7 @@
   let { children } = $props();
 
   const isHome = $derived(page.url.pathname === '/');
+  const isConcept = $derived(page.url.pathname === '/concept');
 </script>
 
 <svelte:head>
@@ -18,11 +19,13 @@
 
 {#if isHome}
   <Header showOffset={1000} />
+{:else if isConcept}
+  <Header showOffset={100} />
 {:else}
   <Header />
 {/if}
 
-{#if isHome}
+{#if isHome || isConcept}
   <main>
     {@render children()}
   </main>

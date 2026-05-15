@@ -7,7 +7,7 @@
     label?: string;
     children?: Snippet;
     type?: 'button' | 'submit' | 'reset';
-    variant?: 'primary' | 'secondary' | 'newsSlug';
+    variant?: 'primary' | 'secondary' | 'newsSlug' | 'concept';
     href?: string;
   }
 
@@ -31,6 +31,9 @@
 
       case 'newsSlug':
         return styles.newsSlug;
+
+      case 'concept':
+        return styles.concept;
 
       default:
         return styles.primary;
