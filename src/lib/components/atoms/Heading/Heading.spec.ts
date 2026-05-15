@@ -145,4 +145,30 @@ describe('Heading', () => {
     expect(screen.getByText('01')).toHaveClass(styles.number);
     expect(screen.getByText('Architecture')).toBeInTheDocument();
   });
+  test('as=h2かつvariant=privacyPolicyの場合、番号とlabelが表示されてh2PrivacyPolicyのクラスが適用される', () => {
+    render(Heading, {
+      props: {
+        label: '個人情報の利用について',
+        number: '1',
+        as: 'h2',
+        variant: 'privacyPolicy'
+      }
+    });
+
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: '1. 個人情報の利用について'
+    });
+
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveClass(styles.h2PrivacyPolicy);
+    expect(heading).not.toHaveClass(styles.h2);
+    expect(heading).not.toHaveClass(styles.h2News);
+    expect(heading).not.toHaveClass(styles.h2NewsSlug);
+    expect(heading).not.toHaveClass(styles.h1);
+    expect(heading).not.toHaveClass(styles.h3);
+
+    expect(screen.getByText('1.')).toBeInTheDocument();
+    expect(screen.getByText('個人情報の利用について')).toBeInTheDocument();
+  });
 });
