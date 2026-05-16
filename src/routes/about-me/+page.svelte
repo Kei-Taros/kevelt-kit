@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Heading, SkillIcon } from '$lib/components/atoms';
+  import { Heading, Icon, SkillIcon } from '$lib/components/atoms';
   import * as styles from './aboutMe.css';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
@@ -23,6 +23,16 @@
           <p class={styles.profileValue}>{item.value}</p>
         </div>
       {/each}
+      <div class={styles.iconList}>
+        <Icon name="envelope" iconType="fontawesome" copyText="keveltkit@gmail.com" size={45} />
+        <Icon
+          name="github"
+          iconType="devicon"
+          colored={false}
+          href="https://github.com/Kei-Taros"
+          size={45}
+        />
+      </div>
     </div>
     <div class={styles.aboutProfileImg}>
       <div class={styles.torchGlow}></div>

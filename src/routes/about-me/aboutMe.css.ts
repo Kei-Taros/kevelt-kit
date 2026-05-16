@@ -35,6 +35,14 @@ export const aboutProfileImg = style({
   position: 'relative'
 });
 
+export const iconList = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: '20px',
+  marginTop: '16px'
+});
+
 export const profileImg = style({
   width: '100%',
   height: 'auto',
