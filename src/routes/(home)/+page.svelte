@@ -241,12 +241,14 @@
 <section class={spacing.mbXXXXL} bind:this={sectionMsgEl}>
   <div class={layout.contentInner}>
     <div class={styles.msgWrapper}>
-      <div class={`${styles.msgTop} ${showMsgTop ? styles.showMsg : ''}`}>一旦やってみる</div>
+      <div class={`${styles.msgTop} ${showMsgTop ? styles.showMsg : ''}`}>
+        {constants.TOP_MESSAGE}
+      </div>
       <div class={`${styles.msgMiddle} ${showMsgMiddle ? styles.showMsg : ''}`}>
-        難しいことはそれから考えよう
+        {constants.MIDDLE_MESSAGE}
       </div>
       <div class={`${styles.msgBottom} ${showMsgBottom ? styles.showMsg : ''}`}>
-        Try first. Think later.
+        {constants.BOTTOM_MESSAGE}
       </div>
     </div>
   </div>

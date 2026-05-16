@@ -1,5 +1,9 @@
 import type { CarouselItem } from '$lib/types/carousel.types';
 
+export const TOP_MESSAGE = '一旦やってみる';
+export const MIDDLE_MESSAGE = '難しいことはそれから考えよう';
+export const BOTTOM_MESSAGE = 'Try first. Think later.';
+
 export const CAROUSEL_ITEMS: CarouselItem[] = [
   {
     id: 6,
