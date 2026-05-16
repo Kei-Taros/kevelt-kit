@@ -9,7 +9,7 @@
     number?: string;
     children?: Snippet;
     as?: 'h1' | 'h2' | 'h3' | 'h4';
-    variant?: 'default' | 'concept' | 'news' | 'newsSlug';
+    variant?: 'default' | 'concept' | 'news' | 'newsSlug' | 'privacyPolicy';
   }
 
   let {
@@ -32,6 +32,8 @@
           return styles.h2News;
         case 'newsSlug':
           return styles.h2NewsSlug;
+        case 'privacyPolicy':
+          return styles.h2PrivacyPolicy;
         default:
           return styles.h2;
       }
@@ -51,6 +53,9 @@
     <span class={styles.date}>{date}</span>
   {:else if variant === 'concept'}
     <span class={styles.number}>{number}</span>
+    <span>{label}</span>
+  {:else if variant === 'privacyPolicy'}
+    <span>{number}.</span>
     <span>{label}</span>
   {:else if children}
     {@render children()}

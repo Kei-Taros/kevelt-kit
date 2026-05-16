@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Heading, SkillIcon } from '$lib/components/atoms';
+  import { Heading, Icon, SkillIcon } from '$lib/components/atoms';
   import * as styles from './aboutMe.css';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
@@ -17,13 +17,21 @@
 
   <div class={`${styles.aboutProfile} ${spacing.mbXL}`}>
     <div class={styles.aboutProfileDetails}>
-      <div class={styles.profileData}>
-        <span class={styles.profileLabel}>NAME:</span>
-        <p class={styles.profileValue}>Keitarou Kase</p>
-      </div>
-      <div class={styles.profileData}>
-        <span class={styles.profileLabel}>BIRTH:</span>
-        <p class={styles.profileValue}>1996</p>
+      {#each constants.PROFILE_LIST as item}
+        <div class={styles.profileData}>
+          <span class={styles.profileLabel}>{item.label}</span>
+          <p class={styles.profileValue}>{item.value}</p>
+        </div>
+      {/each}
+      <div class={styles.iconList}>
+        <Icon name="envelope" iconType="fontawesome" copyText="keveltkit@gmail.com" size={45} />
+        <Icon
+          name="github"
+          iconType="devicon"
+          colored={false}
+          href="https://github.com/Kei-Taros"
+          size={45}
+        />
       </div>
     </div>
     <div class={styles.aboutProfileImg}>

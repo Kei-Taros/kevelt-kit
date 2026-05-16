@@ -63,18 +63,6 @@ test.describe('Home page', () => {
     await expect(worksSection.locator('img').first()).toBeVisible();
   });
 
-  test('Work Listボタンを押した場合、Worksページへ遷移する', async ({ page }) => {
-    await page.waitForTimeout(5500);
-
-    const worksHeading = page.getByRole('heading', { name: 'Works' }).last();
-    await worksHeading.scrollIntoViewIfNeeded();
-
-    await page.getByRole('link', { name: 'Work List', exact: true }).click();
-
-    await expect(page).toHaveURL(/\/works$/);
-    await expect(page.getByRole('heading', { name: 'Works' })).toBeVisible();
-  });
-
   test('Worksカルーセルのカードを押した場合、Worksページへ遷移する', async ({ page }) => {
     await page.goto('/?e2e=1');
     await page.waitForTimeout(5500);

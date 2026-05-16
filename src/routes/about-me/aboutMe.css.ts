@@ -9,8 +9,7 @@ export const aboutProfile = style({
 
 export const aboutProfileDetails = style({
   flex: 1,
-  lineHeight: 1.5,
-  fontSize: '16px'
+  lineHeight: 1.5
 });
 
 export const profileData = style({
@@ -34,6 +33,14 @@ export const profileValue = style({
 export const aboutProfileImg = style({
   flex: '0 0 60%',
   position: 'relative'
+});
+
+export const iconList = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: '20px',
+  marginTop: '16px'
 });
 
 export const profileImg = style({

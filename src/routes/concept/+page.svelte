@@ -24,6 +24,10 @@
   };
 </script>
 
+<svelte:head>
+  <title>Concept | KeveltKit</title>
+</svelte:head>
+
 <SnapDots count={constants.SECTION_COUNT} {activeIndex} onSelect={scrollToSection} />
 
 <section class={styles.contentInner}>

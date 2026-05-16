@@ -5,7 +5,15 @@
   import * as layout from '$lib/styles/layout.css';
 </script>
 
+<svelte:head>
+  <title>A Break | KeveltKit</title>
+</svelte:head>
+
 <section class={layout.contentInner}>
   <div class={spacing.mbM}><Heading label="A Break" /></div>
-  <div>test</div>
+
+  <picture>
+    <source srcset="/images/draft/draft.webp" type="image/webp" />
+    <img class={styles.image} src="/images/draft/draft.png" alt="draft" />
+  </picture>
 </section>

@@ -142,6 +142,13 @@ export const h2NewsSlug = style({
   }
 });
 
+export const h2PrivacyPolicy = style({
+  paddingBottom: '8px',
+  fontSize: '22px',
+  color: colors.text.primary,
+  borderBottom: `1px solid ${colors.brand[600]}`
+});
+
 export const date = style({
   color: colors.text.muted,
   fontSize: '16px',

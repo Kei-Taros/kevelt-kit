@@ -1,2 +1,6 @@
 import { style } from '@vanilla-extract/css';
-import { colors } from '$lib/styles/theme/colors.css';
+
+export const image = style({
+  display: 'block',
+  width: '100%'
+});

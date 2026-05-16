@@ -1,4 +1,4 @@
-export type ImgSrc = {
+export interface ImgSrc {
   webp: string;
   png: string;
-};
+}

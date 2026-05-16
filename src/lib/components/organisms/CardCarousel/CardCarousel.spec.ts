@@ -1,15 +1,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
 import { describe, test, expect, beforeEach } from 'vitest';
-import type { CardCarouselItem } from './CardCarousel.types';
+import type { CarouselItem } from '$lib/types/carousel.types';
 
-const mockItems: CardCarouselItem[] = [
+const mockItems: CarouselItem[] = [
   {
     id: 1,
     src: {
       webp: '/img/test1.webp',
       png: '/img/test1.jpg'
     },
-    alt: 'image1',
     title: 'Slide 1'
   },
   {
@@ -18,7 +17,6 @@ const mockItems: CardCarouselItem[] = [
       webp: '/img/test2.webp',
       png: '/img/test2.jpg'
     },
-    alt: 'image2',
     title: 'Slide 2'
   },
   {
@@ -27,7 +25,6 @@ const mockItems: CardCarouselItem[] = [
       webp: '/img/test3.webp',
       png: '/img/test3.jpg'
     },
-    alt: 'image3',
     title: 'Slide 3'
   }
 ];
@@ -42,14 +39,14 @@ describe('CardCarousel', () => {
 
   test('スライドデータが渡された場合、スライド画像が表示される', () => {
     for (const item of mockItems) {
-      expect(screen.getByAltText(item.alt)).toBeInTheDocument();
+      expect(screen.getByAltText(item.title)).toBeInTheDocument();
     }
   });
 
   test('スライドデータが渡された場合、渡された順でスライド画像が表示される', () => {
     const imgs = Array.from(renderResult.container.querySelectorAll('img'));
     const actualAlts = imgs.map((img) => img.getAttribute('alt'));
-    const expectedAlts = mockItems.map((item) => item.alt);
+    const expectedAlts = mockItems.map((item) => item.title);
 
     expect(actualAlts).toEqual(expectedAlts);
   });
@@ -61,7 +58,6 @@ describe('CardCarousel', () => {
     const activeImage = activeButton?.querySelector('img');
     expect(activeImage).toBeTruthy();
     expect(activeImage).toHaveAttribute('src', mockItems[0].src.png);
-    expect(activeImage).toHaveAttribute('alt', mockItems[0].alt);
   });
 
   test('コンポーネントが描画された場合、prev/nextボタンが表示される', () => {
@@ -85,13 +81,8 @@ describe('CardCarousel', () => {
     await fireEvent.click(btn);
 
     await waitFor(() => {
-      const activeButton = renderResult.container.querySelector('button');
-      expect(activeButton).toBeTruthy();
-
-      const activeImage = activeButton?.querySelector('img');
-      expect(activeImage).toBeTruthy();
-      expect(activeImage).toHaveAttribute('src', expectedItem.src.png);
-      expect(activeImage).toHaveAttribute('alt', expectedItem.alt);
+      const image = screen.getByAltText(expectedItem.title);
+      expect(image).toHaveAttribute('src', expectedItem.src.png);
     });
   });
 
