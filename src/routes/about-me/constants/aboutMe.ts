@@ -1,3 +1,14 @@
+export const PROFILE_LIST = [
+  {
+    label: 'NAME:',
+    value: 'Keitarou Kase'
+  },
+  {
+    label: 'BIRTH:',
+    value: '1996'
+  }
+] as const;
+
 export const SKILL_ICONS = [
   'typescript',
   'react',

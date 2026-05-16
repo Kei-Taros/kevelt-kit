@@ -17,14 +17,12 @@
 
   <div class={`${styles.aboutProfile} ${spacing.mbXL}`}>
     <div class={styles.aboutProfileDetails}>
-      <div class={styles.profileData}>
-        <span class={styles.profileLabel}>NAME:</span>
-        <p class={styles.profileValue}>Keitarou Kase</p>
-      </div>
-      <div class={styles.profileData}>
-        <span class={styles.profileLabel}>BIRTH:</span>
-        <p class={styles.profileValue}>1996</p>
-      </div>
+      {#each constants.PROFILE_LIST as item}
+        <div class={styles.profileData}>
+          <span class={styles.profileLabel}>{item.label}</span>
+          <p class={styles.profileValue}>{item.value}</p>
+        </div>
+      {/each}
     </div>
     <div class={styles.aboutProfileImg}>
       <div class={styles.torchGlow}></div>

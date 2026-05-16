@@ -9,8 +9,7 @@ export const aboutProfile = style({
 
 export const aboutProfileDetails = style({
   flex: 1,
-  lineHeight: 1.5,
-  fontSize: '16px'
+  lineHeight: 1.5
 });
 
 export const profileData = style({
