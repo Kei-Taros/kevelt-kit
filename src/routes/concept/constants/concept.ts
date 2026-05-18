@@ -13,11 +13,11 @@ export const WHATS_KEVELTKIT_TEXTS: string[] = [
   '当初、これまで使用経験のあるReactやNext.jsで開発を始めようと考えていました。',
   '人気の高いフレームワークなので、使い方に困ることもなさそうですからね。',
   'ですが。。。なんかつまらない。',
-  'そんな時に目に留まったのが <span class="brand">SvelteKit</span> でした。',
+  'そんな時に目に留まったのが <a href="https://svelte.jp/" target="_blank" rel="noopener noreferrer" class="brand">SvelteKit</a> でした。',
   '一旦やってみる。難しいことはそれから考えよう。',
-  '後先考えず、とりあえず突き進んでしまう性分なので、気がついたらSvelteKitで開発を始めていました🤔',
+  '後先考えずに突き進んでしまう性分なので日本ではまだマイナーなフレームワークですが、<br>勢いで開発を始めていました🤔',
   'で、ここからが本題なのですが、そんなSvelteKitに無理やり私の名前を融合させて <span class="brand">KeveltKit</span> を爆誕させました！',
-  'キーカラーを<span class="brand">オレンジ色</span>にしているのも、ベースにSvelteKitがあるからです🍊',
+  'ちなみにキーカラーを<span class="brand">オレンジ色</span>にしているのも、ベースにSvelteKitがあるからです🍊',
   'ダークカラー x オレンジってこんなに合うんですね。'
 ];
 
