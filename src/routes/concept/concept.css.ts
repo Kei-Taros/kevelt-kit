@@ -109,7 +109,14 @@ globalStyle(`${sectionText} p`, {
 
 globalStyle(`${sectionText} .brand`, {
   color: colors.brand[600],
-  fontWeight: 700
+  fontWeight: 700,
+  textDecoration: 'none',
+  display: 'inline-block',
+  transition: 'text-shadow 0.3s ease'
+});
+
+globalStyle(`${sectionText} .brand:hover`, {
+  textShadow: `0 0 5px ${colors.brand[600]}`
 });
 
 export const logoImage = style({
