@@ -6,5 +6,6 @@ globalStyle('html, body', {
   padding: 0,
   width: '100%',
   height: '100%',
-  background: colors.background.primary
+  background: colors.background.primary,
+  fontFamily: '"Noto Sans JP", sans-serif'
 });
