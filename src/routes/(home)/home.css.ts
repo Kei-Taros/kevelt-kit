@@ -18,7 +18,8 @@ export const openingOverlay = style({
   opacity: 1,
   transition: 'opacity 1000ms ease',
   pointerEvents: 'auto',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  touchAction: 'none'
 });
 
 export const openingFadeOut = style({

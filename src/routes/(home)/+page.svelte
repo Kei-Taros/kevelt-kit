@@ -65,6 +65,47 @@
     };
   };
 
+  const lockOpeningScroll = () => {
+    if (!window.matchMedia('(max-width: 767px)').matches) return () => {};
+
+    const scrollY = window.scrollY;
+    const htmlOverflow = document.documentElement.style.overflow;
+    const htmlOverscrollBehavior = document.documentElement.style.overscrollBehavior;
+    const bodyOverflow = document.body.style.overflow;
+    const bodyPosition = document.body.style.position;
+    const bodyTop = document.body.style.top;
+    const bodyWidth = document.body.style.width;
+    const bodyTouchAction = document.body.style.touchAction;
+
+    const preventTouchMove = (event: TouchEvent) => event.preventDefault();
+
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.overscrollBehavior = 'none';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.touchAction = 'none';
+    document.addEventListener('touchmove', preventTouchMove, { passive: false });
+
+    let isUnlocked = false;
+
+    return () => {
+      if (isUnlocked) return;
+      isUnlocked = true;
+
+      document.removeEventListener('touchmove', preventTouchMove);
+      document.documentElement.style.overflow = htmlOverflow;
+      document.documentElement.style.overscrollBehavior = htmlOverscrollBehavior;
+      document.body.style.overflow = bodyOverflow;
+      document.body.style.position = bodyPosition;
+      document.body.style.top = bodyTop;
+      document.body.style.width = bodyWidth;
+      document.body.style.touchAction = bodyTouchAction;
+      window.scrollTo(0, scrollY);
+    };
+  };
+
   const setupIntroSequence = () => {
     const skipOpeningOnce = sessionStorage.getItem('skipOpeningOnce') === 'true';
 
@@ -98,6 +139,7 @@
 
     isOpeningVisible = true;
     isOpeningFading = false;
+    const unlockOpeningScroll = lockOpeningScroll();
 
     queueMicrotask(() => {
       introVideoEl?.play().catch(() => {});
@@ -109,6 +151,7 @@
 
     const hideTimer = window.setTimeout(() => {
       isOpeningVisible = false;
+      unlockOpeningScroll();
     }, 5000);
 
     return {
@@ -116,6 +159,7 @@
       cleanup: () => {
         window.clearTimeout(fadeTimer);
         window.clearTimeout(hideTimer);
+        unlockOpeningScroll();
       }
     };
   };
