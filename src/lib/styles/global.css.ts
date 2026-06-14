@@ -6,6 +6,8 @@ globalStyle('html, body', {
   padding: 0,
   width: '100%',
   height: '100%',
+  overflowX: 'clip',
+  overscrollBehaviorX: 'none',
   background: colors.background.primary,
   fontFamily: '"Noto Sans JP", sans-serif'
 });
