@@ -9,7 +9,8 @@ test.describe('Home page', () => {
     await expect(page).toHaveTitle('KeveltKit');
 
     await expect(page.getByText('一旦やってみる')).toBeVisible();
-    await expect(page.getByText('難しいことはそれから考えよう')).toBeVisible();
+    await expect(page.getByText('難しいことは', { exact: true })).toBeVisible();
+    await expect(page.getByText('それから考えよう', { exact: true })).toBeVisible();
     await expect(page.getByText('Try first. Think later.')).toBeVisible();
   });
 

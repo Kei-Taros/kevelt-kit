@@ -267,7 +267,8 @@
         {constants.TOP_MESSAGE}
       </div>
       <div class={`${styles.msgMiddle} ${showMsgMiddle ? styles.showMsg : ''}`}>
-        {constants.MIDDLE_MESSAGE}
+        <span>{constants.MIDDLE_MESSAGE_1}</span>
+        <span>{constants.MIDDLE_MESSAGE_2}</span>
       </div>
       <div class={`${styles.msgBottom} ${showMsgBottom ? styles.showMsg : ''}`}>
         {constants.BOTTOM_MESSAGE}

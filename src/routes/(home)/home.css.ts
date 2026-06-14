@@ -77,7 +77,15 @@ export const heroCover = style({
 /* Msg */
 export const msgWrapper = style({
   position: 'relative',
-  minHeight: '50vh'
+  minHeight: '50vh',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'flex',
+      minHeight: '50svh',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    }
+  }
 });
 
 export const fadeUpMsg = style({
@@ -91,17 +99,33 @@ export const msgTop = style([
   {
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 700,
-    margin: '0 0 24px 0'
+    margin: '0 0 24px 0',
+    '@media': {
+      '(max-width: 767px)': {
+        fontSize: 'clamp(28px, 10vw, 40px)',
+        lineHeight: 1.35,
+        marginBottom: '16px'
+      }
+    }
   }
 ]);
 
 export const msgMiddle = style([
   fadeUpMsg,
   {
+    display: 'flex',
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     margin: 0,
-    lineHeight: 1.2
+    lineHeight: 1.2,
+    '@media': {
+      '(max-width: 767px)': {
+        flexDirection: 'column',
+        gap: '16px',
+        fontSize: 'clamp(28px, 10vw, 40px)',
+        lineHeight: 1.4
+      }
+    }
   }
 ]);
 
@@ -112,7 +136,15 @@ export const msgBottom = style([
     right: 0,
     bottom: 0,
     fontSize: 'clamp(16px, 2vw, 26px)',
-    fontWeight: 600
+    fontWeight: 600,
+    '@media': {
+      '(max-width: 767px)': {
+        position: 'static',
+        alignSelf: 'flex-end',
+        marginTop: '48px',
+        fontSize: '14px'
+      }
+    }
   }
 ]);
 
