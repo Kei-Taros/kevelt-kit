@@ -72,7 +72,12 @@ export const heroCover = style({
   transform: 'scale(1)',
   transformOrigin: '48.5% 49%',
   transition: 'transform 0.3s ease-out',
-  willChange: 'transform'
+  willChange: 'transform',
+  '@media': {
+    '(max-width: 767px)': {
+      transformOrigin: '50% 50%'
+    }
+  }
 });
 
 /* Msg */

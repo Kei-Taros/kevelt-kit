@@ -10,6 +10,7 @@
   import * as layout from '$lib/styles/layout.css';
 
   let { data }: { data: PageData } = $props();
+  let heroWrapperEl: HTMLElement | null = null;
   let heroVideoEl: HTMLVideoElement | null = null;
 
   let coverScale = $state(1);
@@ -31,12 +32,33 @@
   let showGridABreak = $state(false);
   let showGridWorks = $state(false);
 
-  const setupHeroWheelZoom = () => {
+  const setupHeroZoom = () => {
     const zoomSpeed = 5.0;
-    const unlockScale = 30;
+    const wheelUnlockScale = 30;
+    const touchUnlockScale = 45;
+    const wheelSensitivity = 0.0007;
+    const touchSensitivity = 0.003;
+    let lastTouchY: number | null = null;
+    let isZoomCompleted = false;
 
     const updateScale = () => {
       coverScale = Math.exp(scrollProgress * zoomSpeed);
+    };
+
+    const applyZoom = (deltaY: number, sensitivity: number, unlockScale: number) => {
+      const maxProgress = Math.log(unlockScale) / zoomSpeed;
+      const isZoomingIn = deltaY > 0 && scrollProgress < maxProgress;
+      const isZoomingOut = deltaY < 0 && scrollProgress > 0;
+
+      if (isZoomCompleted && deltaY < 0) return false;
+      if (window.scrollY !== 0 || (!isZoomingIn && !isZoomingOut)) return false;
+
+      const nextProgress = scrollProgress + deltaY * sensitivity;
+      scrollProgress = Math.max(0, Math.min(maxProgress, nextProgress));
+      isZoomCompleted = scrollProgress >= maxProgress;
+      updateScale();
+
+      return true;
     };
 
     const handleWheel = (event: WheelEvent) => {
@@ -45,23 +67,45 @@
         return;
       }
 
-      const nextProgress = scrollProgress + event.deltaY * 0.0007;
-      const clamped = Math.max(0, Math.min(1, nextProgress));
-      const nextScale = Math.exp(clamped * zoomSpeed);
+      if (applyZoom(event.deltaY, wheelSensitivity, wheelUnlockScale)) event.preventDefault();
+    };
 
-      if (coverScale < unlockScale && window.scrollY === 0) {
+    const handleTouchStart = (event: TouchEvent) => {
+      if (event.touches.length === 1) lastTouchY = event.touches[0].clientY;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (isOpeningVisible) {
         event.preventDefault();
-
-        scrollProgress = clamped;
-        coverScale = nextScale;
+        return;
       }
+
+      if (event.touches.length !== 1 || lastTouchY === null) return;
+
+      const currentTouchY = event.touches[0].clientY;
+      const deltaY = lastTouchY - currentTouchY;
+      lastTouchY = currentTouchY;
+
+      if (applyZoom(deltaY, touchSensitivity, touchUnlockScale)) event.preventDefault();
+    };
+
+    const handleTouchEnd = () => {
+      lastTouchY = null;
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
+    heroWrapperEl?.addEventListener('touchstart', handleTouchStart, { passive: true });
+    heroWrapperEl?.addEventListener('touchmove', handleTouchMove, { passive: false });
+    heroWrapperEl?.addEventListener('touchend', handleTouchEnd);
+    heroWrapperEl?.addEventListener('touchcancel', handleTouchEnd);
     updateScale();
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
+      heroWrapperEl?.removeEventListener('touchstart', handleTouchStart);
+      heroWrapperEl?.removeEventListener('touchmove', handleTouchMove);
+      heroWrapperEl?.removeEventListener('touchend', handleTouchEnd);
+      heroWrapperEl?.removeEventListener('touchcancel', handleTouchEnd);
     };
   };
 
@@ -226,7 +270,7 @@
     window.scrollTo(0, 0);
     const cleanups: Array<() => void> = [];
     const intro = setupIntroSequence();
-    cleanups.push(setupHeroWheelZoom());
+    cleanups.push(setupHeroZoom());
     cleanups.push(intro.cleanup);
     cleanups.push(setupHeroVideoPlay(intro.shouldShowOpening));
     cleanups.push(setupMsgReveal());
@@ -265,7 +309,7 @@
 {/if}
 
 <section class={spacing.mbXXXXXL}>
-  <div class={styles.heroWrapper}>
+  <div bind:this={heroWrapperEl} class={styles.heroWrapper}>
     <video
       bind:this={heroVideoEl}
       class={styles.heroVideo}
