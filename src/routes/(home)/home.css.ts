@@ -40,7 +40,12 @@ export const heroWrapper = style({
   position: 'relative',
   width: '100%',
   height: '100vh',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  '@media': {
+    '(max-width: 767px)': {
+      height: '100svh'
+    }
+  }
 });
 
 export const heroVideo = style({

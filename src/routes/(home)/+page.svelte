@@ -222,11 +222,33 @@
 
 <section class={spacing.mbXXXXXL}>
   <div class={styles.heroWrapper}>
-    <video bind:this={heroVideoEl} class={styles.heroVideo} muted loop playsinline preload="auto">
-      <source src="/videos/hero-video/hero-video.webm" type="video/webm" />
+    <video
+      bind:this={heroVideoEl}
+      class={styles.heroVideo}
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source
+        media="(hover: hover) and (pointer: fine)"
+        src="/videos/hero-video/hero-video.webm"
+        type="video/webm"
+      />
       <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
     </video>
     <picture>
+      <source
+        media="(max-width: 767px)"
+        srcset="/images/hero-cover/hero-cover-sp.webp"
+        type="image/webp"
+      />
+      <source
+        media="(max-width: 767px)"
+        srcset="/images/hero-cover/hero-cover-sp.png"
+        type="image/png"
+      />
       <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
       <img
         src="/images/hero-cover/hero-cover.png"
