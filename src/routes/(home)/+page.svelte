@@ -246,6 +246,8 @@
   const setupGridReveal = () => {
     if (!sectionGridEl) return () => {};
 
+    const threshold = window.matchMedia('(max-width: 767px)').matches ? 0.15 : 0.45;
+
     const gridObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -258,7 +260,7 @@
           gridObserver.disconnect();
         }
       },
-      { threshold: 0.45 }
+      { threshold }
     );
 
     gridObserver.observe(sectionGridEl);
