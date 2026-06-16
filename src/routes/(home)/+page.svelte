@@ -449,7 +449,7 @@
   <div class={layout.contentInner}>
     <div class={styles.headerRow}>
       <Heading label="Works" />
-      <Button label="Work List" href="/works" />
+      <Button label="Work List" href="/works" class={styles.headerActionButton} />
     </div>
     <CardCarousel items={constants.CAROUSEL_ITEMS} onCardClick={(item) => openWork(item.id)} />
   </div>
@@ -459,7 +459,7 @@
   <div class={layout.contentInner}>
     <div class={styles.headerRow}>
       <Heading label="News" />
-      <Button label="News List" href="/news" />
+      <Button label="News List" href="/news" class={styles.headerActionButton} />
     </div>
     <NewsItemList items={data.newsList} variant="home" />
   </div>

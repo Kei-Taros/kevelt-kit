@@ -9,6 +9,16 @@ export const headerRow = style({
   marginBottom: '32px'
 });
 
+export const headerActionButton = style({
+  '@media': {
+    '(max-width: 767px)': {
+      padding: '12px 18px',
+      fontSize: '15px',
+      whiteSpace: 'nowrap'
+    }
+  }
+});
+
 /* intro */
 export const openingOverlay = style({
   position: 'fixed',
