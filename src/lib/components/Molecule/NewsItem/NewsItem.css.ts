@@ -8,6 +8,12 @@ export const item = style({
   width: '100%',
   textDecoration: 'none',
   transition: 'opacity 180ms ease, transform 180ms ease',
+  '@media': {
+    '(max-width: 767px)': {
+      flexDirection: 'column',
+      gap: '12px'
+    }
+  },
 
   selectors: {
     '&:focus-visible': {
@@ -22,7 +28,13 @@ export const imageContainer = style({
   width: '240px',
   aspectRatio: '16 / 9',
   overflow: 'hidden',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%',
+      borderRadius: '10px'
+    }
+  }
 });
 
 export const image = style({
@@ -44,7 +56,12 @@ export const body = style({
   flexDirection: 'column',
   gap: '12px',
   minWidth: 0,
-  width: '100%'
+  width: '100%',
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '8px'
+    }
+  }
 });
 
 export const date = style({
@@ -52,7 +69,13 @@ export const date = style({
   marginBottom: '6px',
   color: colors.text.muted,
   fontSize: '14px',
-  fontWeight: 500
+  fontWeight: 500,
+  '@media': {
+    '(max-width: 767px)': {
+      marginBottom: 0,
+      fontSize: '13px'
+    }
+  }
 });
 
 export const title = style({
@@ -61,6 +84,12 @@ export const title = style({
   fontSize: '28px',
   fontWeight: 700,
   transition: 'color 300ms ease, text-shadow 240ms ease',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: 'clamp(18px, 5vw, 22px)',
+      lineHeight: 1.4
+    }
+  },
 
   selectors: {
     [`${item}:hover &`]: {

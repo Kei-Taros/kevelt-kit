@@ -17,7 +17,13 @@ export const divider = style({
   width: '80%',
   border: 'none',
   borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
-  margin: '28px auto'
+  margin: '28px auto',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%',
+      margin: '22px auto'
+    }
+  }
 });
 
 export const buttonContainer = style({
