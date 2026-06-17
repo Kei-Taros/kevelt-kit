@@ -29,5 +29,12 @@ export const transitionVideo = style({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  display: 'block'
+  display: 'block',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '172%',
+      height: '172%',
+      objectFit: 'contain'
+    }
+  }
 });
