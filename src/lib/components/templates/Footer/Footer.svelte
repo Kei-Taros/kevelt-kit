@@ -13,12 +13,14 @@
       <a href="/a-break" class={styles.link}>A Break</a>
     </nav>
 
-    <div class={styles.nav}>
-      <a href="/privacy-policy" class={styles.link}>Privacy Policy</a>
-    </div>
+    <div class={styles.side}>
+      <div class={styles.nav}>
+        <a href="/privacy-policy" class={styles.link}>Privacy Policy</a>
+      </div>
 
-    <div class={styles.logo}>
-      <Logo />
+      <div class={styles.logo}>
+        <Logo />
+      </div>
     </div>
   </div>
 
