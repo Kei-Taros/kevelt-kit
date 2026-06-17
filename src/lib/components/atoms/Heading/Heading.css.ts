@@ -8,6 +8,16 @@ export const h1 = style({
   lineHeight: 1.4,
   paddingBottom: '2px',
   fontSize: '42px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '32px',
+      selectors: {
+        '&::after': {
+          height: '11px'
+        }
+      }
+    }
+  },
 
   selectors: {
     '&::after': {
