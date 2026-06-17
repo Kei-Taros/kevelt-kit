@@ -27,7 +27,7 @@
 <header class={`${styles.header} ${isVisible ? styles.show : styles.hide}`}>
   <div class={styles.inner}>
     <div>
-      <Logo />
+      <Logo class={styles.logo} />
     </div>
 
     <nav class={styles.nav}>
