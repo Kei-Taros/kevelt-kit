@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import * as styles from './Icon.css';
   import type { HTMLAttributes } from 'svelte/elements';
 
@@ -27,6 +28,7 @@
   }: Props = $props();
 
   let copied = $state(false);
+  let copyTimer: number | null = null;
 
   const isFontAwesome = $derived(iconType === 'fontawesome');
 
@@ -38,17 +40,64 @@
 
   const accessibleLabel = $derived(name);
 
+  const copyWithClipboardApi = async (text: string) => {
+    if (!navigator.clipboard?.writeText) return false;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const copyWithTextArea = (text: string) => {
+    const textArea = document.createElement('textarea');
+
+    textArea.value = text;
+    textArea.readOnly = true;
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.width = '1px';
+    textArea.style.height = '1px';
+    textArea.style.opacity = '0';
+    textArea.style.pointerEvents = 'none';
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    textArea.setSelectionRange(0, text.length);
+
+    try {
+      return document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
+
   const handleCopy = async () => {
     if (!copyText) return;
 
-    await navigator.clipboard.writeText(copyText);
+    const copiedSuccessfully = (await copyWithClipboardApi(copyText)) || copyWithTextArea(copyText);
+
+    if (!copiedSuccessfully) return;
 
     copied = true;
 
-    setTimeout(() => {
+    if (copyTimer) window.clearTimeout(copyTimer);
+
+    copyTimer = window.setTimeout(() => {
       copied = false;
+      copyTimer = null;
     }, 1200);
   };
+
+  onDestroy(() => {
+    if (copyTimer) window.clearTimeout(copyTimer);
+  });
 </script>
 
 {#snippet icon()}

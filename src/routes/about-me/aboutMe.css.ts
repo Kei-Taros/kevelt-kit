@@ -4,18 +4,34 @@ import { colors } from '$lib/styles/theme/colors.css';
 export const aboutProfile = style({
   display: 'flex',
   alignItems: 'flex-start',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  '@media': {
+    '(max-width: 767px)': {
+      flexDirection: 'column',
+      gap: '32px'
+    }
+  }
 });
 
 export const aboutProfileDetails = style({
   flex: 1,
-  lineHeight: 1.5
+  lineHeight: 1.5,
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%'
+    }
+  }
 });
 
 export const profileData = style({
   display: 'flex',
   alignItems: 'baseline',
-  gap: '20px'
+  gap: '20px',
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '12px'
+    }
+  }
 });
 
 export const profileLabel = style({
@@ -27,12 +43,23 @@ export const profileLabel = style({
 export const profileValue = style({
   fontSize: '28px',
   fontWeight: 700,
-  margin: '5px'
+  margin: '5px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '22px'
+    }
+  }
 });
 
 export const aboutProfileImg = style({
   flex: '0 0 60%',
-  position: 'relative'
+  position: 'relative',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%',
+      flex: 'none'
+    }
+  }
 });
 
 export const iconList = style({
@@ -40,7 +67,12 @@ export const iconList = style({
   alignItems: 'center',
   justifyContent: 'flex-end',
   gap: '20px',
-  marginTop: '16px'
+  marginTop: '16px',
+  '@media': {
+    '(max-width: 767px)': {
+      justifyContent: 'flex-start'
+    }
+  }
 });
 
 export const profileImg = style({
@@ -51,7 +83,13 @@ export const profileImg = style({
   objectFit: 'cover',
 
   maskImage: 'linear-gradient(to right, transparent 0%, black 15%)',
-  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%)'
+  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%)',
+  '@media': {
+    '(max-width: 767px)': {
+      maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)',
+      WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)'
+    }
+  }
 });
 
 export const aboutText = style({
@@ -117,11 +155,37 @@ export const torchGlow = style({
   background:
     'radial-gradient(circle, rgba(255,180,80,0.6) 0%, rgba(255,140,40,0.35) 40%, rgba(255,120,20,0.1) 70%, transparent 80%)',
   filter: 'blur(12px)',
-  animation: `${torchFlicker} 2s ease-in-out infinite`
+  animation: `${torchFlicker} 2s ease-in-out infinite`,
+  '@media': {
+    '(max-width: 767px)': {
+      top: '17%',
+      left: '33%',
+      width: '55px',
+      height: '60px',
+      filter: 'blur(9px)'
+    }
+  }
 });
 
 export const skillIconList = style({
   display: 'flex',
   flexWrap: 'wrap',
-  gap: '18px'
+  gap: '18px',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+      gap: '12px',
+      justifyItems: 'center'
+    }
+  }
+});
+
+globalStyle(`${skillIconList} i`, {
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: 'clamp(78px, 22vw, 92px) !important',
+      padding: '8px'
+    }
+  }
 });

@@ -1,9 +1,14 @@
-import { render, screen } from '@testing-library/svelte';
-import { describe, test, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/svelte';
+import { describe, test, expect, afterEach, vi } from 'vitest';
 import SkillIcon from './SkillIcon.svelte';
 import * as styles from './SkillIcon.css';
 
 describe('SkillIcon', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
   test('nameが渡された場合、aria-labelにnameが設定される', () => {
     render(SkillIcon, { props: { name: 'typescript' } });
 
@@ -56,5 +61,72 @@ describe('SkillIcon', () => {
     render(SkillIcon, { props: { name: 'github', colored: false } });
 
     expect(screen.getByRole('img', { name: 'github' })).not.toHaveClass('colored');
+  });
+
+  test('タッチ端末で連続タップした場合、光演出が再開始される', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (query) =>
+        ({
+          matches: query.includes('hover: none') || query.includes('pointer: coarse'),
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn()
+        }) as MediaQueryList
+    );
+    const offsetWidthSpy = vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(1);
+
+    render(SkillIcon, { props: { name: 'typescript' } });
+
+    const icon = screen.getByRole('img', { name: 'typescript' });
+
+    for (let i = 0; i < 5; i += 1) {
+      await fireEvent.pointerDown(icon);
+    }
+
+    expect(offsetWidthSpy).toHaveBeenCalledTimes(5);
+    expect(icon).toHaveClass(styles.touchShine);
+
+    vi.advanceTimersByTime(650);
+
+    expect(icon).not.toHaveClass(styles.touchShine);
+  });
+
+  test('タッチ端末で別のアイコンをタップした場合、新しくタップしたアイコンだけに光演出が表示される', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (query) =>
+        ({
+          matches: query.includes('hover: none') || query.includes('pointer: coarse'),
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn()
+        }) as MediaQueryList
+    );
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(1);
+
+    render(SkillIcon, { props: { name: 'typescript' } });
+    render(SkillIcon, { props: { name: 'react' } });
+
+    const typescript = screen.getByRole('img', { name: 'typescript' });
+    const react = screen.getByRole('img', { name: 'react' });
+
+    await fireEvent.pointerDown(typescript);
+
+    expect(typescript).toHaveClass(styles.touchShine);
+    expect(react).not.toHaveClass(styles.touchShine);
+
+    await fireEvent.pointerDown(react);
+
+    expect(typescript).not.toHaveClass(styles.touchShine);
+    expect(react).toHaveClass(styles.touchShine);
   });
 });
