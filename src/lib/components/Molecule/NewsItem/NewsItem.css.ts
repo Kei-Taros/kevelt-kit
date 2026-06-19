@@ -12,6 +12,9 @@ export const item = style({
     '(max-width: 767px)': {
       flexDirection: 'column',
       gap: '12px'
+    },
+    '(hover: none), (pointer: coarse)': {
+      transition: 'none'
     }
   },
 
@@ -47,6 +50,16 @@ export const image = style({
   selectors: {
     [`${item}:hover &`]: {
       filter: 'brightness(1.25)'
+    }
+  },
+
+  '@media': {
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        [`${item}:hover &`]: {
+          filter: 'none'
+        }
+      }
     }
   }
 });
@@ -88,6 +101,13 @@ export const title = style({
     '(max-width: 767px)': {
       fontSize: 'clamp(18px, 5vw, 22px)',
       lineHeight: 1.4
+    },
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        [`${item}:hover &`]: {
+          color: colors.text.primary
+        }
+      }
     }
   },
 

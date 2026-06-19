@@ -3,7 +3,12 @@ import { colors } from '$lib/styles/theme/colors.css';
 
 export const article = style({
   margin: '0 auto',
-  marginBottom: '120px'
+  marginBottom: '120px',
+  '@media': {
+    '(max-width: 767px)': {
+      marginBottom: '72px'
+    }
+  }
 });
 
 export const thumbnail = style({
@@ -11,27 +16,50 @@ export const thumbnail = style({
   width: '100%',
   aspectRatio: '16 / 7.5',
   objectFit: 'cover',
-  borderRadius: '14px'
+  borderRadius: '14px',
+  '@media': {
+    '(max-width: 767px)': {
+      aspectRatio: '16 / 10',
+      borderRadius: '10px'
+    }
+  }
 });
 
 export const contentWithToc = style({
   display: 'grid',
   gridTemplateColumns: '1fr 220px',
   gap: '48px',
-  alignItems: 'start'
+  alignItems: 'start',
+  '@media': {
+    '(max-width: 767px)': {
+      gridTemplateColumns: '1fr',
+      gap: '28px'
+    }
+  }
 });
 
 export const tocArea = style({
   position: 'sticky',
   top: '100px',
   alignSelf: 'start',
-  order: 2
+  order: 2,
+  '@media': {
+    '(max-width: 767px)': {
+      position: 'static',
+      order: 1
+    }
+  }
 });
 
 export const toc = style({
   padding: '16px 0 16px 18px',
   borderLeft: `2px solid ${colors.brand[600]}`,
-  background: 'transparent'
+  background: 'transparent',
+  '@media': {
+    '(max-width: 767px)': {
+      padding: '12px 0 12px 14px'
+    }
+  }
 });
 
 export const tocTitle = style({
@@ -39,7 +67,12 @@ export const tocTitle = style({
   color: colors.text.primary,
   fontSize: '18px',
   fontWeight: 700,
-  letterSpacing: '0.1em'
+  letterSpacing: '0.1em',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '16px'
+    }
+  }
 });
 
 export const tocList = style({
@@ -65,12 +98,30 @@ export const tocLink = style({
       color: colors.brand[500],
       transform: 'translateX(4px)'
     }
+  },
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '13px'
+    },
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        '&:hover': {
+          color: colors.text.muted,
+          transform: 'none'
+        }
+      }
+    }
   }
 });
 
 export const content = style({
   order: 1,
-  minWidth: 0
+  minWidth: 0,
+  '@media': {
+    '(max-width: 767px)': {
+      order: 2
+    }
+  }
 });
 
 globalStyle(`${content} h3`, {
@@ -80,6 +131,31 @@ globalStyle(`${content} h3`, {
   background: 'transparent',
   borderLeft: `3px solid ${colors.brand[600]}`,
   scrollMarginTop: '120px'
+});
+
+globalStyle(`${content} h3`, {
+  '@media': {
+    '(max-width: 767px)': {
+      marginTop: '36px',
+      fontSize: '20px',
+      lineHeight: 1.4,
+      scrollMarginTop: '88px'
+    }
+  }
+});
+
+globalStyle(`${content} p`, {
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '15px',
+      lineHeight: 1.9
+    }
+  }
+});
+
+globalStyle(`${content} img`, {
+  maxWidth: '100%',
+  height: 'auto'
 });
 
 globalStyle(`${content} h3::before`, {
@@ -114,23 +190,47 @@ export const navButtons = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '16px'
+  gap: '16px',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gap: '18px'
+    }
+  }
 });
 
 export const left = style({
   flex: 1,
   display: 'flex',
-  justifyContent: 'flex-start'
+  justifyContent: 'flex-start',
+  '@media': {
+    '(max-width: 767px)': {
+      justifyContent: 'center',
+      order: 2
+    }
+  }
 });
 
 export const center = style({
   flex: 1,
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '@media': {
+    '(max-width: 767px)': {
+      order: 1
+    }
+  }
 });
 
 export const right = style({
   flex: 1,
   display: 'flex',
-  justifyContent: 'flex-end'
+  justifyContent: 'flex-end',
+  '@media': {
+    '(max-width: 767px)': {
+      justifyContent: 'center',
+      order: 3
+    }
+  }
 });

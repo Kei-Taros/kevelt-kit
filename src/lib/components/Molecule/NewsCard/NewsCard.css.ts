@@ -21,6 +21,18 @@ export const card = style({
       boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
       borderColor: 'rgba(255, 255, 255, 0.3)'
     }
+  },
+
+  '@media': {
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        '&:hover': {
+          transform: 'none',
+          boxShadow: 'none',
+          borderColor: 'rgba(255, 255, 255, 0.08)'
+        }
+      }
+    }
   }
 });
 
@@ -33,26 +45,44 @@ export const imageContainer = style({
 export const image = style({
   display: 'block',
   width: '100%',
-  height: '100%'
+  height: '100%',
+  objectFit: 'cover'
 });
 
 export const body = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
-  padding: '0 16px 18px'
+  padding: '0 16px 18px',
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '8px',
+      padding: '0 14px 16px'
+    }
+  }
 });
 
 export const title = style({
   margin: 0,
   marginTop: '12px',
   color: colors.text.primary,
-  fontSize: '18px'
+  fontSize: '18px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '20px',
+      lineHeight: 1.4
+    }
+  }
 });
 
 export const date = style({
   margin: 0,
   color: colors.text.muted,
   fontSize: '14px',
-  fontWeight: 500
+  fontWeight: 500,
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '13px'
+    }
+  }
 });

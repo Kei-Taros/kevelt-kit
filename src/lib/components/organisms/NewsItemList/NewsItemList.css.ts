@@ -10,7 +10,12 @@ export const headingContainer = style({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  marginBottom: '48px'
+  marginBottom: '48px',
+  '@media': {
+    '(max-width: 767px)': {
+      marginBottom: '28px'
+    }
+  }
 });
 
 export const divider = style({
@@ -29,5 +34,10 @@ export const divider = style({
 export const buttonContainer = style({
   display: 'flex',
   justifyContent: 'center',
-  marginTop: '40px'
+  marginTop: '40px',
+  '@media': {
+    '(max-width: 767px)': {
+      marginTop: '28px'
+    }
+  }
 });
