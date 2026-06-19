@@ -9,7 +9,13 @@ export const overlay = style({
   justifyContent: 'center',
   padding: '24px',
   background: 'rgba(0, 0, 0, 0.7)',
-  zIndex: 1000
+  zIndex: 1000,
+  '@media': {
+    '(max-width: 767px)': {
+      alignItems: 'flex-start',
+      padding: '14px'
+    }
+  }
 });
 
 export const content = style({
@@ -17,7 +23,12 @@ export const content = style({
   width: '100%',
   maxWidth: '1000px',
   borderRadius: '16px',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  '@media': {
+    '(max-width: 767px)': {
+      borderRadius: '12px'
+    }
+  }
 });
 
 export const contentInner = style({
@@ -30,7 +41,14 @@ export const contentInner = style({
   padding: '40px 50px',
   boxSizing: 'border-box',
 
-  scrollbarColor: 'rgba(255,255,255,0.5) #141928'
+  scrollbarColor: 'rgba(255,255,255,0.5) #141928',
+  '@media': {
+    '(max-width: 767px)': {
+      maxHeight: 'calc(100dvh - 28px)',
+      padding: '24px 16px',
+      borderRadius: '12px'
+    }
+  }
 });
 
 export const closeButton = style({
@@ -46,7 +64,15 @@ export const closeButton = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 1
+  zIndex: 1,
+  '@media': {
+    '(max-width: 767px)': {
+      top: '10px',
+      right: '10px',
+      width: '34px',
+      height: '34px'
+    }
+  }
 });
 
 const closeIconSpin = keyframes({
@@ -67,6 +93,12 @@ export const closeIcon = style({
   borderRadius: '50%',
   border: '2px solid #c0bfbf',
   transformOrigin: 'center',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '34px',
+      height: '34px'
+    }
+  },
 
   selectors: {
     [`${closeButton}:hover &`]: {

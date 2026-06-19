@@ -93,6 +93,33 @@ test.describe('Works page', () => {
     await expect(page).toHaveURL(/\/works$/);
   });
 
+  test('スクロール後にモーダルを閉じた場合、スクロール位置が維持される', async ({ page }) => {
+    const targetCard = workCards(page).last();
+
+    await targetCard.scrollIntoViewIfNeeded();
+    await expect(targetCard).toBeVisible();
+
+    const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
+    expect(scrollBeforeOpen).toBeGreaterThan(0);
+
+    await expect(async () => {
+      await targetCard.click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+    }).toPass({
+      timeout: 10000,
+      intervals: [200, 400, 800, 1000]
+    });
+
+    const closeButton = page.getByRole('dialog').getByRole('button', { name: '閉じる' });
+
+    await closeButton.click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY))
+      .toBeGreaterThanOrEqual(scrollBeforeOpen - 5);
+  });
+
   test('Escapeキーを押した場合、モーダルが閉じる', async ({ page }) => {
     await openFirstWorkModal(page);
 

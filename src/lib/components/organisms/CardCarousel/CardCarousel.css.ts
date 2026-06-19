@@ -6,10 +6,20 @@ globalStyle(':root', {
     '--embla-slide-height': '35rem',
     '--embla-slide-spacing': '1rem',
     '--embla-slide-size': '70%'
+  },
+  '@media': {
+    '(max-width: 767px)': {
+      vars: {
+        '--embla-slide-height': 'clamp(260px, 86vw, 360px)',
+        '--embla-slide-spacing': '0.75rem',
+        '--embla-slide-size': '88%'
+      }
+    }
   }
 });
 
 export const embla = style({
+  width: '100%',
   maxWidth: '60rem',
   margin: '0 auto'
 });
@@ -37,7 +47,12 @@ export const slideImg = style({
   width: '100%',
   objectFit: 'cover',
   borderRadius: '1.8rem',
-  transition: 'opacity 220ms ease, transform 220ms ease, filter 220ms ease'
+  transition: 'opacity 220ms ease, transform 220ms ease, filter 220ms ease',
+  '@media': {
+    '(max-width: 767px)': {
+      borderRadius: '1rem'
+    }
+  }
 });
 
 export const slideOverlay = style({
@@ -56,7 +71,13 @@ export const slideOverlay = style({
   alignItems: 'flex-end',
   justifyContent: 'center',
   padding: '1.4rem',
-  transition: 'opacity 220ms ease'
+  transition: 'opacity 220ms ease',
+  '@media': {
+    '(max-width: 767px)': {
+      borderRadius: '1rem',
+      padding: '1rem'
+    }
+  }
 });
 
 export const slideDimmed = style({
@@ -73,7 +94,13 @@ export const slideTitle = style({
   fontSize: '32px',
   fontWeight: 500,
   letterSpacing: '0.06em',
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: 'clamp(16px, 4.6vw, 20px)',
+      lineHeight: 1.35
+    }
+  }
 });
 
 globalStyle(`${slideOverlayActive} ~ ${slideImg}, ${slideOverlayActive} + ${slideImg}`, {
@@ -86,7 +113,14 @@ export const controls = style({
   gridTemplateColumns: 'auto 1fr',
   justifyContent: 'space-between',
   gap: '1.2rem',
-  marginTop: '1.8rem'
+  marginTop: '1.8rem',
+  '@media': {
+    '(max-width: 767px)': {
+      alignItems: 'center',
+      gap: '0.75rem',
+      marginTop: '1rem'
+    }
+  }
 });
 
 export const buttons = style({
@@ -115,7 +149,13 @@ export const button = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  transition: 'background-color 160ms ease, transform 160ms ease, border-color 160ms ease'
+  transition: 'background-color 160ms ease, transform 160ms ease, border-color 160ms ease',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '2.8rem',
+      height: '2.8rem'
+    }
+  }
 });
 
 export const buttonDisabled = style({
@@ -141,7 +181,14 @@ export const dots = style({
   flexWrap: 'wrap',
   justifyContent: 'flex-end',
   alignItems: 'center',
-  marginRight: 'calc((2.6rem - 1.4rem) / 2 * -1)'
+  marginRight: 'calc((2.6rem - 1.4rem) / 2 * -1)',
+  '@media': {
+    '(max-width: 767px)': {
+      columnGap: '0.25rem',
+      marginRight: 0,
+      rowGap: '0.25rem'
+    }
+  }
 });
 
 export const dot = style({
@@ -159,7 +206,13 @@ export const dot = style({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
-  position: 'relative'
+  position: 'relative',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '1.8rem',
+      height: '1.8rem'
+    }
+  }
 });
 
 globalStyle(`${dot}::before`, {

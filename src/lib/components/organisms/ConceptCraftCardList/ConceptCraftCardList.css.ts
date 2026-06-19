@@ -4,5 +4,11 @@ export const cardGrid = style({
   display: 'grid',
   gridTemplateColumns: '1fr',
   gap: '24px',
-  marginBottom: '28px'
+  marginBottom: '28px',
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '18px',
+      marginBottom: '32px'
+    }
+  }
 });

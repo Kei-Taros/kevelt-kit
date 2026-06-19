@@ -12,6 +12,10 @@ describe('Icon', () => {
         writeText: vi.fn()
       }
     });
+
+    Object.assign(document, {
+      execCommand: vi.fn(() => true)
+    });
   });
 
   test('nameが渡された場合、aria-labelにnameが設定される', () => {
@@ -137,6 +141,23 @@ describe('Icon', () => {
 
     await fireEvent.click(screen.getByRole('button', { name: 'Copy keveltkit@gmail.com' }));
 
+    expect(screen.getByText('Copied!')).toBeInTheDocument();
+  });
+
+  test('copyTextが渡された場合、Clipboard APIが失敗してもfallbackでCopiedが表示される', async () => {
+    vi.mocked(navigator.clipboard.writeText).mockRejectedValueOnce(new Error('copy failed'));
+
+    render(Icon, {
+      props: {
+        name: 'envelope',
+        iconType: 'fontawesome',
+        copyText: 'keveltkit@gmail.com'
+      }
+    });
+
+    await fireEvent.click(screen.getByRole('button', { name: 'Copy keveltkit@gmail.com' }));
+
+    expect(document.execCommand).toHaveBeenCalledWith('copy');
     expect(screen.getByText('Copied!')).toBeInTheDocument();
   });
 });

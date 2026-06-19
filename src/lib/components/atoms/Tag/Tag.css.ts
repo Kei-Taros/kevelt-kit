@@ -9,7 +9,14 @@ export const tag = style({
   borderRadius: '8px',
   fontSize: '15px',
   fontWeight: 700,
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
+  '@media': {
+    '(max-width: 767px)': {
+      minHeight: '28px',
+      padding: '0 10px',
+      fontSize: '12px'
+    }
+  }
 });
 
 export const primary = style({

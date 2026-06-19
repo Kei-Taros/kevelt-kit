@@ -9,6 +9,16 @@ export const headerRow = style({
   marginBottom: '32px'
 });
 
+export const headerActionButton = style({
+  '@media': {
+    '(max-width: 767px)': {
+      padding: '12px 18px',
+      fontSize: '15px',
+      whiteSpace: 'nowrap'
+    }
+  }
+});
+
 /* intro */
 export const openingOverlay = style({
   position: 'fixed',
@@ -18,7 +28,8 @@ export const openingOverlay = style({
   opacity: 1,
   transition: 'opacity 1000ms ease',
   pointerEvents: 'auto',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  touchAction: 'none'
 });
 
 export const openingFadeOut = style({
@@ -40,7 +51,12 @@ export const heroWrapper = style({
   position: 'relative',
   width: '100%',
   height: '100vh',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  '@media': {
+    '(max-width: 767px)': {
+      height: '100svh'
+    }
+  }
 });
 
 export const heroVideo = style({
@@ -66,13 +82,26 @@ export const heroCover = style({
   transform: 'scale(1)',
   transformOrigin: '48.5% 49%',
   transition: 'transform 0.3s ease-out',
-  willChange: 'transform'
+  willChange: 'transform',
+  '@media': {
+    '(max-width: 767px)': {
+      transformOrigin: '50% 50%'
+    }
+  }
 });
 
 /* Msg */
 export const msgWrapper = style({
   position: 'relative',
-  minHeight: '50vh'
+  minHeight: '50vh',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'flex',
+      minHeight: '50svh',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    }
+  }
 });
 
 export const fadeUpMsg = style({
@@ -86,17 +115,33 @@ export const msgTop = style([
   {
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 700,
-    margin: '0 0 24px 0'
+    margin: '0 0 24px 0',
+    '@media': {
+      '(max-width: 767px)': {
+        fontSize: 'clamp(28px, 10vw, 40px)',
+        lineHeight: 1.35,
+        marginBottom: '16px'
+      }
+    }
   }
 ]);
 
 export const msgMiddle = style([
   fadeUpMsg,
   {
+    display: 'flex',
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     margin: 0,
-    lineHeight: 1.2
+    lineHeight: 1.2,
+    '@media': {
+      '(max-width: 767px)': {
+        flexDirection: 'column',
+        gap: '16px',
+        fontSize: 'clamp(28px, 10vw, 40px)',
+        lineHeight: 1.4
+      }
+    }
   }
 ]);
 
@@ -107,7 +152,15 @@ export const msgBottom = style([
     right: 0,
     bottom: 0,
     fontSize: 'clamp(16px, 2vw, 26px)',
-    fontWeight: 600
+    fontWeight: 600,
+    '@media': {
+      '(max-width: 767px)': {
+        position: 'static',
+        alignSelf: 'flex-end',
+        marginTop: '48px',
+        fontSize: '14px'
+      }
+    }
   }
 ]);
 
@@ -129,7 +182,15 @@ export const grid = style({
   gridTemplateRows: 'var(--big) var(--big)',
   columnGap: 'var(--gap)',
   rowGap: 'var(--gap)',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'flex',
+      width: '100%',
+      flexDirection: 'column',
+      gap: '16px'
+    }
+  }
 });
 
 export const gridTileHidden = style({
@@ -148,7 +209,12 @@ export const gridTile = style({
   position: 'relative',
   overflow: 'hidden',
   borderRadius: '12px',
-  filter: 'brightness(0.8)'
+  filter: 'brightness(0.8)',
+  '@media': {
+    '(max-width: 767px)': {
+      filter: 'brightness(0.9)'
+    }
+  }
 });
 
 globalStyle(`.${gridTile}:hover`, {
@@ -172,7 +238,13 @@ export const gridLabel = style({
   fontSize: '22px',
   opacity: 0,
   transform: 'translateY(10px)',
-  transition: 'opacity 0.5s ease, transform 0.3s ease'
+  transition: 'opacity 0.5s ease, transform 0.3s ease',
+  '@media': {
+    '(max-width: 767px)': {
+      opacity: 1,
+      transform: 'translateY(0)'
+    }
+  }
 });
 
 globalStyle(`.${gridTile}:hover .${gridLabel}`, {
@@ -184,14 +256,26 @@ export const aboutMe = style({
   gridColumn: '1 / 2',
   gridRow: '1 / 2',
   width: '100%',
-  height: '100%'
+  height: '100%',
+  '@media': {
+    '(max-width: 767px)': {
+      height: 'auto',
+      aspectRatio: '1 / 1'
+    }
+  }
 });
 
 export const concept = style({
   gridColumn: '2 / 3',
   gridRow: '1 / 2',
   width: '100%',
-  height: '100%'
+  height: '100%',
+  '@media': {
+    '(max-width: 767px)': {
+      height: 'auto',
+      aspectRatio: '1 / 1'
+    }
+  }
 });
 
 export const gridBottomRow = style({
@@ -201,7 +285,16 @@ export const gridBottomRow = style({
   display: 'grid',
   gridTemplateColumns: 'var(--small) 1fr',
   columnGap: 'var(--gap)',
-  alignItems: 'stretch'
+  alignItems: 'stretch',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'flex',
+      width: '100%',
+      height: 'auto',
+      flexDirection: 'column',
+      gap: '16px'
+    }
+  }
 });
 
 export const gridLeftBottom = style({
@@ -212,7 +305,16 @@ export const gridLeftBottom = style({
   justifySelf: 'start',
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--gap)'
+  gap: 'var(--gap)',
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'grid',
+      width: '100%',
+      height: 'auto',
+      gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+      gap: '16px'
+    }
+  }
 });
 
 export const gridHalfTile = style({
@@ -226,5 +328,11 @@ export const works = style({
   width: '100%',
   height: '100%',
   justifySelf: 'end',
-  alignSelf: 'start'
+  alignSelf: 'start',
+  '@media': {
+    '(max-width: 767px)': {
+      height: 'auto',
+      aspectRatio: '1 / 1'
+    }
+  }
 });

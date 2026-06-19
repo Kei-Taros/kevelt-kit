@@ -8,6 +8,16 @@ export const h1 = style({
   lineHeight: 1.4,
   paddingBottom: '2px',
   fontSize: '42px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '32px',
+      selectors: {
+        '&::after': {
+          height: '11px'
+        }
+      }
+    }
+  },
 
   selectors: {
     '&::after': {
@@ -103,6 +113,19 @@ export const h2News = style({
         transparent
       )`
     }
+  },
+
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '18px',
+      fontSize: '24px',
+      selectors: {
+        '&::before, &::after': {
+          width: '72px',
+          height: '2px'
+        }
+      }
+    }
   }
 });
 
@@ -116,6 +139,13 @@ export const h2NewsSlug = style({
   justifyContent: 'center',
   position: 'relative',
   textAlign: 'center',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '20px',
+      padding: '16px 20px',
+      lineHeight: 1.45
+    }
+  },
 
   selectors: {
     '&::before, &::after': {

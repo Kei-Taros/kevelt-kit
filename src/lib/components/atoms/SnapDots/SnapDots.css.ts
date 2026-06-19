@@ -41,7 +41,12 @@ export const snapDots = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '22px',
-  zIndex: 10
+  zIndex: 10,
+  '@media': {
+    '(max-width: 767px)': {
+      display: 'none'
+    }
+  }
 });
 
 export const snapDotActive = style({

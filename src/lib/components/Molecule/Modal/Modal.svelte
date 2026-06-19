@@ -14,6 +14,12 @@
 
   let closeOnBackdrop = $state<boolean>(true);
   let closeOnEscape = $state<boolean>(true);
+  let scrollLocked = false;
+  let scrollLockPosition = 0;
+  let previousBodyOverflow = '';
+  let previousBodyPosition = '';
+  let previousBodyTop = '';
+  let previousBodyWidth = '';
 
   const handleBackdropClick = (event: MouseEvent) => {
     if (!closeOnBackdrop) return;
@@ -30,8 +36,34 @@
     closeModal();
   };
 
-  const toggleBodyScroll = (locked: boolean) => {
-    document.body.style.overflow = locked ? 'hidden' : '';
+  const lockBodyScroll = () => {
+    if (scrollLocked) return;
+
+    scrollLockPosition = window.scrollY;
+    previousBodyOverflow = document.body.style.overflow;
+    previousBodyPosition = document.body.style.position;
+    previousBodyTop = document.body.style.top;
+    previousBodyWidth = document.body.style.width;
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollLockPosition}px`;
+    document.body.style.width = '100%';
+
+    scrollLocked = true;
+  };
+
+  const unlockBodyScroll = () => {
+    if (!scrollLocked) return;
+
+    document.body.style.overflow = previousBodyOverflow;
+    document.body.style.position = previousBodyPosition;
+    document.body.style.top = previousBodyTop;
+    document.body.style.width = previousBodyWidth;
+
+    window.scrollTo(0, scrollLockPosition);
+
+    scrollLocked = false;
   };
 
   onMount(() => {
@@ -39,20 +71,20 @@
 
     return () => {
       window.removeEventListener('keydown', handleKeydown);
-      toggleBodyScroll(false);
+      unlockBodyScroll();
     };
   });
 
   $effect(() => {
     if (!isOpen) {
-      toggleBodyScroll(false);
+      unlockBodyScroll();
       return;
     }
 
-    toggleBodyScroll(true);
+    lockBodyScroll();
 
     return () => {
-      toggleBodyScroll(false);
+      unlockBodyScroll();
     };
   });
 </script>

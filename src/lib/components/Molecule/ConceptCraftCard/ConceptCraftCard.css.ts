@@ -22,6 +22,14 @@ export const card = style({
       borderColor: colors.brand[600],
       background: 'rgba(255, 255, 255, 0.08)'
     }
+  },
+
+  '@media': {
+    '(max-width: 767px)': {
+      flexDirection: 'column',
+      gap: '16px',
+      padding: '16px'
+    }
   }
 });
 
@@ -30,15 +38,35 @@ export const cardImage = style({
   width: '260px',
   aspectRatio: '16 / 9',
   objectFit: 'cover',
-  flexShrink: 0
+  flexShrink: 0,
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%',
+      borderRadius: '8px'
+    }
+  }
 });
 
 export const cardContent = style({
   display: 'flex',
   flexDirection: 'column',
-  margin: 0
+  margin: 0,
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '8px'
+    }
+  }
 });
 
 globalStyle(`${cardContent} p`, {
   margin: 0
+});
+
+globalStyle(`${cardContent} p`, {
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '14px',
+      lineHeight: 1.8
+    }
+  }
 });

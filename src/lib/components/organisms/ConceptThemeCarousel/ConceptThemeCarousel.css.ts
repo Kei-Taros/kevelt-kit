@@ -13,13 +13,24 @@ export const viewport = style({
 export const container = style({
   display: 'flex',
   marginLeft: '-24px',
-  touchAction: 'pan-y pinch-zoom'
+  touchAction: 'pan-y pinch-zoom',
+  '@media': {
+    '(max-width: 767px)': {
+      marginLeft: '-14px'
+    }
+  }
 });
 
 export const slide = style({
   flex: '0 0 calc(100% / 3)',
   minWidth: 0,
-  paddingLeft: '24px'
+  paddingLeft: '24px',
+  '@media': {
+    '(max-width: 767px)': {
+      flexBasis: '82%',
+      paddingLeft: '14px'
+    }
+  }
 });
 
 export const image = style({
@@ -27,5 +38,10 @@ export const image = style({
   width: '100%',
   aspectRatio: '1/1',
   objectFit: 'cover',
-  borderRadius: '20px'
+  borderRadius: '20px',
+  '@media': {
+    '(max-width: 767px)': {
+      borderRadius: '14px'
+    }
+  }
 });
