@@ -68,7 +68,7 @@
       </Button>
     </div>
 
-    <div bind:this={sectionElements[1]} class={styles.sectionBlock}>
+    <div bind:this={sectionElements[1]} class={`${styles.sectionBlock} ${styles.whatSectionBlock}`}>
       <div class={spacing.mbM}>
         <Heading label="What’s KeveltKit" number="01" as="h3" variant="concept" />
       </div>
@@ -86,20 +86,31 @@
         <img class={styles.logoImage} src="/images/logo/logo.png" alt="KeveltKit Logo" />
       </picture>
 
-      <Button variant="concept" onclick={() => scrollToSection(2)}>
+      <Button
+        variant="concept"
+        class={styles.mobileHiddenScrollButton}
+        onclick={() => scrollToSection(2)}
+      >
         <span>SCROLL</span>
         <span class={styles.arrow}>↓</span>
       </Button>
     </div>
 
-    <div bind:this={sectionElements[2]} class={styles.sectionBlock}>
+    <div
+      bind:this={sectionElements[2]}
+      class={`${styles.sectionBlock} ${styles.craftSectionBlock}`}
+    >
       <div class={spacing.mbXS}>
         <Heading label="Craft" number="02" as="h3" variant="concept" />
       </div>
 
       <ConceptCraftCardList items={constants.CRAFT} />
 
-      <Button variant="concept" onclick={() => scrollToSection(3)}>
+      <Button
+        variant="concept"
+        class={styles.mobileHiddenScrollButton}
+        onclick={() => scrollToSection(3)}
+      >
         <span>SCROLL</span>
         <span class={styles.arrow}>↓</span>
       </Button>

@@ -161,5 +161,14 @@ export const concept = style({
       transform: 'translateY(-4px)',
       borderColor: colors.brand[600]
     }
+  },
+
+  '@media': {
+    '(max-width: 767px)': {
+      width: '96px',
+      height: '96px',
+      gap: '8px',
+      fontSize: '11px'
+    }
   }
 });
