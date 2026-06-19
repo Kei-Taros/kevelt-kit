@@ -29,6 +29,18 @@ export const card = style({
     '&:active': {
       transform: 'translateY(-1px) scale(0.995)'
     }
+  },
+
+  '@media': {
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        '&:hover': {
+          transform: 'none',
+          boxShadow: 'none',
+          borderColor: 'rgba(255, 255, 255, 0.08)'
+        }
+      }
+    }
   }
 });
 
@@ -37,7 +49,12 @@ export const imageWrapper = style({
   width: '100%',
   aspectRatio: '5 / 4',
   overflow: 'hidden',
-  background: 'linear-gradient(180deg, rgba(62, 70, 96, 0.95) 0%, rgba(36, 44, 65, 1) 100%)'
+  background: 'linear-gradient(180deg, rgba(62, 70, 96, 0.95) 0%, rgba(36, 44, 65, 1) 100%)',
+  '@media': {
+    '(max-width: 767px)': {
+      aspectRatio: '16 / 10'
+    }
+  }
 });
 
 export const image = style({
@@ -51,6 +68,16 @@ export const image = style({
     [`${card}:hover &`]: {
       transform: 'scale(1.05)'
     }
+  },
+
+  '@media': {
+    '(hover: none), (pointer: coarse)': {
+      selectors: {
+        [`${card}:hover &`]: {
+          transform: 'none'
+        }
+      }
+    }
   }
 });
 
@@ -58,7 +85,12 @@ export const body = style({
   display: 'flex',
   flexDirection: 'column',
   padding: '22px 20px 20px',
-  background: 'linear-gradient(180deg, rgba(28, 34, 54, 0.92) 0%, rgba(21, 26, 42, 0.98) 100%)'
+  background: 'linear-gradient(180deg, rgba(28, 34, 54, 0.92) 0%, rgba(21, 26, 42, 0.98) 100%)',
+  '@media': {
+    '(max-width: 767px)': {
+      padding: '16px'
+    }
+  }
 });
 
 export const title = style({
@@ -66,7 +98,13 @@ export const title = style({
   color: colors.text.primary,
   fontSize: '24px',
   fontWeight: 700,
-  marginBottom: '12px'
+  marginBottom: '12px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '20px',
+      marginBottom: '8px'
+    }
+  }
 });
 
 export const period = style({
@@ -75,11 +113,22 @@ export const period = style({
   fontSize: '16px',
   lineHeight: 1.4,
   fontWeight: 500,
-  marginBottom: '12px'
+  marginBottom: '12px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '14px',
+      marginBottom: '10px'
+    }
+  }
 });
 
 export const tagList = style({
   display: 'flex',
   flexWrap: 'wrap',
-  gap: '10px'
+  gap: '10px',
+  '@media': {
+    '(max-width: 767px)': {
+      gap: '8px'
+    }
+  }
 });

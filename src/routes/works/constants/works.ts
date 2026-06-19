@@ -13,7 +13,7 @@ export const WORK_DETAILS: WorkDetail[] = [
       既存システムのDB調査・分析を踏まえ、ヘキサゴナルアーキテクチャおよびDDDを用いたAPI設計・実装を実施。
       また、利用者へのヒアリングを基にした画面設計とUI実装も対応。`,
     period: '2025/04 - 2026/03',
-    role: 'SE（メンバー）',
+    role: 'SE',
     scope: '設計 / 実装 / テスト / 技術選定',
     categories: ['Web', 'Frontend', 'Backend'],
     techStack: ['TypeScript', 'SvelteKit', 'NestJS', 'OpenAPI', 'Docker', 'Node.js', 'GitHub'],
@@ -44,7 +44,7 @@ export const WORK_DETAILS: WorkDetail[] = [
       Atomic Designを用いたコンポーネント設計およびUI実装を行い、状態管理やテスト実装を含めたフロントエンド基盤の構築を実施。
       また、生成AIを活用した開発プロセスの改善にも対応。`,
     period: '2025/01 - 2025/03',
-    role: 'PG（メンバー）',
+    role: 'PG',
     scope: '設計 / 実装 / テスト',
     categories: ['Web', 'Frontend'],
     techStack: ['TypeScript', 'React', 'Docker', 'Node.js', 'GitHub'],
@@ -70,7 +70,7 @@ export const WORK_DETAILS: WorkDetail[] = [
       OpenAPIを用いたAPI設計・実装およびテスト、既存機能の改修を実施。
       決済・ポイント事業者との連携を踏まえた仕様調整にも対応。`,
     period: '2023/08 - 2024/12',
-    role: 'SE（メンバー）',
+    role: 'SE',
     scope: '設計 / 実装 / テスト / 改修',
     categories: ['Web', 'Backend'],
     techStack: ['Elixir', 'OpenAPI', 'Docker', 'GitHub'],
@@ -129,7 +129,7 @@ export const WORK_DETAILS: WorkDetail[] = [
       店頭展示モードの設計・実装に加え、テスト仕様書の作成や既存実装の改修を実施。
       また、テスト実施時に使用される解析ツールの開発にも対応。`,
     period: '2019/08 - 2020/08',
-    role: 'PG（メンバー）',
+    role: 'PG',
     scope: '設計 / 実装 / テスト / ツール開発',
     categories: ['Embedded'],
     techStack: ['C', 'FreeRTOS'],

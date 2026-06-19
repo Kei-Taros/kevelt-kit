@@ -8,13 +8,25 @@ export const content = style({
 
 export const header = style({
   display: 'grid',
-  marginBottom: '24px'
+  marginBottom: '24px',
+  '@media': {
+    '(max-width: 767px)': {
+      marginBottom: '18px',
+      paddingRight: '40px'
+    }
+  }
 });
 
 export const workTitle = style({
   margin: 0,
   fontSize: '32px',
-  fontWeight: 800
+  fontWeight: 800,
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '24px',
+      lineHeight: 1.3
+    }
+  }
 });
 
 export const image = style({
@@ -23,13 +35,25 @@ export const image = style({
   borderRadius: '12px',
   objectFit: 'cover',
   aspectRatio: '16 / 10',
-  margin: '0 auto'
+  margin: '0 auto',
+  '@media': {
+    '(max-width: 767px)': {
+      width: '100%',
+      borderRadius: '10px'
+    }
+  }
 });
 
 export const summary = style({
   borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
   marginBottom: '18px',
-  paddingBottom: '24px'
+  paddingBottom: '24px',
+  '@media': {
+    '(max-width: 767px)': {
+      marginBottom: '20px',
+      paddingBottom: '20px'
+    }
+  }
 });
 
 export const descriptionBox = style({
@@ -40,21 +64,40 @@ export const descriptionBox = style({
   border: '1px solid rgba(255, 255, 255, 0.1)',
   background: 'rgba(255, 255, 255, 0.05)',
   borderLeft: `4px solid ${colors.brand[600]}`,
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
+  '@media': {
+    '(max-width: 767px)': {
+      margin: '18px auto',
+      padding: '14px 16px'
+    }
+  }
 });
 
 export const description = style({
   margin: 0,
   whiteSpace: 'pre-line',
   fontSize: '16px',
-  lineHeight: 1.9
+  lineHeight: 1.9,
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '14px',
+      lineHeight: 1.8
+    }
+  }
 });
 
 export const summaryGrid = style({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
   gap: '16px',
-  marginBottom: '24px'
+  marginBottom: '24px',
+  '@media': {
+    '(max-width: 767px)': {
+      gridTemplateColumns: '1fr',
+      gap: '12px',
+      marginBottom: '18px'
+    }
+  }
 });
 
 export const tagList = style({
@@ -73,14 +116,26 @@ export const tagRow = style({
 export const details = style({
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
-  gap: '24px'
+  gap: '24px',
+  '@media': {
+    '(max-width: 767px)': {
+      gridTemplateColumns: '1fr',
+      gap: '20px'
+    }
+  }
 });
 
 export const detailList = style({
   margin: 0,
   paddingLeft: '1.5em',
   display: 'grid',
-  gap: '10px'
+  gap: '10px',
+  '@media': {
+    '(max-width: 767px)': {
+      fontSize: '14px',
+      lineHeight: 1.7
+    }
+  }
 });
 
 export const navigation = style({
