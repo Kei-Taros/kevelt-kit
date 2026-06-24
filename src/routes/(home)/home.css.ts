@@ -11,6 +11,11 @@ export const headerRow = style({
 
 export const headerActionButton = style({
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      padding: '12px 20px',
+      fontSize: '15px',
+      whiteSpace: 'nowrap'
+    },
     '(max-width: 767px)': {
       padding: '12px 18px',
       fontSize: '15px',
@@ -53,6 +58,9 @@ export const heroWrapper = style({
   height: '100vh',
   overflow: 'hidden',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      height: '100svh'
+    },
     '(max-width: 767px)': {
       height: '100svh'
     }
@@ -84,6 +92,9 @@ export const heroCover = style({
   transition: 'transform 0.3s ease-out',
   willChange: 'transform',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      transformOrigin: '50% 47%'
+    },
     '(max-width: 767px)': {
       transformOrigin: '50% 50%'
     }
@@ -95,6 +106,9 @@ export const msgWrapper = style({
   position: 'relative',
   minHeight: '50vh',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      minHeight: '46svh'
+    },
     '(max-width: 767px)': {
       display: 'flex',
       minHeight: '50svh',
@@ -117,6 +131,11 @@ export const msgTop = style([
     fontWeight: 700,
     margin: '0 0 24px 0',
     '@media': {
+      '(min-width: 768px) and (max-width: 1023px)': {
+        fontSize: 'clamp(38px, 5.6vw, 60px)',
+        lineHeight: 1.3,
+        marginBottom: '56px'
+      },
       '(max-width: 767px)': {
         fontSize: 'clamp(28px, 10vw, 40px)',
         lineHeight: 1.35,
@@ -135,6 +154,13 @@ export const msgMiddle = style([
     margin: 0,
     lineHeight: 1.2,
     '@media': {
+      '(min-width: 768px) and (max-width: 1023px)': {
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        fontSize: 'clamp(34px, 5vw, 50px)',
+        lineHeight: 1.3,
+        whiteSpace: 'nowrap'
+      },
       '(max-width: 767px)': {
         flexDirection: 'column',
         gap: '16px',
@@ -154,6 +180,9 @@ export const msgBottom = style([
     fontSize: 'clamp(16px, 2vw, 26px)',
     fontWeight: 600,
     '@media': {
+      '(min-width: 768px) and (max-width: 1023px)': {
+        fontSize: 'clamp(18px, 2.4vw, 24px)'
+      },
       '(max-width: 767px)': {
         position: 'static',
         alignSelf: 'flex-end',
@@ -184,6 +213,13 @@ export const grid = style({
   rowGap: 'var(--gap)',
   justifyContent: 'center',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      vars: {
+        '--big': 'clamp(320px, 48vw, 420px)',
+        '--rightCol': 'calc(var(--big) * 0.72)',
+        '--gap': '16px'
+      }
+    },
     '(max-width: 767px)': {
       display: 'flex',
       width: '100%',
@@ -211,6 +247,9 @@ export const gridTile = style({
   borderRadius: '12px',
   filter: 'brightness(0.8)',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      filter: 'brightness(0.9)'
+    },
     '(max-width: 767px)': {
       filter: 'brightness(0.9)'
     }
@@ -240,6 +279,13 @@ export const gridLabel = style({
   transform: 'translateY(10px)',
   transition: 'opacity 0.5s ease, transform 0.3s ease',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      left: '14px',
+      bottom: '14px',
+      fontSize: '20px',
+      opacity: 1,
+      transform: 'translateY(0)'
+    },
     '(max-width: 767px)': {
       opacity: 1,
       transform: 'translateY(0)'

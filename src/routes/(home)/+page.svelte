@@ -339,6 +339,16 @@
         srcset="/images/hero-cover/hero-cover-sp.png"
         type="image/png"
       />
+      <source
+        media="(min-width: 768px) and (max-width: 1023px)"
+        srcset="/images/hero-cover/hero-cover-tb.webp"
+        type="image/webp"
+      />
+      <source
+        media="(min-width: 768px) and (max-width: 1023px)"
+        srcset="/images/hero-cover/hero-cover-tb.png"
+        type="image/png"
+      />
       <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
       <img
         src="/images/hero-cover/hero-cover.png"
