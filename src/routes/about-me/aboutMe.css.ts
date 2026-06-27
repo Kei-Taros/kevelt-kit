@@ -17,6 +17,9 @@ export const aboutProfileDetails = style({
   flex: 1,
   lineHeight: 1.5,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      minWidth: 0
+    },
     '(max-width: 767px)': {
       width: '100%'
     }
@@ -28,6 +31,10 @@ export const profileData = style({
   alignItems: 'baseline',
   gap: '20px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      flexWrap: 'nowrap',
+      gap: '12px'
+    },
     '(max-width: 767px)': {
       gap: '12px'
     }
@@ -37,7 +44,14 @@ export const profileData = style({
 export const profileLabel = style({
   color: colors.brand[600],
   letterSpacing: '1px',
-  fontWeight: 500
+  fontWeight: 500,
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      flexShrink: 0,
+      fontSize: '16px',
+      whiteSpace: 'nowrap'
+    }
+  }
 });
 
 export const profileValue = style({
@@ -45,6 +59,11 @@ export const profileValue = style({
   fontWeight: 700,
   margin: '5px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: 'clamp(20px, 2.5vw, 24px)',
+      margin: '4px 0',
+      whiteSpace: 'nowrap'
+    },
     '(max-width: 767px)': {
       fontSize: '22px'
     }
@@ -55,6 +74,9 @@ export const aboutProfileImg = style({
   flex: '0 0 60%',
   position: 'relative',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      flex: '0 0 56%'
+    },
     '(max-width: 767px)': {
       width: '100%',
       flex: 'none'
@@ -69,6 +91,9 @@ export const iconList = style({
   gap: '20px',
   marginTop: '16px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      marginTop: '120px'
+    },
     '(max-width: 767px)': {
       justifyContent: 'flex-start'
     }
@@ -157,6 +182,13 @@ export const torchGlow = style({
   filter: 'blur(12px)',
   animation: `${torchFlicker} 2s ease-in-out infinite`,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      top: '18%',
+      left: '34%',
+      width: '64px',
+      height: '72px',
+      filter: 'blur(10px)'
+    },
     '(max-width: 767px)': {
       top: '17%',
       left: '33%',

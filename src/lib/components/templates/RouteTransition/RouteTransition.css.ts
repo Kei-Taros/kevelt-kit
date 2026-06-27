@@ -31,6 +31,11 @@ export const transitionVideo = style({
   objectFit: 'cover',
   display: 'block',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '172%',
+      height: '172%',
+      objectFit: 'contain'
+    },
     '(max-width: 767px)': {
       width: '172%',
       height: '172%',

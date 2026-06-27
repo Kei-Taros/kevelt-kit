@@ -25,10 +25,27 @@ export const card = style({
   },
 
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      alignItems: 'center',
+      gap: '14px',
+      padding: '12px 14px'
+    },
     '(max-width: 767px)': {
       flexDirection: 'column',
       gap: '16px',
       padding: '16px'
+    }
+  }
+});
+
+export const cardImageFrame = style({
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      display: 'block',
+      alignSelf: 'center',
+      flexShrink: 0,
+      overflow: 'hidden',
+      lineHeight: 0
     }
   }
 });
@@ -40,6 +57,12 @@ export const cardImage = style({
   objectFit: 'cover',
   flexShrink: 0,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: 'clamp(136px, 17vw, 170px)',
+      display: 'block',
+      transform: 'scale(1.2)',
+      transformOrigin: 'center'
+    },
     '(max-width: 767px)': {
       width: '100%',
       borderRadius: '8px'
@@ -52,6 +75,10 @@ export const cardContent = style({
   flexDirection: 'column',
   margin: 0,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      gap: '4px',
+      minWidth: 0
+    },
     '(max-width: 767px)': {
       gap: '8px'
     }
@@ -64,9 +91,31 @@ globalStyle(`${cardContent} p`, {
 
 globalStyle(`${cardContent} p`, {
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '12px',
+      lineHeight: 1.55
+    },
     '(max-width: 767px)': {
       fontSize: '14px',
       lineHeight: 1.8
+    }
+  }
+});
+
+globalStyle(`${cardContent} h4`, {
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '16px',
+      paddingBottom: '4px'
+    }
+  }
+});
+
+globalStyle(`${cardContent} h4::after`, {
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '96px',
+      height: '5px'
     }
   }
 });

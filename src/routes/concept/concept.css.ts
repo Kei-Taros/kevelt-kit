@@ -7,6 +7,9 @@ export const contentInner = style({
   display: 'flex',
   color: colors.text.primary,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      overflowX: 'hidden'
+    },
     '(max-width: 767px)': {
       display: 'block',
       minHeight: 'auto',
@@ -24,6 +27,13 @@ export const leftArea = style({
   overflow: 'hidden',
   paddingLeft: '36px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '36%',
+      height: '100svh',
+      paddingLeft: '28px',
+      paddingRight: '8px',
+      boxSizing: 'border-box'
+    },
     '(max-width: 767px)': {
       position: 'relative',
       width: '100%',
@@ -31,6 +41,33 @@ export const leftArea = style({
       minHeight: '82svh',
       padding: '0 20px 340px',
       boxSizing: 'border-box'
+    }
+  }
+});
+
+export const conceptHeadingWrapper = style({
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      marginTop: '48px',
+      marginBottom: '24px'
+    }
+  }
+});
+
+globalStyle(`${conceptHeadingWrapper} h1`, {
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '34px',
+      lineHeight: 1.3
+    }
+  }
+});
+
+globalStyle(`${conceptHeadingWrapper} h1::after`, {
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '145%',
+      height: '10px'
     }
   }
 });
@@ -44,6 +81,12 @@ export const msgMain = style({
   marginBottom: '36px',
   position: 'relative',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '36px',
+      lineHeight: 1.24,
+      letterSpacing: '0.02em',
+      marginBottom: '28px'
+    },
     '(max-width: 767px)': {
       fontSize: 'clamp(38px, 11vw, 48px)',
       marginBottom: '24px',
@@ -59,6 +102,11 @@ export const msgDescription = style({
   lineHeight: 2,
   position: 'relative',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '14px',
+      lineHeight: 1.8,
+      marginTop: '70px'
+    },
     '(max-width: 767px)': {
       fontSize: '14px',
       lineHeight: 1.8
@@ -74,6 +122,11 @@ export const msgBackground = style({
   zIndex: 0,
   pointerEvents: 'none',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      bottom: '55px',
+      left: '-30%',
+      width: '180%'
+    },
     '(max-width: 767px)': {
       bottom: '-30px',
       left: '50%',
@@ -103,6 +156,12 @@ export const rightArea = style({
   scrollBehavior: 'smooth',
   scrollbarWidth: 'none',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '64%',
+      paddingLeft: '20px',
+      paddingRight: '36px',
+      boxSizing: 'border-box'
+    },
     '(max-width: 767px)': {
       width: '100%',
       height: 'auto',
@@ -124,6 +183,9 @@ export const sectionBlock = style({
   boxSizing: 'border-box',
   position: 'relative',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      padding: '48px 0'
+    },
     '(max-width: 767px)': {
       minHeight: 'auto',
       padding: '72px 0',
@@ -136,6 +198,9 @@ export const sectionBlock = style({
 
 export const whatSectionBlock = style({
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      paddingBottom: '60px'
+    },
     '(max-width: 767px)': {
       paddingBottom: '64px'
     }
@@ -144,6 +209,10 @@ export const whatSectionBlock = style({
 
 export const craftSectionBlock = style({
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      paddingTop: '28px',
+      paddingBottom: '28px'
+    },
     '(max-width: 767px)': {
       paddingTop: '0px'
     }
@@ -157,6 +226,10 @@ export const firstMsg = style({
   letterSpacing: '0.03em',
   textAlign: 'center',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: 'clamp(36px, 5vw, 50px)',
+      lineHeight: 1.2
+    },
     '(max-width: 767px)': {
       fontSize: 'clamp(36px, 11vw, 48px)',
       lineHeight: 1.2
@@ -168,6 +241,11 @@ export const firstBrandMsg = style({
   color: colors.brand[600],
   marginLeft: '12px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      display: 'block',
+      marginLeft: 0,
+      marginTop: '8px'
+    },
     '(max-width: 767px)': {
       display: 'block',
       marginLeft: 0,
@@ -189,6 +267,22 @@ export const mobileHiddenScrollButton = style({
   }
 });
 
+export const whatScrollButton = style({
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      top: '50px'
+    }
+  }
+});
+
+export const craftScrollButton = style({
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      top: '32px'
+    }
+  }
+});
+
 export const sectionText = style({
   display: 'flex',
   flexDirection: 'column',
@@ -196,6 +290,9 @@ export const sectionText = style({
   position: 'relative',
   zIndex: 2,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      gap: '12px'
+    },
     '(max-width: 767px)': {
       gap: '12px'
     }
@@ -212,6 +309,10 @@ globalStyle(`${sectionText} p`, {
 
 globalStyle(`${sectionText} p`, {
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '15px',
+      lineHeight: 1.8
+    },
     '(max-width: 767px)': {
       fontSize: '15px',
       lineHeight: 1.85
@@ -241,6 +342,12 @@ export const logoImage = style({
   userSelect: 'none',
   zIndex: 1,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      right: 0,
+      bottom: '165px',
+      width: '220px',
+      opacity: 0.22
+    },
     '(max-width: 767px)': {
       display: 'none'
     }
@@ -254,6 +361,9 @@ export const themeText = style({
   textAlign: 'center',
   gap: '24px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      gap: '16px'
+    },
     '(max-width: 767px)': {
       alignItems: 'center',
       textAlign: 'center',
@@ -268,6 +378,10 @@ globalStyle(`${themeText} p`, {
 
 globalStyle(`${themeText} p`, {
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      fontSize: '15px',
+      lineHeight: 1.8
+    },
     '(max-width: 767px)': {
       fontSize: '15px',
       lineHeight: 1.8,

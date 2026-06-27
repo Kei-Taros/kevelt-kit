@@ -12,7 +12,7 @@
 </script>
 
 <div class={styles.card}>
-  <picture>
+  <picture class={styles.cardImageFrame}>
     <source srcset={item.src.webp} type="image/webp" />
     <img class={styles.cardImage} src={item.src.png} alt={item.title} />
   </picture>

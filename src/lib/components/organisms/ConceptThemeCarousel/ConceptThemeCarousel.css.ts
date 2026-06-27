@@ -15,6 +15,9 @@ export const container = style({
   marginLeft: '-24px',
   touchAction: 'pan-y pinch-zoom',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      marginLeft: '-18px'
+    },
     '(max-width: 767px)': {
       marginLeft: '-14px'
     }
@@ -26,6 +29,10 @@ export const slide = style({
   minWidth: 0,
   paddingLeft: '24px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      flexBasis: '50%',
+      paddingLeft: '18px'
+    },
     '(max-width: 767px)': {
       flexBasis: '82%',
       paddingLeft: '14px'
@@ -40,6 +47,9 @@ export const image = style({
   objectFit: 'cover',
   borderRadius: '20px',
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      borderRadius: '16px'
+    },
     '(max-width: 767px)': {
       borderRadius: '14px'
     }
