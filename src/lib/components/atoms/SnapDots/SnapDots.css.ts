@@ -30,6 +30,12 @@ export const snapDot = style({
     '&:focus': {
       outline: 'none'
     }
+  },
+  '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      width: '14px',
+      height: '14px'
+    }
   }
 });
 
@@ -43,6 +49,10 @@ export const snapDots = style({
   gap: '22px',
   zIndex: 10,
   '@media': {
+    '(min-width: 768px) and (max-width: 1023px)': {
+      right: '10px',
+      gap: '18px'
+    },
     '(max-width: 767px)': {
       display: 'none'
     }

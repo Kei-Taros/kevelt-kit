@@ -32,7 +32,7 @@
 
 <section class={styles.contentInner}>
   <div class={styles.leftArea}>
-    <div class={spacing.mbM}>
+    <div class={`${spacing.mbM} ${styles.conceptHeadingWrapper}`}>
       <Heading label="Concept" />
     </div>
 
@@ -88,7 +88,7 @@
 
       <Button
         variant="concept"
-        class={styles.mobileHiddenScrollButton}
+        class={`${styles.mobileHiddenScrollButton} ${styles.whatScrollButton}`}
         onclick={() => scrollToSection(2)}
       >
         <span>SCROLL</span>
@@ -108,7 +108,7 @@
 
       <Button
         variant="concept"
-        class={styles.mobileHiddenScrollButton}
+        class={`${styles.mobileHiddenScrollButton} ${styles.craftScrollButton}`}
         onclick={() => scrollToSection(3)}
       >
         <span>SCROLL</span>
