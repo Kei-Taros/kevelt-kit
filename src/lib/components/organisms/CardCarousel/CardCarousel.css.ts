@@ -11,7 +11,7 @@ globalStyle(':root', {
   '@media': {
     [media.pcs]: {
       vars: {
-        '--embla-slide-height': '26rem',
+        '--embla-slide-height': '24rem',
         '--embla-slide-spacing': '0.9rem',
         '--embla-slide-size': '66%'
       }
