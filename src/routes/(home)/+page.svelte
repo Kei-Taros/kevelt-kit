@@ -294,183 +294,185 @@
   <title>KeveltKit</title>
 </svelte:head>
 
-{#if isOpeningVisible}
-  <div class={`${styles.openingOverlay} ${isOpeningFading ? styles.openingFadeOut : ''}`}>
-    <video
-      bind:this={introVideoEl}
-      class={styles.openingVideo}
-      autoplay
-      muted
-      playsinline
-      preload="auto"
-    >
-      <source src="/videos/intro/intro.webm" type="video/webm" />
-      <source src="/videos/intro/intro.mp4" type="video/mp4" />
-    </video>
-  </div>
-{/if}
-
-<section class={spacing.mbXXXXXL}>
-  <div bind:this={heroWrapperEl} class={styles.heroWrapper}>
-    <video
-      bind:this={heroVideoEl}
-      class={styles.heroVideo}
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-    >
-      <source
-        media="(hover: hover) and (pointer: fine)"
-        src="/videos/hero-video/hero-video.webm"
-        type="video/webm"
-      />
-      <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
-    </video>
-    <picture>
-      <source
-        media="(max-width: 767px)"
-        srcset="/images/hero-cover/hero-cover-sp.webp"
-        type="image/webp"
-      />
-      <source
-        media="(max-width: 767px)"
-        srcset="/images/hero-cover/hero-cover-sp.png"
-        type="image/png"
-      />
-      <source
-        media="(min-width: 768px) and (max-width: 1023px)"
-        srcset="/images/hero-cover/hero-cover-tb.webp"
-        type="image/webp"
-      />
-      <source
-        media="(min-width: 768px) and (max-width: 1023px)"
-        srcset="/images/hero-cover/hero-cover-tb.png"
-        type="image/png"
-      />
-      <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
-      <img
-        src="/images/hero-cover/hero-cover.png"
-        alt="hero-cover"
-        class={styles.heroCover}
-        style={`transform: scale(${coverScale});`}
-      />
-    </picture>
-  </div>
-</section>
-
-<section class={spacing.mbXXXXL} bind:this={sectionMsgEl}>
-  <div class={layout.contentInner}>
-    <div class={styles.msgWrapper}>
-      <div class={`${styles.msgTop} ${showMsgTop ? styles.showMsg : ''}`}>
-        {constants.TOP_MESSAGE}
-      </div>
-      <div class={`${styles.msgMiddle} ${showMsgMiddle ? styles.showMsg : ''}`}>
-        <span>{constants.MIDDLE_MESSAGE_1}</span>
-        <span>{constants.MIDDLE_MESSAGE_2}</span>
-      </div>
-      <div class={`${styles.msgBottom} ${showMsgBottom ? styles.showMsg : ''}`}>
-        {constants.BOTTOM_MESSAGE}
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class={spacing.mbXXXXL} bind:this={sectionGridEl}>
-  <div class={layout.contentInner}>
-    <div class={spacing.mbM}>
-      <Heading label="Contents" />
-    </div>
-    <div class={styles.grid}>
-      <a
-        href="/about-me"
-        class={`${styles.gridTile} ${styles.aboutMe} ${
-          showGridAbout ? styles.gridTileShow : styles.gridTileHidden
-        }`}
+<div class={styles.page}>
+  {#if isOpeningVisible}
+    <div class={`${styles.openingOverlay} ${isOpeningFading ? styles.openingFadeOut : ''}`}>
+      <video
+        bind:this={introVideoEl}
+        class={styles.openingVideo}
+        autoplay
+        muted
+        playsinline
+        preload="auto"
       >
-        <picture>
-          <source srcset="/images/theme/about-me.webp" type="image/webp" />
-          <img src="/images/theme/about-me.png" alt="About Me" class={styles.gridImg} />
-        </picture>
-        <span class={styles.gridLabel}>About Me</span>
-      </a>
+        <source src="/videos/intro/intro.webm" type="video/webm" />
+        <source src="/videos/intro/intro.mp4" type="video/mp4" />
+      </video>
+    </div>
+  {/if}
 
-      <a
-        href="/concept"
-        class={`${styles.gridTile} ${styles.concept} ${
-          showGridConcept ? styles.gridTileShow : styles.gridTileHidden
-        }`}
+  <section class={spacing.mbXXXXXL}>
+    <div bind:this={heroWrapperEl} class={styles.heroWrapper}>
+      <video
+        bind:this={heroVideoEl}
+        class={styles.heroVideo}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
       >
-        <picture>
-          <source srcset="/images/theme/consept.webp" type="image/webp" />
-          <img src="/images/theme/consept.png" alt="Concept" class={styles.gridImg} />
-        </picture>
-        <span class={styles.gridLabel}>Concept</span>
-      </a>
+        <source
+          media="(hover: hover) and (pointer: fine)"
+          src="/videos/hero-video/hero-video.webm"
+          type="video/webm"
+        />
+        <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
+      </video>
+      <picture>
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/hero-cover/hero-cover-sp.webp"
+          type="image/webp"
+        />
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/hero-cover/hero-cover-sp.png"
+          type="image/png"
+        />
+        <source
+          media="(min-width: 768px) and (max-width: 1023px)"
+          srcset="/images/hero-cover/hero-cover-tb.webp"
+          type="image/webp"
+        />
+        <source
+          media="(min-width: 768px) and (max-width: 1023px)"
+          srcset="/images/hero-cover/hero-cover-tb.png"
+          type="image/png"
+        />
+        <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
+        <img
+          src="/images/hero-cover/hero-cover.png"
+          alt="hero-cover"
+          class={styles.heroCover}
+          style={`transform: scale(${coverScale});`}
+        />
+      </picture>
+    </div>
+  </section>
 
-      <div class={styles.gridBottomRow}>
-        <div class={styles.gridLeftBottom}>
-          <a
-            href="/news"
-            class={`${styles.gridTile} ${styles.gridHalfTile} ${
-              showGridNews ? styles.gridTileShow : styles.gridTileHidden
-            }`}
-          >
-            <picture>
-              <source srcset="/images/theme/news.webp" type="image/webp" />
-              <img src="/images/theme/news.png" alt="News" class={styles.gridImg} />
-            </picture>
-            <span class={styles.gridLabel}>News</span>
-          </a>
-
-          <a
-            href="/a-break"
-            class={`${styles.gridTile} ${styles.gridHalfTile} ${
-              showGridABreak ? styles.gridTileShow : styles.gridTileHidden
-            }`}
-          >
-            <picture>
-              <source srcset="/images/theme/a-break.webp" type="image/webp" />
-              <img src="/images/theme/a-break.png" alt="A Break" class={styles.gridImg} />
-            </picture>
-            <span class={styles.gridLabel}>A Break</span>
-          </a>
+  <section class={spacing.mbXXXXL} bind:this={sectionMsgEl}>
+    <div class={layout.contentInner}>
+      <div class={styles.msgWrapper}>
+        <div class={`${styles.msgTop} ${showMsgTop ? styles.showMsg : ''}`}>
+          {constants.TOP_MESSAGE}
         </div>
+        <div class={`${styles.msgMiddle} ${showMsgMiddle ? styles.showMsg : ''}`}>
+          <span>{constants.MIDDLE_MESSAGE_1}</span>
+          <span>{constants.MIDDLE_MESSAGE_2}</span>
+        </div>
+        <div class={`${styles.msgBottom} ${showMsgBottom ? styles.showMsg : ''}`}>
+          {constants.BOTTOM_MESSAGE}
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class={spacing.mbXXXXL} bind:this={sectionGridEl}>
+    <div class={layout.contentInner}>
+      <div class={spacing.mbM}>
+        <Heading label="Contents" />
+      </div>
+      <div class={styles.grid}>
         <a
-          href="/works"
-          class={`${styles.gridTile} ${styles.works} ${
-            showGridWorks ? styles.gridTileShow : styles.gridTileHidden
+          href="/about-me"
+          class={`${styles.gridTile} ${styles.aboutMe} ${
+            showGridAbout ? styles.gridTileShow : styles.gridTileHidden
           }`}
         >
           <picture>
-            <source srcset="/images/theme/works.webp" type="image/webp" />
-            <img src="/images/theme/works.png" alt="Works" class={styles.gridImg} />
+            <source srcset="/images/theme/about-me.webp" type="image/webp" />
+            <img src="/images/theme/about-me.png" alt="About Me" class={styles.gridImg} />
           </picture>
-          <span class={styles.gridLabel}>Works</span>
+          <span class={styles.gridLabel}>About Me</span>
         </a>
+
+        <a
+          href="/concept"
+          class={`${styles.gridTile} ${styles.concept} ${
+            showGridConcept ? styles.gridTileShow : styles.gridTileHidden
+          }`}
+        >
+          <picture>
+            <source srcset="/images/theme/consept.webp" type="image/webp" />
+            <img src="/images/theme/consept.png" alt="Concept" class={styles.gridImg} />
+          </picture>
+          <span class={styles.gridLabel}>Concept</span>
+        </a>
+
+        <div class={styles.gridBottomRow}>
+          <div class={styles.gridLeftBottom}>
+            <a
+              href="/news"
+              class={`${styles.gridTile} ${styles.gridHalfTile} ${
+                showGridNews ? styles.gridTileShow : styles.gridTileHidden
+              }`}
+            >
+              <picture>
+                <source srcset="/images/theme/news.webp" type="image/webp" />
+                <img src="/images/theme/news.png" alt="News" class={styles.gridImg} />
+              </picture>
+              <span class={styles.gridLabel}>News</span>
+            </a>
+
+            <a
+              href="/a-break"
+              class={`${styles.gridTile} ${styles.gridHalfTile} ${
+                showGridABreak ? styles.gridTileShow : styles.gridTileHidden
+              }`}
+            >
+              <picture>
+                <source srcset="/images/theme/a-break.webp" type="image/webp" />
+                <img src="/images/theme/a-break.png" alt="A Break" class={styles.gridImg} />
+              </picture>
+              <span class={styles.gridLabel}>A Break</span>
+            </a>
+          </div>
+
+          <a
+            href="/works"
+            class={`${styles.gridTile} ${styles.works} ${
+              showGridWorks ? styles.gridTileShow : styles.gridTileHidden
+            }`}
+          >
+            <picture>
+              <source srcset="/images/theme/works.webp" type="image/webp" />
+              <img src="/images/theme/works.png" alt="Works" class={styles.gridImg} />
+            </picture>
+            <span class={styles.gridLabel}>Works</span>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class={spacing.mbXXXL}>
-  <div class={layout.contentInner}>
-    <div class={styles.headerRow}>
-      <Heading label="Works" />
-      <Button label="Work List" href="/works" class={styles.headerActionButton} />
+  <section class={spacing.mbXXXL}>
+    <div class={layout.contentInner}>
+      <div class={styles.headerRow}>
+        <Heading label="Works" />
+        <Button label="Work List" href="/works" class={styles.headerActionButton} />
+      </div>
+      <CardCarousel items={constants.CAROUSEL_ITEMS} onCardClick={(item) => openWork(item.id)} />
     </div>
-    <CardCarousel items={constants.CAROUSEL_ITEMS} onCardClick={(item) => openWork(item.id)} />
-  </div>
-</section>
+  </section>
 
-<section class={spacing.mbXXXXL}>
-  <div class={layout.contentInner}>
-    <div class={styles.headerRow}>
-      <Heading label="News" />
-      <Button label="News List" href="/news" class={styles.headerActionButton} />
+  <section class={spacing.mbXXXXL}>
+    <div class={layout.contentInner}>
+      <div class={styles.headerRow}>
+        <Heading label="News" />
+        <Button label="News List" href="/news" class={styles.headerActionButton} />
+      </div>
+      <NewsItemList items={data.newsList} variant="home" />
     </div>
-    <NewsItemList items={data.newsList} variant="home" />
-  </div>
-</section>
+  </section>
+</div>

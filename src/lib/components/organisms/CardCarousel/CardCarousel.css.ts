@@ -1,16 +1,24 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 globalStyle(':root', {
   vars: {
-    '--embla-slide-height': '35rem',
+    '--embla-slide-height': '33rem',
     '--embla-slide-spacing': '1rem',
     '--embla-slide-size': '70%'
   },
   '@media': {
+    [media.pcs]: {
+      vars: {
+        '--embla-slide-height': '26rem',
+        '--embla-slide-spacing': '0.9rem',
+        '--embla-slide-size': '66%'
+      }
+    },
     '(max-width: 767px)': {
       vars: {
-        '--embla-slide-height': 'clamp(260px, 86vw, 360px)',
+        '--embla-slide-height': 'clamp(250px, 82vw, 340px)',
         '--embla-slide-spacing': '0.75rem',
         '--embla-slide-size': '88%'
       }
@@ -21,11 +29,13 @@ globalStyle(':root', {
 export const embla = style({
   width: '100%',
   maxWidth: '60rem',
-  margin: '0 auto'
+  margin: '0 auto',
+  overflow: 'visible'
 });
 
 export const viewport = style({
-  overflow: 'hidden'
+  overflow: 'hidden',
+  contain: 'layout paint'
 });
 
 export const container = style({
@@ -114,11 +124,14 @@ export const controls = style({
   justifyContent: 'space-between',
   gap: '1.2rem',
   marginTop: '1.8rem',
+  padding: '0 0.6rem',
+  boxSizing: 'border-box',
   '@media': {
     '(max-width: 767px)': {
       alignItems: 'center',
       gap: '0.75rem',
-      marginTop: '1rem'
+      marginTop: '1rem',
+      padding: '0 0.35rem'
     }
   }
 });

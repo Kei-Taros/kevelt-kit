@@ -1,7 +1,12 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 /* Common */
+export const page = style({
+  overflowX: 'hidden'
+});
+
 export const headerRow = style({
   display: 'flex',
   alignItems: 'center',
@@ -11,6 +16,11 @@ export const headerRow = style({
 
 export const headerActionButton = style({
   '@media': {
+    [media.pcs]: {
+      padding: '12px 22px',
+      fontSize: '15px',
+      whiteSpace: 'nowrap'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       padding: '12px 20px',
       fontSize: '15px',
@@ -58,6 +68,9 @@ export const heroWrapper = style({
   height: '100vh',
   overflow: 'hidden',
   '@media': {
+    [media.pcs]: {
+      height: '100svh'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       height: '100svh'
     },
@@ -92,6 +105,9 @@ export const heroCover = style({
   transition: 'transform 0.3s ease-out',
   willChange: 'transform',
   '@media': {
+    [media.pcs]: {
+      transformOrigin: '48% 49.3%'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       transformOrigin: '50% 47%'
     },
@@ -106,6 +122,9 @@ export const msgWrapper = style({
   position: 'relative',
   minHeight: '50vh',
   '@media': {
+    [media.pcs]: {
+      minHeight: '48svh'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       minHeight: '46svh'
     },
@@ -131,6 +150,11 @@ export const msgTop = style([
     fontWeight: 700,
     margin: '0 0 24px 0',
     '@media': {
+      [media.pcs]: {
+        fontSize: 'clamp(40px, 5.2vw, 64px)',
+        lineHeight: 1.25,
+        marginBottom: '40px'
+      },
       '(min-width: 768px) and (max-width: 1023px)': {
         fontSize: 'clamp(38px, 5.6vw, 60px)',
         lineHeight: 1.3,
@@ -154,6 +178,11 @@ export const msgMiddle = style([
     margin: 0,
     lineHeight: 1.2,
     '@media': {
+      [media.pcs]: {
+        fontSize: 'clamp(40px, 5.2vw, 64px)',
+        lineHeight: 1.25,
+        whiteSpace: 'nowrap'
+      },
       '(min-width: 768px) and (max-width: 1023px)': {
         flexDirection: 'row',
         flexWrap: 'nowrap',
@@ -180,6 +209,9 @@ export const msgBottom = style([
     fontSize: 'clamp(16px, 2vw, 26px)',
     fontWeight: 600,
     '@media': {
+      [media.pcs]: {
+        fontSize: 'clamp(18px, 1.8vw, 24px)'
+      },
       '(min-width: 768px) and (max-width: 1023px)': {
         fontSize: 'clamp(18px, 2.4vw, 24px)'
       },
@@ -213,6 +245,13 @@ export const grid = style({
   rowGap: 'var(--gap)',
   justifyContent: 'center',
   '@media': {
+    [media.pcs]: {
+      vars: {
+        '--big': 'clamp(420px, 42vw, 500px)',
+        '--rightCol': 'calc(var(--big) * 0.70)',
+        '--gap': '18px'
+      }
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       vars: {
         '--big': 'clamp(320px, 48vw, 420px)',
@@ -279,6 +318,11 @@ export const gridLabel = style({
   transform: 'translateY(10px)',
   transition: 'opacity 0.5s ease, transform 0.3s ease',
   '@media': {
+    [media.pcs]: {
+      left: '15px',
+      bottom: '15px',
+      fontSize: '21px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       left: '14px',
       bottom: '14px',
