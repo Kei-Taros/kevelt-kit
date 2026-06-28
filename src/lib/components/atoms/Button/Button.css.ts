@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const button = style({
   border: 'none',
@@ -164,7 +165,7 @@ export const concept = style({
   },
 
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '96px',
       height: '96px',
       gap: '8px',

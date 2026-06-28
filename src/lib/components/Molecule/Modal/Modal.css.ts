@@ -1,5 +1,6 @@
 import { style, keyframes, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const overlay = style({
   position: 'fixed',
@@ -11,7 +12,7 @@ export const overlay = style({
   background: 'rgba(0, 0, 0, 0.7)',
   zIndex: 1000,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignItems: 'flex-start',
       padding: '14px'
     }
@@ -25,7 +26,7 @@ export const content = style({
   borderRadius: '16px',
   overflow: 'hidden',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '12px'
     }
   }
@@ -43,7 +44,7 @@ export const contentInner = style({
 
   scrollbarColor: 'rgba(255,255,255,0.5) #141928',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       maxHeight: 'calc(100dvh - 28px)',
       padding: '24px 16px',
       borderRadius: '12px'
@@ -66,7 +67,7 @@ export const closeButton = style({
   justifyContent: 'center',
   zIndex: 1,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       top: '10px',
       right: '10px',
       width: '34px',
@@ -94,7 +95,7 @@ export const closeIcon = style({
   border: '2px solid #c0bfbf',
   transformOrigin: 'center',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '34px',
       height: '34px'
     }
@@ -124,7 +125,7 @@ export const closeIcon = style({
   }
 });
 
-// スクロールバー
+// スクロールバ�E
 globalStyle(`${contentInner}::-webkit-scrollbar`, {
   height: '8px',
   width: '8px'

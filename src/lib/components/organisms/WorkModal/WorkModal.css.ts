@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const content = style({
   display: 'grid',
@@ -10,7 +11,7 @@ export const header = style({
   display: 'grid',
   marginBottom: '24px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: '18px',
       paddingRight: '40px'
     }
@@ -22,7 +23,7 @@ export const workTitle = style({
   fontSize: '32px',
   fontWeight: 800,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '24px',
       lineHeight: 1.3
     }
@@ -37,7 +38,7 @@ export const image = style({
   aspectRatio: '16 / 10',
   margin: '0 auto',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       borderRadius: '10px'
     }
@@ -49,7 +50,7 @@ export const summary = style({
   marginBottom: '18px',
   paddingBottom: '24px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: '20px',
       paddingBottom: '20px'
     }
@@ -66,7 +67,7 @@ export const descriptionBox = style({
   borderLeft: `4px solid ${colors.brand[600]}`,
   boxSizing: 'border-box',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       margin: '18px auto',
       padding: '14px 16px'
     }
@@ -79,7 +80,7 @@ export const description = style({
   fontSize: '16px',
   lineHeight: 1.9,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       lineHeight: 1.8
     }
@@ -92,7 +93,7 @@ export const summaryGrid = style({
   gap: '16px',
   marginBottom: '24px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gridTemplateColumns: '1fr',
       gap: '12px',
       marginBottom: '18px'
@@ -118,7 +119,7 @@ export const details = style({
   gridTemplateColumns: '1fr 1fr',
   gap: '24px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gridTemplateColumns: '1fr',
       gap: '20px'
     }
@@ -131,7 +132,7 @@ export const detailList = style({
   display: 'grid',
   gap: '10px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       lineHeight: 1.7
     }

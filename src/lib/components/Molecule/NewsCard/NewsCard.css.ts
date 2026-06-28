@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const card = style({
   display: 'flex',
@@ -55,7 +56,7 @@ export const body = style({
   gap: '12px',
   padding: '0 16px 18px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '8px',
       padding: '0 14px 16px'
     }
@@ -68,7 +69,7 @@ export const title = style({
   color: colors.text.primary,
   fontSize: '18px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '20px',
       lineHeight: 1.4
     }
@@ -81,7 +82,7 @@ export const date = style({
   fontSize: '14px',
   fontWeight: 500,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '13px'
     }
   }

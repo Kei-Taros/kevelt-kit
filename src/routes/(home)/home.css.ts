@@ -1,7 +1,12 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 /* Common */
+export const page = style({
+  overflowX: 'hidden'
+});
+
 export const headerRow = style({
   display: 'flex',
   alignItems: 'center',
@@ -11,12 +16,17 @@ export const headerRow = style({
 
 export const headerActionButton = style({
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      padding: '12px 22px',
+      fontSize: '15px',
+      whiteSpace: 'nowrap'
+    },
+    [media.tb]: {
       padding: '12px 20px',
       fontSize: '15px',
       whiteSpace: 'nowrap'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       padding: '12px 18px',
       fontSize: '15px',
       whiteSpace: 'nowrap'
@@ -58,10 +68,13 @@ export const heroWrapper = style({
   height: '100vh',
   overflow: 'hidden',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
       height: '100svh'
     },
-    '(max-width: 767px)': {
+    [media.tb]: {
+      height: '100svh'
+    },
+    [media.sp]: {
       height: '100svh'
     }
   }
@@ -92,10 +105,13 @@ export const heroCover = style({
   transition: 'transform 0.3s ease-out',
   willChange: 'transform',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      transformOrigin: '48% 49.3%'
+    },
+    [media.tb]: {
       transformOrigin: '50% 47%'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       transformOrigin: '50% 50%'
     }
   }
@@ -106,10 +122,13 @@ export const msgWrapper = style({
   position: 'relative',
   minHeight: '50vh',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      minHeight: '48svh'
+    },
+    [media.tb]: {
       minHeight: '46svh'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       minHeight: '50svh',
       flexDirection: 'column',
@@ -131,12 +150,17 @@ export const msgTop = style([
     fontWeight: 700,
     margin: '0 0 24px 0',
     '@media': {
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.pcs]: {
+        fontSize: 'clamp(40px, 5.2vw, 64px)',
+        lineHeight: 1.25,
+        marginBottom: '40px'
+      },
+      [media.tb]: {
         fontSize: 'clamp(38px, 5.6vw, 60px)',
         lineHeight: 1.3,
         marginBottom: '56px'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         fontSize: 'clamp(28px, 10vw, 40px)',
         lineHeight: 1.35,
         marginBottom: '16px'
@@ -154,14 +178,19 @@ export const msgMiddle = style([
     margin: 0,
     lineHeight: 1.2,
     '@media': {
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.pcs]: {
+        fontSize: 'clamp(40px, 5.2vw, 64px)',
+        lineHeight: 1.25,
+        whiteSpace: 'nowrap'
+      },
+      [media.tb]: {
         flexDirection: 'row',
         flexWrap: 'nowrap',
         fontSize: 'clamp(34px, 5vw, 50px)',
         lineHeight: 1.3,
         whiteSpace: 'nowrap'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         flexDirection: 'column',
         gap: '16px',
         fontSize: 'clamp(28px, 10vw, 40px)',
@@ -180,10 +209,13 @@ export const msgBottom = style([
     fontSize: 'clamp(16px, 2vw, 26px)',
     fontWeight: 600,
     '@media': {
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.pcs]: {
+        fontSize: 'clamp(18px, 1.8vw, 24px)'
+      },
+      [media.tb]: {
         fontSize: 'clamp(18px, 2.4vw, 24px)'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         position: 'static',
         alignSelf: 'flex-end',
         marginTop: '48px',
@@ -213,14 +245,21 @@ export const grid = style({
   rowGap: 'var(--gap)',
   justifyContent: 'center',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      vars: {
+        '--big': 'clamp(420px, 42vw, 500px)',
+        '--rightCol': 'calc(var(--big) * 0.70)',
+        '--gap': '18px'
+      }
+    },
+    [media.tb]: {
       vars: {
         '--big': 'clamp(320px, 48vw, 420px)',
         '--rightCol': 'calc(var(--big) * 0.72)',
         '--gap': '16px'
       }
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       width: '100%',
       flexDirection: 'column',
@@ -247,10 +286,10 @@ export const gridTile = style({
   borderRadius: '12px',
   filter: 'brightness(0.8)',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       filter: 'brightness(0.9)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       filter: 'brightness(0.9)'
     }
   }
@@ -279,14 +318,19 @@ export const gridLabel = style({
   transform: 'translateY(10px)',
   transition: 'opacity 0.5s ease, transform 0.3s ease',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      left: '15px',
+      bottom: '15px',
+      fontSize: '21px'
+    },
+    [media.tb]: {
       left: '14px',
       bottom: '14px',
       fontSize: '20px',
       opacity: 1,
       transform: 'translateY(0)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       opacity: 1,
       transform: 'translateY(0)'
     }
@@ -304,7 +348,7 @@ export const aboutMe = style({
   width: '100%',
   height: '100%',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }
@@ -317,7 +361,7 @@ export const concept = style({
   width: '100%',
   height: '100%',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }
@@ -333,7 +377,7 @@ export const gridBottomRow = style({
   columnGap: 'var(--gap)',
   alignItems: 'stretch',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       width: '100%',
       height: 'auto',
@@ -353,7 +397,7 @@ export const gridLeftBottom = style({
   flexDirection: 'column',
   gap: 'var(--gap)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'grid',
       width: '100%',
       height: 'auto',
@@ -376,7 +420,7 @@ export const works = style({
   justifySelf: 'end',
   alignSelf: 'start',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }

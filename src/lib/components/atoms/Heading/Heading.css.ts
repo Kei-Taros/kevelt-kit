@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const h1 = style({
   position: 'relative',
@@ -9,7 +10,10 @@ export const h1 = style({
   paddingBottom: '2px',
   fontSize: '42px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.tb]: {
+      fontSize: '38px'
+    },
+    [media.sp]: {
       fontSize: '32px',
       selectors: {
         '&::after': {
@@ -116,7 +120,7 @@ export const h2News = style({
   },
 
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '18px',
       fontSize: '24px',
       selectors: {
@@ -140,7 +144,7 @@ export const h2NewsSlug = style({
   position: 'relative',
   textAlign: 'center',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '20px',
       padding: '16px 20px',
       lineHeight: 1.45

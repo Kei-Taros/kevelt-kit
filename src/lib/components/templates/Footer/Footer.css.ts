@@ -1,5 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const footer = style({
   background: colors.background.primary,
@@ -30,7 +31,7 @@ export const inner = style({
   gap: '60px',
   alignItems: 'start',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       boxSizing: 'border-box',
       width: '100%',
       gridTemplateColumns: 'auto auto',
@@ -47,7 +48,7 @@ export const nav = style({
   flexDirection: 'column',
   gap: '10px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignItems: 'flex-start'
     }
   }
@@ -57,7 +58,7 @@ export const logo = style({
   display: 'flex',
   justifyContent: 'flex-end',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       justifyContent: 'center'
     }
   }
@@ -66,7 +67,7 @@ export const logo = style({
 export const side = style({
   display: 'contents',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignSelf: 'stretch',
       display: 'flex',
       flexDirection: 'column',
@@ -96,7 +97,7 @@ export const copyright = style({
   fontSize: '14px',
   color: colors.text.muted,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       boxSizing: 'border-box',
       padding: '0 16px',
       fontSize: '12px',
@@ -107,7 +108,7 @@ export const copyright = style({
 
 globalStyle(`${footer}::before`, {
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: 'calc(100% - 32px)'
     }
   }

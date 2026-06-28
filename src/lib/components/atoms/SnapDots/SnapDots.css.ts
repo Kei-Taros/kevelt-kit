@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const snapDot = style({
   appearance: 'none',
@@ -32,7 +33,11 @@ export const snapDot = style({
     }
   },
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      width: '16px',
+      height: '16px'
+    },
+    [media.tb]: {
       width: '14px',
       height: '14px'
     }
@@ -49,11 +54,15 @@ export const snapDots = style({
   gap: '22px',
   zIndex: 10,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      right: '10px',
+      gap: '20px'
+    },
+    [media.tb]: {
       right: '10px',
       gap: '18px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'none'
     }
   }

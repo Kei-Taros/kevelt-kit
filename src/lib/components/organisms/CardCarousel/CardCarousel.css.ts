@@ -1,16 +1,24 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 globalStyle(':root', {
   vars: {
-    '--embla-slide-height': '35rem',
+    '--embla-slide-height': '33rem',
     '--embla-slide-spacing': '1rem',
     '--embla-slide-size': '70%'
   },
   '@media': {
-    '(max-width: 767px)': {
+    [media.pcs]: {
       vars: {
-        '--embla-slide-height': 'clamp(260px, 86vw, 360px)',
+        '--embla-slide-height': '24rem',
+        '--embla-slide-spacing': '0.9rem',
+        '--embla-slide-size': '66%'
+      }
+    },
+    [media.sp]: {
+      vars: {
+        '--embla-slide-height': 'clamp(250px, 82vw, 340px)',
         '--embla-slide-spacing': '0.75rem',
         '--embla-slide-size': '88%'
       }
@@ -21,11 +29,13 @@ globalStyle(':root', {
 export const embla = style({
   width: '100%',
   maxWidth: '60rem',
-  margin: '0 auto'
+  margin: '0 auto',
+  overflow: 'visible'
 });
 
 export const viewport = style({
-  overflow: 'hidden'
+  overflow: 'hidden',
+  contain: 'layout paint'
 });
 
 export const container = style({
@@ -49,7 +59,7 @@ export const slideImg = style({
   borderRadius: '1.8rem',
   transition: 'opacity 220ms ease, transform 220ms ease, filter 220ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '1rem'
     }
   }
@@ -73,7 +83,7 @@ export const slideOverlay = style({
   padding: '1.4rem',
   transition: 'opacity 220ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '1rem',
       padding: '1rem'
     }
@@ -96,7 +106,7 @@ export const slideTitle = style({
   letterSpacing: '0.06em',
   textTransform: 'uppercase',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(16px, 4.6vw, 20px)',
       lineHeight: 1.35
     }
@@ -114,11 +124,14 @@ export const controls = style({
   justifyContent: 'space-between',
   gap: '1.2rem',
   marginTop: '1.8rem',
+  padding: '0 0.6rem',
+  boxSizing: 'border-box',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignItems: 'center',
       gap: '0.75rem',
-      marginTop: '1rem'
+      marginTop: '1rem',
+      padding: '0 0.35rem'
     }
   }
 });
@@ -151,7 +164,7 @@ export const button = style({
   justifyContent: 'center',
   transition: 'background-color 160ms ease, transform 160ms ease, border-color 160ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '2.8rem',
       height: '2.8rem'
     }
@@ -183,7 +196,7 @@ export const dots = style({
   alignItems: 'center',
   marginRight: 'calc((2.6rem - 1.4rem) / 2 * -1)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       columnGap: '0.25rem',
       marginRight: 0,
       rowGap: '0.25rem'
@@ -208,7 +221,7 @@ export const dot = style({
   borderRadius: '50%',
   position: 'relative',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '1.8rem',
       height: '1.8rem'
     }

@@ -1,5 +1,6 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const card = style({
   display: 'flex',
@@ -25,12 +26,17 @@ export const card = style({
   },
 
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      alignItems: 'center',
+      gap: '12px',
+      padding: '9px 12px'
+    },
+    [media.tb]: {
       alignItems: 'center',
       gap: '14px',
       padding: '12px 14px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexDirection: 'column',
       gap: '16px',
       padding: '16px'
@@ -40,7 +46,14 @@ export const card = style({
 
 export const cardImageFrame = style({
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      display: 'block',
+      alignSelf: 'center',
+      flexShrink: 0,
+      overflow: 'hidden',
+      lineHeight: 0
+    },
+    [media.tb]: {
       display: 'block',
       alignSelf: 'center',
       flexShrink: 0,
@@ -57,13 +70,17 @@ export const cardImage = style({
   objectFit: 'cover',
   flexShrink: 0,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      width: 'clamp(132px, 13vw, 152px)',
+      display: 'block'
+    },
+    [media.tb]: {
       width: 'clamp(136px, 17vw, 170px)',
       display: 'block',
       transform: 'scale(1.2)',
       transformOrigin: 'center'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       borderRadius: '8px'
     }
@@ -75,11 +92,15 @@ export const cardContent = style({
   flexDirection: 'column',
   margin: 0,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      gap: '3px',
+      minWidth: 0
+    },
+    [media.tb]: {
       gap: '4px',
       minWidth: 0
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '8px'
     }
   }
@@ -91,11 +112,15 @@ globalStyle(`${cardContent} p`, {
 
 globalStyle(`${cardContent} p`, {
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      fontSize: '12px',
+      lineHeight: 1.38
+    },
+    [media.tb]: {
       fontSize: '12px',
       lineHeight: 1.55
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       lineHeight: 1.8
     }
@@ -104,7 +129,11 @@ globalStyle(`${cardContent} p`, {
 
 globalStyle(`${cardContent} h4`, {
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      fontSize: '15px',
+      paddingBottom: '3px'
+    },
+    [media.tb]: {
       fontSize: '16px',
       paddingBottom: '4px'
     }
@@ -113,7 +142,11 @@ globalStyle(`${cardContent} h4`, {
 
 globalStyle(`${cardContent} h4::after`, {
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      width: '88px',
+      height: '4px'
+    },
+    [media.tb]: {
       width: '96px',
       height: '5px'
     }

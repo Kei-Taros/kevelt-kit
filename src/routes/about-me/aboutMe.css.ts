@@ -1,12 +1,17 @@
 import { style, keyframes, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const aboutProfile = style({
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
+  gap: '32px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.pcs]: {
+      gap: '28px'
+    },
+    [media.sp]: {
       flexDirection: 'column',
       gap: '32px'
     }
@@ -17,10 +22,13 @@ export const aboutProfileDetails = style({
   flex: 1,
   lineHeight: 1.5,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
       minWidth: 0
     },
-    '(max-width: 767px)': {
+    [media.tb]: {
+      minWidth: 0
+    },
+    [media.sp]: {
       width: '100%'
     }
   }
@@ -31,11 +39,15 @@ export const profileData = style({
   alignItems: 'baseline',
   gap: '20px',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      flexWrap: 'nowrap',
+      gap: '14px'
+    },
+    [media.tb]: {
       flexWrap: 'nowrap',
       gap: '12px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '12px'
     }
   }
@@ -46,7 +58,12 @@ export const profileLabel = style({
   letterSpacing: '1px',
   fontWeight: 500,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      flexShrink: 0,
+      fontSize: '16px',
+      whiteSpace: 'nowrap'
+    },
+    [media.tb]: {
       flexShrink: 0,
       fontSize: '16px',
       whiteSpace: 'nowrap'
@@ -59,12 +76,17 @@ export const profileValue = style({
   fontWeight: 700,
   margin: '5px',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      fontSize: 'clamp(22px, 2.2vw, 26px)',
+      margin: '4px 0',
+      whiteSpace: 'nowrap'
+    },
+    [media.tb]: {
       fontSize: 'clamp(20px, 2.5vw, 24px)',
       margin: '4px 0',
       whiteSpace: 'nowrap'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '22px'
     }
   }
@@ -74,10 +96,13 @@ export const aboutProfileImg = style({
   flex: '0 0 60%',
   position: 'relative',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
       flex: '0 0 56%'
     },
-    '(max-width: 767px)': {
+    [media.tb]: {
+      flex: '0 0 56%'
+    },
+    [media.sp]: {
       width: '100%',
       flex: 'none'
     }
@@ -91,10 +116,13 @@ export const iconList = style({
   gap: '20px',
   marginTop: '16px',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      marginTop: '72px'
+    },
+    [media.tb]: {
       marginTop: '120px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       justifyContent: 'flex-start'
     }
   }
@@ -110,7 +138,10 @@ export const profileImg = style({
   maskImage: 'linear-gradient(to right, transparent 0%, black 15%)',
   WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.pcs]: {
+      aspectRatio: '16 / 11'
+    },
+    [media.sp]: {
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)'
     }
@@ -121,7 +152,12 @@ export const aboutText = style({
   background: 'rgba(255, 255, 255, 0.15)',
   backdropFilter: 'blur(10px)',
   padding: '24px',
-  borderRadius: '16px'
+  borderRadius: '16px',
+  '@media': {
+    [media.pcs]: {
+      padding: '22px'
+    }
+  }
 });
 
 export const warningText = style({
@@ -129,7 +165,12 @@ export const warningText = style({
   lineHeight: 1.2,
   fontWeight: 800,
   padding: '10px 0',
-  fontSize: '24px'
+  fontSize: '24px',
+  '@media': {
+    [media.pcs]: {
+      fontSize: '22px'
+    }
+  }
 });
 
 export const profileText = style({
@@ -150,7 +191,7 @@ globalStyle(`${profileText} a:hover`, {
   textDecoration: 'underline'
 });
 
-/* 松明用エフェクト */
+/* 松明用エフェクチE*/
 const torchFlicker = keyframes({
   '0%': {
     opacity: 0.5,
@@ -182,14 +223,21 @@ export const torchGlow = style({
   filter: 'blur(12px)',
   animation: `${torchFlicker} 2s ease-in-out infinite`,
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.pcs]: {
+      top: '18%',
+      left: '34%',
+      width: '72px',
+      height: '80px',
+      filter: 'blur(11px)'
+    },
+    [media.tb]: {
       top: '18%',
       left: '34%',
       width: '64px',
       height: '72px',
       filter: 'blur(10px)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       top: '17%',
       left: '33%',
       width: '55px',
@@ -204,7 +252,17 @@ export const skillIconList = style({
   flexWrap: 'wrap',
   gap: '18px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.pcs]: {
+      display: 'grid',
+      width: 'fit-content',
+      maxWidth: '100%',
+      margin: '0 auto',
+      gridTemplateColumns: 'repeat(6, max-content)',
+      gap: '14px 12px',
+      justifyContent: 'center',
+      justifyItems: 'center'
+    },
+    [media.sp]: {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
       gap: '12px',
@@ -215,7 +273,11 @@ export const skillIconList = style({
 
 globalStyle(`${skillIconList} i`, {
   '@media': {
-    '(max-width: 767px)': {
+    [media.pcs]: {
+      fontSize: '128px !important',
+      padding: '7px'
+    },
+    [media.sp]: {
       fontSize: 'clamp(78px, 22vw, 92px) !important',
       padding: '8px'
     }

@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const dataItem = style({
   display: 'grid',
@@ -10,7 +11,7 @@ export const dataItem = style({
   border: '1px solid rgba(255, 255, 255, 0.1)',
   background: 'rgba(255, 255, 255, 0.05)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       minHeight: 'auto',
       gap: '8px',
       padding: '12px 14px',
@@ -24,7 +25,7 @@ export const label = style({
   fontWeight: 700,
   color: 'rgba(255, 255, 255, 0.62)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '13px'
     }
   }
@@ -36,7 +37,7 @@ export const value = style({
   fontWeight: 800,
   color: colors.text.primary,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px'
     }
   }

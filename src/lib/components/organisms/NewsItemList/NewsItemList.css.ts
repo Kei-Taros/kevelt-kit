@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 export const list = style({
   display: 'flex',
@@ -12,7 +13,7 @@ export const headingContainer = style({
   width: '100%',
   marginBottom: '48px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: '28px'
     }
   }
@@ -24,7 +25,7 @@ export const divider = style({
   borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
   margin: '28px auto',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       margin: '22px auto'
     }
@@ -36,7 +37,7 @@ export const buttonContainer = style({
   justifyContent: 'center',
   marginTop: '40px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginTop: '28px'
     }
   }

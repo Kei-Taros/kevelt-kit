@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 export const grid = style({
   display: 'grid',
@@ -7,10 +8,10 @@ export const grid = style({
   width: '100%',
   alignItems: 'start',
   '@media': {
-    '(max-width: 1023px)': {
+    [media.tb]: {
       gridTemplateColumns: 'repeat(2, minmax(0, 1fr))'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gridTemplateColumns: '1fr',
       gap: '20px'
     }
@@ -23,7 +24,7 @@ export const headingContainer = style({
   width: '100%',
   marginBottom: '48px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: '28px'
     }
   }

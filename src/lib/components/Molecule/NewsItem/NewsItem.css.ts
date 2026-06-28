@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const item = style({
   display: 'flex',
@@ -9,7 +10,7 @@ export const item = style({
   textDecoration: 'none',
   transition: 'opacity 180ms ease, transform 180ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexDirection: 'column',
       gap: '12px'
     },
@@ -33,7 +34,7 @@ export const imageContainer = style({
   overflow: 'hidden',
   borderRadius: '12px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       borderRadius: '10px'
     }
@@ -71,7 +72,7 @@ export const body = style({
   minWidth: 0,
   width: '100%',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '8px'
     }
   }
@@ -84,7 +85,7 @@ export const date = style({
   fontSize: '14px',
   fontWeight: 500,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: 0,
       fontSize: '13px'
     }
@@ -98,7 +99,7 @@ export const title = style({
   fontWeight: 700,
   transition: 'color 300ms ease, text-shadow 240ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(18px, 5vw, 22px)',
       lineHeight: 1.4
     },
