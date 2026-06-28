@@ -11,7 +11,7 @@ export const aboutProfile = style({
     [media.pcs]: {
       gap: '28px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexDirection: 'column',
       gap: '32px'
     }
@@ -25,10 +25,10 @@ export const aboutProfileDetails = style({
     [media.pcs]: {
       minWidth: 0
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       minWidth: 0
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%'
     }
   }
@@ -43,11 +43,11 @@ export const profileData = style({
       flexWrap: 'nowrap',
       gap: '14px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       flexWrap: 'nowrap',
       gap: '12px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '12px'
     }
   }
@@ -63,7 +63,7 @@ export const profileLabel = style({
       fontSize: '16px',
       whiteSpace: 'nowrap'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       flexShrink: 0,
       fontSize: '16px',
       whiteSpace: 'nowrap'
@@ -81,12 +81,12 @@ export const profileValue = style({
       margin: '4px 0',
       whiteSpace: 'nowrap'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: 'clamp(20px, 2.5vw, 24px)',
       margin: '4px 0',
       whiteSpace: 'nowrap'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '22px'
     }
   }
@@ -99,10 +99,10 @@ export const aboutProfileImg = style({
     [media.pcs]: {
       flex: '0 0 56%'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       flex: '0 0 56%'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       flex: 'none'
     }
@@ -119,10 +119,10 @@ export const iconList = style({
     [media.pcs]: {
       marginTop: '72px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       marginTop: '120px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       justifyContent: 'flex-start'
     }
   }
@@ -141,7 +141,7 @@ export const profileImg = style({
     [media.pcs]: {
       aspectRatio: '16 / 11'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%)'
     }
@@ -191,7 +191,7 @@ globalStyle(`${profileText} a:hover`, {
   textDecoration: 'underline'
 });
 
-/* 松明用エフェクト */
+/* 松明用エフェクチE*/
 const torchFlicker = keyframes({
   '0%': {
     opacity: 0.5,
@@ -230,14 +230,14 @@ export const torchGlow = style({
       height: '80px',
       filter: 'blur(11px)'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       top: '18%',
       left: '34%',
       width: '64px',
       height: '72px',
       filter: 'blur(10px)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       top: '17%',
       left: '33%',
       width: '55px',
@@ -262,7 +262,7 @@ export const skillIconList = style({
       justifyContent: 'center',
       justifyItems: 'center'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
       gap: '12px',
@@ -277,7 +277,7 @@ globalStyle(`${skillIconList} i`, {
       fontSize: '128px !important',
       padding: '7px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(78px, 22vw, 92px) !important',
       padding: '8px'
     }

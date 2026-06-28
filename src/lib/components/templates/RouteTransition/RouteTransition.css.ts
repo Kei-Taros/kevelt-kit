@@ -1,4 +1,5 @@
 import { style, keyframes } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 const fadeOutKeyframes = keyframes({
   from: {
@@ -31,12 +32,12 @@ export const transitionVideo = style({
   objectFit: 'cover',
   display: 'block',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '172%',
       height: '172%',
       objectFit: 'contain'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '172%',
       height: '172%',
       objectFit: 'contain'

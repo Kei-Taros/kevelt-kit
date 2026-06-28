@@ -31,12 +31,12 @@ export const card = style({
       gap: '12px',
       padding: '9px 12px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       alignItems: 'center',
       gap: '14px',
       padding: '12px 14px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexDirection: 'column',
       gap: '16px',
       padding: '16px'
@@ -53,7 +53,7 @@ export const cardImageFrame = style({
       overflow: 'hidden',
       lineHeight: 0
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       display: 'block',
       alignSelf: 'center',
       flexShrink: 0,
@@ -74,13 +74,13 @@ export const cardImage = style({
       width: 'clamp(132px, 13vw, 152px)',
       display: 'block'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: 'clamp(136px, 17vw, 170px)',
       display: 'block',
       transform: 'scale(1.2)',
       transformOrigin: 'center'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       borderRadius: '8px'
     }
@@ -96,11 +96,11 @@ export const cardContent = style({
       gap: '3px',
       minWidth: 0
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       gap: '4px',
       minWidth: 0
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '8px'
     }
   }
@@ -116,11 +116,11 @@ globalStyle(`${cardContent} p`, {
       fontSize: '12px',
       lineHeight: 1.38
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '12px',
       lineHeight: 1.55
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       lineHeight: 1.8
     }
@@ -133,7 +133,7 @@ globalStyle(`${cardContent} h4`, {
       fontSize: '15px',
       paddingBottom: '3px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '16px',
       paddingBottom: '4px'
     }
@@ -146,7 +146,7 @@ globalStyle(`${cardContent} h4::after`, {
       width: '88px',
       height: '4px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '96px',
       height: '5px'
     }

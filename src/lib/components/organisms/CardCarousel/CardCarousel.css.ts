@@ -16,7 +16,7 @@ globalStyle(':root', {
         '--embla-slide-size': '66%'
       }
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       vars: {
         '--embla-slide-height': 'clamp(250px, 82vw, 340px)',
         '--embla-slide-spacing': '0.75rem',
@@ -59,7 +59,7 @@ export const slideImg = style({
   borderRadius: '1.8rem',
   transition: 'opacity 220ms ease, transform 220ms ease, filter 220ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '1rem'
     }
   }
@@ -83,7 +83,7 @@ export const slideOverlay = style({
   padding: '1.4rem',
   transition: 'opacity 220ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '1rem',
       padding: '1rem'
     }
@@ -106,7 +106,7 @@ export const slideTitle = style({
   letterSpacing: '0.06em',
   textTransform: 'uppercase',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(16px, 4.6vw, 20px)',
       lineHeight: 1.35
     }
@@ -127,7 +127,7 @@ export const controls = style({
   padding: '0 0.6rem',
   boxSizing: 'border-box',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignItems: 'center',
       gap: '0.75rem',
       marginTop: '1rem',
@@ -164,7 +164,7 @@ export const button = style({
   justifyContent: 'center',
   transition: 'background-color 160ms ease, transform 160ms ease, border-color 160ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '2.8rem',
       height: '2.8rem'
     }
@@ -196,7 +196,7 @@ export const dots = style({
   alignItems: 'center',
   marginRight: 'calc((2.6rem - 1.4rem) / 2 * -1)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       columnGap: '0.25rem',
       marginRight: 0,
       rowGap: '0.25rem'
@@ -221,7 +221,7 @@ export const dot = style({
   borderRadius: '50%',
   position: 'relative',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '1.8rem',
       height: '1.8rem'
     }

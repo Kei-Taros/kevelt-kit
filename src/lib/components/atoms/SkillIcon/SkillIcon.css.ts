@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 const touchShineKeyframes = keyframes({
   '0%': {
@@ -40,7 +41,7 @@ export const defaultIcon = style({
   },
 
   '@media': {
-    '(hover: none), (pointer: coarse), (max-width: 767px)': {
+    [`(hover: none), (pointer: coarse), ${media.sp}`]: {
       transition: 'none'
     },
 

@@ -11,10 +11,10 @@ export const contentInner = style({
     [media.pcs]: {
       overflowX: 'hidden'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       overflowX: 'hidden'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'block',
       minHeight: 'auto',
       overflowX: 'hidden'
@@ -38,14 +38,14 @@ export const leftArea = style({
       paddingRight: '10px',
       boxSizing: 'border-box'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '36%',
       height: '100svh',
       paddingLeft: '28px',
       paddingRight: '8px',
       boxSizing: 'border-box'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       position: 'relative',
       width: '100%',
       height: 'auto',
@@ -62,7 +62,7 @@ export const conceptHeadingWrapper = style({
       marginTop: '4px',
       marginBottom: '12px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       marginTop: '48px',
       marginBottom: '24px'
     }
@@ -75,7 +75,7 @@ globalStyle(`${conceptHeadingWrapper} h1`, {
       fontSize: '38px',
       lineHeight: 1.3
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '34px',
       lineHeight: 1.3
     }
@@ -88,7 +88,7 @@ globalStyle(`${conceptHeadingWrapper} h1::after`, {
       width: '150%',
       height: '11px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '145%',
       height: '10px'
     }
@@ -110,13 +110,13 @@ export const msgMain = style({
       letterSpacing: '0.03em',
       marginBottom: '30px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '36px',
       lineHeight: 1.24,
       letterSpacing: '0.02em',
       marginBottom: '28px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(38px, 11vw, 48px)',
       marginBottom: '24px',
       lineHeight: 1.25
@@ -136,12 +136,12 @@ export const msgDescription = style({
       lineHeight: 1.8,
       marginTop: '42px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '14px',
       lineHeight: 1.8,
       marginTop: '70px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       lineHeight: 1.8
     }
@@ -161,12 +161,12 @@ export const msgBackground = style({
       left: '-10%',
       width: '120%'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       bottom: '55px',
       left: '-30%',
       width: '180%'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       bottom: '-30px',
       left: '50%',
       width: '112%',
@@ -201,13 +201,13 @@ export const rightArea = style({
       paddingRight: '42px',
       boxSizing: 'border-box'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '64%',
       paddingLeft: '20px',
       paddingRight: '36px',
       boxSizing: 'border-box'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       width: '100%',
       height: 'auto',
       padding: '0 20px',
@@ -231,10 +231,10 @@ export const sectionBlock = style({
     [media.pcs]: {
       padding: '24px 0'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       padding: '48px 0'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       minHeight: 'auto',
       padding: '72px 0',
       justifyContent: 'flex-start',
@@ -250,10 +250,10 @@ export const whatSectionBlock = style({
       paddingTop: '20px',
       paddingBottom: '28px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       paddingBottom: '60px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       paddingBottom: '64px'
     }
   }
@@ -281,11 +281,11 @@ export const craftSectionBlock = style({
       paddingTop: '16px',
       paddingBottom: '16px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       paddingTop: '28px',
       paddingBottom: '28px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       paddingTop: '0px'
     }
   }
@@ -326,11 +326,11 @@ export const firstMsg = style({
       fontSize: 'clamp(42px, 4.8vw, 56px)',
       lineHeight: 1.2
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: 'clamp(36px, 5vw, 50px)',
       lineHeight: 1.2
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(36px, 11vw, 48px)',
       lineHeight: 1.2
     }
@@ -346,12 +346,12 @@ export const firstBrandMsg = style({
       marginLeft: 0,
       marginTop: '8px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       display: 'block',
       marginLeft: 0,
       marginTop: '8px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'block',
       marginLeft: 0,
       marginTop: '8px'
@@ -369,7 +369,7 @@ export const mobileHiddenScrollButton = style({
     [media.pcs]: {
       display: 'none'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'none'
     }
   }
@@ -380,7 +380,7 @@ export const whatScrollButton = style({
     [media.pcs]: {
       top: '42px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       top: '50px'
     }
   }
@@ -391,7 +391,7 @@ export const craftScrollButton = style({
     [media.pcs]: {
       top: '30px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       top: '32px'
     }
   }
@@ -407,10 +407,10 @@ export const sectionText = style({
     [media.pcs]: {
       gap: '8px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       gap: '12px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '12px'
     }
   }
@@ -430,11 +430,11 @@ globalStyle(`${sectionText} p`, {
       fontSize: '14px',
       lineHeight: 1.55
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '15px',
       lineHeight: 1.8
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '15px',
       lineHeight: 1.85
     }
@@ -469,13 +469,13 @@ export const logoImage = style({
       width: '210px',
       opacity: 0.18
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       right: 0,
       bottom: '165px',
       width: '220px',
       opacity: 0.22
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'none'
     }
   }
@@ -491,10 +491,10 @@ export const themeText = style({
     [media.pcs]: {
       gap: '12px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       gap: '16px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       alignItems: 'center',
       textAlign: 'center',
       gap: '14px'
@@ -512,11 +512,11 @@ globalStyle(`${themeText} p`, {
       fontSize: '15px',
       lineHeight: 1.6
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       fontSize: '15px',
       lineHeight: 1.8
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '15px',
       lineHeight: 1.8,
       width: '100%'

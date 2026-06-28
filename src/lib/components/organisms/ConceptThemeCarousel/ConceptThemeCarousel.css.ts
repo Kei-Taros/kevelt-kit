@@ -19,10 +19,10 @@ export const container = style({
     [media.pcs]: {
       marginLeft: '-18px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       marginLeft: '-18px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginLeft: '-14px'
     }
   }
@@ -37,11 +37,11 @@ export const slide = style({
       flexBasis: 'calc(100% / 3)',
       paddingLeft: '18px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       flexBasis: '50%',
       paddingLeft: '18px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexBasis: '82%',
       paddingLeft: '14px'
     }
@@ -59,10 +59,10 @@ export const image = style({
       aspectRatio: '4 / 3',
       borderRadius: '18px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       borderRadius: '16px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       borderRadius: '14px'
     }
   }

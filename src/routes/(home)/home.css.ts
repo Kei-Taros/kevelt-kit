@@ -21,12 +21,12 @@ export const headerActionButton = style({
       fontSize: '15px',
       whiteSpace: 'nowrap'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       padding: '12px 20px',
       fontSize: '15px',
       whiteSpace: 'nowrap'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       padding: '12px 18px',
       fontSize: '15px',
       whiteSpace: 'nowrap'
@@ -71,10 +71,10 @@ export const heroWrapper = style({
     [media.pcs]: {
       height: '100svh'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       height: '100svh'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: '100svh'
     }
   }
@@ -108,10 +108,10 @@ export const heroCover = style({
     [media.pcs]: {
       transformOrigin: '48% 49.3%'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       transformOrigin: '50% 47%'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       transformOrigin: '50% 50%'
     }
   }
@@ -125,10 +125,10 @@ export const msgWrapper = style({
     [media.pcs]: {
       minHeight: '48svh'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       minHeight: '46svh'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       minHeight: '50svh',
       flexDirection: 'column',
@@ -155,12 +155,12 @@ export const msgTop = style([
         lineHeight: 1.25,
         marginBottom: '40px'
       },
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.tb]: {
         fontSize: 'clamp(38px, 5.6vw, 60px)',
         lineHeight: 1.3,
         marginBottom: '56px'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         fontSize: 'clamp(28px, 10vw, 40px)',
         lineHeight: 1.35,
         marginBottom: '16px'
@@ -183,14 +183,14 @@ export const msgMiddle = style([
         lineHeight: 1.25,
         whiteSpace: 'nowrap'
       },
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.tb]: {
         flexDirection: 'row',
         flexWrap: 'nowrap',
         fontSize: 'clamp(34px, 5vw, 50px)',
         lineHeight: 1.3,
         whiteSpace: 'nowrap'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         flexDirection: 'column',
         gap: '16px',
         fontSize: 'clamp(28px, 10vw, 40px)',
@@ -212,10 +212,10 @@ export const msgBottom = style([
       [media.pcs]: {
         fontSize: 'clamp(18px, 1.8vw, 24px)'
       },
-      '(min-width: 768px) and (max-width: 1023px)': {
+      [media.tb]: {
         fontSize: 'clamp(18px, 2.4vw, 24px)'
       },
-      '(max-width: 767px)': {
+      [media.sp]: {
         position: 'static',
         alignSelf: 'flex-end',
         marginTop: '48px',
@@ -252,14 +252,14 @@ export const grid = style({
         '--gap': '18px'
       }
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       vars: {
         '--big': 'clamp(320px, 48vw, 420px)',
         '--rightCol': 'calc(var(--big) * 0.72)',
         '--gap': '16px'
       }
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       width: '100%',
       flexDirection: 'column',
@@ -286,10 +286,10 @@ export const gridTile = style({
   borderRadius: '12px',
   filter: 'brightness(0.8)',
   '@media': {
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       filter: 'brightness(0.9)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       filter: 'brightness(0.9)'
     }
   }
@@ -323,14 +323,14 @@ export const gridLabel = style({
       bottom: '15px',
       fontSize: '21px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       left: '14px',
       bottom: '14px',
       fontSize: '20px',
       opacity: 1,
       transform: 'translateY(0)'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       opacity: 1,
       transform: 'translateY(0)'
     }
@@ -348,7 +348,7 @@ export const aboutMe = style({
   width: '100%',
   height: '100%',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }
@@ -361,7 +361,7 @@ export const concept = style({
   width: '100%',
   height: '100%',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }
@@ -377,7 +377,7 @@ export const gridBottomRow = style({
   columnGap: 'var(--gap)',
   alignItems: 'stretch',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'flex',
       width: '100%',
       height: 'auto',
@@ -397,7 +397,7 @@ export const gridLeftBottom = style({
   flexDirection: 'column',
   gap: 'var(--gap)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'grid',
       width: '100%',
       height: 'auto',
@@ -420,7 +420,7 @@ export const works = style({
   justifySelf: 'end',
   alignSelf: 'start',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: 'auto',
       aspectRatio: '1 / 1'
     }

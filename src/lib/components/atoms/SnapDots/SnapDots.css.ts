@@ -37,7 +37,7 @@ export const snapDot = style({
       width: '16px',
       height: '16px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       width: '14px',
       height: '14px'
     }
@@ -58,11 +58,11 @@ export const snapDots = style({
       right: '10px',
       gap: '20px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       right: '10px',
       gap: '18px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'none'
     }
   }

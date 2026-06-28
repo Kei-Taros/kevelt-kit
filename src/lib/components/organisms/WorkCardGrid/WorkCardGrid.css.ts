@@ -1,10 +1,11 @@
 import { style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 export const container = style({
   display: 'grid',
   rowGap: '32px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       rowGap: '24px'
     }
   }
@@ -15,7 +16,7 @@ export const filterList = style({
   flexWrap: 'wrap',
   gap: '12px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '10px'
     }
   }
@@ -26,7 +27,7 @@ export const filterRow = style({
   flexWrap: 'wrap',
   gap: '12px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '10px'
     }
   }
@@ -47,7 +48,7 @@ export const filterButton = style({
   cursor: 'pointer',
   transition: 'background 180ms ease, border-color 180ms ease, transform 180ms ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       minHeight: '34px',
       padding: '0 14px',
       fontSize: '13px'
@@ -80,10 +81,10 @@ export const grid = style({
   gap: '44px 24px',
   alignItems: 'start',
   '@media': {
-    '(max-width: 1023px)': {
+    [media.tb]: {
       gridTemplateColumns: 'repeat(2, minmax(0, 1fr))'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gridTemplateColumns: '1fr',
       gap: '24px'
     }

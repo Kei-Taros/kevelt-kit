@@ -1,11 +1,12 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const article = style({
   margin: '0 auto',
   marginBottom: '120px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginBottom: '72px'
     }
   }
@@ -18,7 +19,7 @@ export const thumbnail = style({
   objectFit: 'cover',
   borderRadius: '14px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       aspectRatio: '16 / 10',
       borderRadius: '10px'
     }
@@ -31,7 +32,7 @@ export const contentWithToc = style({
   gap: '48px',
   alignItems: 'start',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gridTemplateColumns: '1fr',
       gap: '28px'
     }
@@ -44,7 +45,7 @@ export const tocArea = style({
   alignSelf: 'start',
   order: 2,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       position: 'static',
       order: 1
     }
@@ -56,7 +57,7 @@ export const toc = style({
   borderLeft: `2px solid ${colors.brand[600]}`,
   background: 'transparent',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       padding: '12px 0 12px 14px'
     }
   }
@@ -69,7 +70,7 @@ export const tocTitle = style({
   fontWeight: 700,
   letterSpacing: '0.1em',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '16px'
     }
   }
@@ -100,7 +101,7 @@ export const tocLink = style({
     }
   },
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '13px'
     },
     '(hover: none), (pointer: coarse)': {
@@ -118,7 +119,7 @@ export const content = style({
   order: 1,
   minWidth: 0,
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       order: 2
     }
   }
@@ -135,7 +136,7 @@ globalStyle(`${content} h3`, {
 
 globalStyle(`${content} h3`, {
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       marginTop: '36px',
       fontSize: '20px',
       lineHeight: 1.4,
@@ -146,7 +147,7 @@ globalStyle(`${content} h3`, {
 
 globalStyle(`${content} p`, {
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '15px',
       lineHeight: 1.9
     }
@@ -192,7 +193,7 @@ export const navButtons = style({
   justifyContent: 'space-between',
   gap: '16px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'grid',
       gridTemplateColumns: '1fr',
       gap: '18px'
@@ -205,7 +206,7 @@ export const left = style({
   display: 'flex',
   justifyContent: 'flex-start',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       justifyContent: 'center',
       order: 2
     }
@@ -217,7 +218,7 @@ export const center = style({
   display: 'flex',
   justifyContent: 'center',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       order: 1
     }
   }
@@ -228,7 +229,7 @@ export const right = style({
   display: 'flex',
   justifyContent: 'flex-end',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       justifyContent: 'center',
       order: 3
     }

@@ -1,5 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const header = style({
   position: 'fixed',
@@ -14,7 +15,7 @@ export const header = style({
 
   transition: 'transform 0.3s ease, opacity 0.3s ease',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       height: '64px'
     }
   }
@@ -41,7 +42,7 @@ export const inner = style({
   paddingInline: '24px',
   boxSizing: 'border-box',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '12px',
       paddingInline: '12px'
     }
@@ -52,7 +53,7 @@ export const logo = style({});
 
 globalStyle(`${logo} span`, {
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       display: 'none'
     }
   }
@@ -62,7 +63,7 @@ export const nav = style({
   display: 'flex',
   gap: '40px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       flexWrap: 'nowrap',
       justifyContent: 'center',
       gap: 'clamp(14px, 4.5vw, 26px)'
@@ -77,7 +78,7 @@ export const link = style({
   transition: 'opacity 0.2s',
   whiteSpace: 'nowrap',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: 'clamp(11px, 3.2vw, 13px)',
       lineHeight: 1.2
     }

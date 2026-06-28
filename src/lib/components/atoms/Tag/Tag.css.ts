@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const tag = style({
   display: 'inline-flex',
@@ -11,7 +12,7 @@ export const tag = style({
   fontWeight: 700,
   whiteSpace: 'nowrap',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       minHeight: '28px',
       padding: '0 10px',
       fontSize: '12px'

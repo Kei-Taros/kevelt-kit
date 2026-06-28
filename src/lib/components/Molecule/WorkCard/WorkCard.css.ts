@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const card = style({
   display: 'flex',
@@ -51,7 +52,7 @@ export const imageWrapper = style({
   overflow: 'hidden',
   background: 'linear-gradient(180deg, rgba(62, 70, 96, 0.95) 0%, rgba(36, 44, 65, 1) 100%)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       aspectRatio: '16 / 10'
     }
   }
@@ -87,7 +88,7 @@ export const body = style({
   padding: '22px 20px 20px',
   background: 'linear-gradient(180deg, rgba(28, 34, 54, 0.92) 0%, rgba(21, 26, 42, 0.98) 100%)',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       padding: '16px'
     }
   }
@@ -100,7 +101,7 @@ export const title = style({
   fontWeight: 700,
   marginBottom: '12px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '20px',
       marginBottom: '8px'
     }
@@ -115,7 +116,7 @@ export const period = style({
   fontWeight: 500,
   marginBottom: '12px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       fontSize: '14px',
       marginBottom: '10px'
     }
@@ -127,7 +128,7 @@ export const tagList = style({
   flexWrap: 'wrap',
   gap: '10px',
   '@media': {
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '8px'
     }
   }

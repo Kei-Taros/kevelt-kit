@@ -8,6 +8,7 @@
   import * as constants from './constants/home';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
+  import { media } from '$lib/styles/breakpoints';
 
   let { data }: { data: PageData } = $props();
   let heroWrapperEl: HTMLElement | null = null;
@@ -110,7 +111,7 @@
   };
 
   const lockOpeningScroll = () => {
-    if (!window.matchMedia('(max-width: 767px)').matches) return () => {};
+    if (!window.matchMedia(media.sp).matches) return () => {};
 
     const scrollY = window.scrollY;
     const htmlOverflow = document.documentElement.style.overflow;
@@ -246,7 +247,7 @@
   const setupGridReveal = () => {
     if (!sectionGridEl) return () => {};
 
-    const threshold = window.matchMedia('(max-width: 767px)').matches ? 0.15 : 0.45;
+    const threshold = window.matchMedia(media.sp).matches ? 0.15 : 0.45;
 
     const gridObserver = new IntersectionObserver(
       ([entry]) => {
@@ -331,22 +332,22 @@
       </video>
       <picture>
         <source
-          media="(max-width: 767px)"
+          media={media.sp}
           srcset="/images/hero-cover/hero-cover-sp.webp"
           type="image/webp"
         />
         <source
-          media="(max-width: 767px)"
+          media={media.sp}
           srcset="/images/hero-cover/hero-cover-sp.png"
           type="image/png"
         />
         <source
-          media="(min-width: 768px) and (max-width: 1023px)"
+          media={media.tb}
           srcset="/images/hero-cover/hero-cover-tb.webp"
           type="image/webp"
         />
         <source
-          media="(min-width: 768px) and (max-width: 1023px)"
+          media={media.tb}
           srcset="/images/hero-cover/hero-cover-tb.png"
           type="image/png"
         />

@@ -11,11 +11,11 @@ export const cardGrid = style({
       gap: '10px',
       marginBottom: '12px'
     },
-    '(min-width: 768px) and (max-width: 1023px)': {
+    [media.tb]: {
       gap: '14px',
       marginBottom: '20px'
     },
-    '(max-width: 767px)': {
+    [media.sp]: {
       gap: '18px',
       marginBottom: '32px'
     }
