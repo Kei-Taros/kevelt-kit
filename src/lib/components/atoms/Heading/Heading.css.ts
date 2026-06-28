@@ -10,6 +10,9 @@ export const h1 = style({
   paddingBottom: '2px',
   fontSize: '42px',
   '@media': {
+    [media.tb]: {
+      fontSize: '38px'
+    },
     [media.sp]: {
       fontSize: '32px',
       selectors: {

@@ -74,10 +74,6 @@ globalStyle(`${conceptHeadingWrapper} h1`, {
     [media.pcs]: {
       fontSize: '38px',
       lineHeight: 1.3
-    },
-    [media.tb]: {
-      fontSize: '34px',
-      lineHeight: 1.3
     }
   }
 });
@@ -87,10 +83,6 @@ globalStyle(`${conceptHeadingWrapper} h1::after`, {
     [media.pcs]: {
       width: '150%',
       height: '11px'
-    },
-    [media.tb]: {
-      width: '145%',
-      height: '10px'
     }
   }
 });
