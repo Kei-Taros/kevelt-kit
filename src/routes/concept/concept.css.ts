@@ -1,5 +1,6 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
+import { media } from '$lib/styles/breakpoints';
 
 export const contentInner = style({
   width: '100%',
@@ -7,6 +8,9 @@ export const contentInner = style({
   display: 'flex',
   color: colors.text.primary,
   '@media': {
+    [media.pcs]: {
+      overflowX: 'hidden'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       overflowX: 'hidden'
     },
@@ -27,6 +31,13 @@ export const leftArea = style({
   overflow: 'hidden',
   paddingLeft: '36px',
   '@media': {
+    [media.pcs]: {
+      width: '38%',
+      height: '100svh',
+      paddingLeft: '30px',
+      paddingRight: '10px',
+      boxSizing: 'border-box'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       width: '36%',
       height: '100svh',
@@ -47,6 +58,10 @@ export const leftArea = style({
 
 export const conceptHeadingWrapper = style({
   '@media': {
+    [media.pcs]: {
+      marginTop: '4px',
+      marginBottom: '12px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       marginTop: '48px',
       marginBottom: '24px'
@@ -56,6 +71,10 @@ export const conceptHeadingWrapper = style({
 
 globalStyle(`${conceptHeadingWrapper} h1`, {
   '@media': {
+    [media.pcs]: {
+      fontSize: '38px',
+      lineHeight: 1.3
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: '34px',
       lineHeight: 1.3
@@ -65,6 +84,10 @@ globalStyle(`${conceptHeadingWrapper} h1`, {
 
 globalStyle(`${conceptHeadingWrapper} h1::after`, {
   '@media': {
+    [media.pcs]: {
+      width: '150%',
+      height: '11px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       width: '145%',
       height: '10px'
@@ -81,6 +104,12 @@ export const msgMain = style({
   marginBottom: '36px',
   position: 'relative',
   '@media': {
+    [media.pcs]: {
+      fontSize: '42px',
+      lineHeight: 1.22,
+      letterSpacing: '0.03em',
+      marginBottom: '30px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: '36px',
       lineHeight: 1.24,
@@ -102,6 +131,11 @@ export const msgDescription = style({
   lineHeight: 2,
   position: 'relative',
   '@media': {
+    [media.pcs]: {
+      fontSize: '12px',
+      lineHeight: 1.8,
+      marginTop: '42px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: '14px',
       lineHeight: 1.8,
@@ -122,6 +156,11 @@ export const msgBackground = style({
   zIndex: 0,
   pointerEvents: 'none',
   '@media': {
+    [media.pcs]: {
+      bottom: '-165px',
+      left: '-10%',
+      width: '120%'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       bottom: '55px',
       left: '-30%',
@@ -156,6 +195,12 @@ export const rightArea = style({
   scrollBehavior: 'smooth',
   scrollbarWidth: 'none',
   '@media': {
+    [media.pcs]: {
+      width: '62%',
+      paddingLeft: '22px',
+      paddingRight: '42px',
+      boxSizing: 'border-box'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       width: '64%',
       paddingLeft: '20px',
@@ -183,6 +228,9 @@ export const sectionBlock = style({
   boxSizing: 'border-box',
   position: 'relative',
   '@media': {
+    [media.pcs]: {
+      padding: '24px 0'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       padding: '48px 0'
     },
@@ -198,6 +246,10 @@ export const sectionBlock = style({
 
 export const whatSectionBlock = style({
   '@media': {
+    [media.pcs]: {
+      paddingTop: '20px',
+      paddingBottom: '28px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       paddingBottom: '60px'
     },
@@ -207,14 +259,58 @@ export const whatSectionBlock = style({
   }
 });
 
+globalStyle(`${whatSectionBlock} > div:first-child`, {
+  '@media': {
+    [media.pcs]: {
+      marginBottom: '16px'
+    }
+  }
+});
+
+globalStyle(`${whatSectionBlock} > div:nth-of-type(2)`, {
+  '@media': {
+    [media.pcs]: {
+      marginBottom: '18px'
+    }
+  }
+});
+
 export const craftSectionBlock = style({
   '@media': {
+    [media.pcs]: {
+      paddingTop: '16px',
+      paddingBottom: '16px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       paddingTop: '28px',
       paddingBottom: '28px'
     },
     '(max-width: 767px)': {
       paddingTop: '0px'
+    }
+  }
+});
+
+globalStyle(`${craftSectionBlock} > div:first-child`, {
+  '@media': {
+    [media.pcs]: {
+      marginBottom: '10px'
+    }
+  }
+});
+
+globalStyle(`${rightArea} > div:last-child > div:first-child`, {
+  '@media': {
+    [media.pcs]: {
+      marginBottom: '18px'
+    }
+  }
+});
+
+globalStyle(`${rightArea} > div:last-child > div:nth-child(2)`, {
+  '@media': {
+    [media.pcs]: {
+      marginBottom: '20px'
     }
   }
 });
@@ -226,6 +322,10 @@ export const firstMsg = style({
   letterSpacing: '0.03em',
   textAlign: 'center',
   '@media': {
+    [media.pcs]: {
+      fontSize: 'clamp(42px, 4.8vw, 56px)',
+      lineHeight: 1.2
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: 'clamp(36px, 5vw, 50px)',
       lineHeight: 1.2
@@ -241,6 +341,11 @@ export const firstBrandMsg = style({
   color: colors.brand[600],
   marginLeft: '12px',
   '@media': {
+    [media.pcs]: {
+      display: 'block',
+      marginLeft: 0,
+      marginTop: '8px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       display: 'block',
       marginLeft: 0,
@@ -261,6 +366,9 @@ export const arrow = style({
 
 export const mobileHiddenScrollButton = style({
   '@media': {
+    [media.pcs]: {
+      display: 'none'
+    },
     '(max-width: 767px)': {
       display: 'none'
     }
@@ -269,6 +377,9 @@ export const mobileHiddenScrollButton = style({
 
 export const whatScrollButton = style({
   '@media': {
+    [media.pcs]: {
+      top: '42px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       top: '50px'
     }
@@ -277,6 +388,9 @@ export const whatScrollButton = style({
 
 export const craftScrollButton = style({
   '@media': {
+    [media.pcs]: {
+      top: '30px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       top: '32px'
     }
@@ -290,6 +404,9 @@ export const sectionText = style({
   position: 'relative',
   zIndex: 2,
   '@media': {
+    [media.pcs]: {
+      gap: '8px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       gap: '12px'
     },
@@ -309,6 +426,10 @@ globalStyle(`${sectionText} p`, {
 
 globalStyle(`${sectionText} p`, {
   '@media': {
+    [media.pcs]: {
+      fontSize: '14px',
+      lineHeight: 1.55
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: '15px',
       lineHeight: 1.8
@@ -342,6 +463,12 @@ export const logoImage = style({
   userSelect: 'none',
   zIndex: 1,
   '@media': {
+    [media.pcs]: {
+      right: 0,
+      bottom: '20px',
+      width: '210px',
+      opacity: 0.18
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       right: 0,
       bottom: '165px',
@@ -361,6 +488,9 @@ export const themeText = style({
   textAlign: 'center',
   gap: '24px',
   '@media': {
+    [media.pcs]: {
+      gap: '12px'
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       gap: '16px'
     },
@@ -378,6 +508,10 @@ globalStyle(`${themeText} p`, {
 
 globalStyle(`${themeText} p`, {
   '@media': {
+    [media.pcs]: {
+      fontSize: '15px',
+      lineHeight: 1.6
+    },
     '(min-width: 768px) and (max-width: 1023px)': {
       fontSize: '15px',
       lineHeight: 1.8
