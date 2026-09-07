@@ -3,6 +3,32 @@ import type { WorkDetail } from '$lib/components/organisms';
 
 export const WORK_DETAILS: WorkDetail[] = [
   {
+    id: 7,
+    title: 'ブランド品オークションサイト改修',
+    src: {
+      webp: '/images/works/work-7.webp',
+      png: '/images/works/work-7.png'
+    },
+    summary: `生成AIを活用した開発プロセスの検証および認証方式刷新を担当。
+      生成AIのみで設計から実装まで進められるかPoCを実施し、生産性の計測と改善案の提案を実施。
+      また、自前の認証基盤から外部認証基盤への移行に向けた技術選定・顧客提案および採用方式の設計にも対応。`,
+    period:  '2026/05 - 2026/08',
+    role: 'SE',
+    scope: '設計 / 実装 / テスト / 技術選定 / 技術検証',
+    categories: ['Web', 'Frontend', 'Backend'],
+    techStack: ['TypeScript', 'Next.js', 'NestJS', 'OpenAPI', 'Docker', 'Node.js', 'GitHub', 'ClaudeCode'],
+    responsibilities: [
+      '生成AIのみで設計から実装まで進められるかPoCを実施',
+      '作業時間の計測および生産性向上に向けた改善案の提案',
+      '開発作業を効率化する生成AI向けスキルの開発',
+      '自前の認証基盤から外部認証基盤への移行に向けた技術選定・提案',
+      '認証方式の設計'
+    ],
+    highlights: [
+      '生成AIを活用した開発プロセスの確立に向け、先行して設計・実装を行い、プロジェクト全体の開発土台を整備',
+    ]
+  },
+  {
     id: 6,
     title: 'ファッション向けECサイト開発',
     src: {
@@ -174,6 +200,16 @@ export const WORK_DETAILS: WorkDetail[] = [
 ];
 
 export const WORK_CARD: WorkCardItem[] = [
+  {
+    id: 7,
+    src: {
+      webp: '/images/works/work-7.webp',
+      png: '/images/works/work-7.png'
+    },
+    title: 'ブランド品オークションサイト改修',
+    period:  '2026',
+    tags: ['Web', 'Frontend', 'Backend', 'TypeScript', 'Next.js', 'NestJS']
+  },
   {
     id: 6,
     src: {
