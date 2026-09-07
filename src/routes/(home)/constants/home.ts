@@ -7,6 +7,14 @@ export const BOTTOM_MESSAGE = 'Try first. Think later.';
 
 export const CAROUSEL_ITEMS: CarouselItem[] = [
   {
+    id: 7,
+    src: {
+      webp: '/images/works/work-7.webp',
+      png: '/images/works/work-7.png'
+    },
+    title: 'ブランド品オークションサイト改修'
+  },
+  {
     id: 6,
     src: {
       webp: '/images/works/work-6.webp',
