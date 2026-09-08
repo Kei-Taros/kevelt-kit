@@ -11,3 +11,7 @@ globalStyle('html, body', {
   background: colors.background.primary,
   fontFamily: '"Noto Sans JP", sans-serif'
 });
+
+globalStyle('body', {
+  isolation: 'isolate'
+});
