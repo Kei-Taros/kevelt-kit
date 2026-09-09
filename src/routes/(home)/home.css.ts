@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 import { colors } from '$lib/styles/theme/colors.css';
 import { media } from '$lib/styles/breakpoints';
 
@@ -67,15 +67,9 @@ export const heroWrapper = style({
   width: '100%',
   height: '100vh',
   overflow: 'hidden',
-  '@media': {
-    [media.pcs]: {
-      height: '100svh'
-    },
-    [media.tb]: {
-      height: '100svh'
-    },
-    [media.sp]: {
-      height: '100svh'
+  '@supports': {
+    '(height: 100lvh)': {
+      height: '100lvh'
     }
   }
 });
@@ -90,6 +84,27 @@ export const heroVideo = style({
   zIndex: 1
 });
 
+const heroPlaceholderFadeOut = keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0 }
+});
+
+export const heroPlaceholder = style({
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  zIndex: 2,
+  backgroundColor: '#fff',
+  pointerEvents: 'none',
+  opacity: 1
+});
+
+export const heroPlaceholderFading = style({
+  animation: `${heroPlaceholderFadeOut} 2s ease-out both`
+});
+
 export const heroCover = style({
   position: 'absolute',
   top: 0,
@@ -97,7 +112,7 @@ export const heroCover = style({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  zIndex: 2,
+  zIndex: 3,
   pointerEvents: 'none',
 
   transform: 'scale(1)',

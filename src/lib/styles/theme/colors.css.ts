@@ -2,7 +2,7 @@ import { createGlobalTheme } from '@vanilla-extract/css';
 
 export const colors = createGlobalTheme(':root', {
   background: {
-    primary: '#050b16',
+    primary: '#080a09',
     secondary: '#ffffff'
   },
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Header, Footer, RouteTransition } from '$lib/components/templates';
+  import { Header, Footer, RouteTransition, GridBackground } from '$lib/components/templates';
   import { page } from '$app/state';
   import * as spacing from '$lib/styles/spacing.css';
   import '$lib/styles/global.css';
@@ -15,6 +15,7 @@
   <title>KeveltKit</title>
 </svelte:head>
 
+<GridBackground />
 <RouteTransition />
 
 {#if isHome}

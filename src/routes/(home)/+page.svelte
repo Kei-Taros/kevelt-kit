@@ -13,6 +13,10 @@
   let { data }: { data: PageData } = $props();
   let heroWrapperEl: HTMLElement | null = null;
   let heroVideoEl: HTMLVideoElement | null = null;
+  let heroCoverEl: HTMLImageElement | null = null;
+  let isHeroCoverReady = $state(false);
+  let showHeroPlaceholder = $state(false);
+  let isHeroPlaying = $state(false);
 
   let coverScale = $state(1);
   let scrollProgress = 0;
@@ -46,12 +50,19 @@
       coverScale = Math.exp(scrollProgress * zoomSpeed);
     };
 
+    const keepHeroAtTop = () => {
+      if (!isZoomCompleted && window.scrollY !== 0) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }
+    };
+
     const applyZoom = (deltaY: number, sensitivity: number, unlockScale: number) => {
       const maxProgress = Math.log(unlockScale) / zoomSpeed;
       const isZoomingIn = deltaY > 0 && scrollProgress < maxProgress;
       const isZoomingOut = deltaY < 0 && scrollProgress > 0;
 
       if (isZoomCompleted && deltaY < 0) return false;
+      if (!isZoomCompleted) keepHeroAtTop();
       if (window.scrollY !== 0 || (!isZoomingIn && !isZoomingOut)) return false;
 
       const nextProgress = scrollProgress + deltaY * sensitivity;
@@ -95,18 +106,21 @@
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
-    heroWrapperEl?.addEventListener('touchstart', handleTouchStart, { passive: true });
-    heroWrapperEl?.addEventListener('touchmove', handleTouchMove, { passive: false });
-    heroWrapperEl?.addEventListener('touchend', handleTouchEnd);
-    heroWrapperEl?.addEventListener('touchcancel', handleTouchEnd);
+    window.addEventListener('scroll', keepHeroAtTop, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchcancel', handleTouchEnd);
+    keepHeroAtTop();
     updateScale();
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      heroWrapperEl?.removeEventListener('touchstart', handleTouchStart);
-      heroWrapperEl?.removeEventListener('touchmove', handleTouchMove);
-      heroWrapperEl?.removeEventListener('touchend', handleTouchEnd);
-      heroWrapperEl?.removeEventListener('touchcancel', handleTouchEnd);
+      window.removeEventListener('scroll', keepHeroAtTop);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
     };
   };
 
@@ -210,14 +224,26 @@
   };
 
   const setupHeroVideoPlay = (shouldShowOpening: boolean) => {
+    const video = heroVideoEl;
+    if (!video) return () => {};
+
     const delay = shouldShowOpening ? 3000 : 0;
+    const play = () => {
+      video.currentTime = 3;
+      video.play().catch(() => {});
+    };
 
     const timer = window.setTimeout(() => {
-      heroVideoEl?.play().catch(() => {});
+      if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+        play();
+      } else {
+        video.addEventListener('loadedmetadata', play, { once: true });
+      }
     }, delay);
 
     return () => {
       window.clearTimeout(timer);
+      video.removeEventListener('loadedmetadata', play);
     };
   };
 
@@ -272,6 +298,24 @@
   onMount(() => {
     window.scrollTo(0, 0);
     const cleanups: Array<() => void> = [];
+    const cover = heroCoverEl;
+    let disposed = false;
+    const markCoverReady = async () => {
+      if (!cover || !cover.complete || cover.naturalWidth === 0) return;
+      try {
+        await cover.decode();
+        if (!disposed) isHeroCoverReady = true;
+      } catch {
+        // Keep the white layer hidden if the cover cannot be displayed.
+      }
+    };
+    cover?.addEventListener('load', markCoverReady);
+    void markCoverReady();
+    cleanups.push(() => {
+      disposed = true;
+      cover?.removeEventListener('load', markCoverReady);
+    });
+    showHeroPlaceholder = sessionStorage.getItem('skipOpeningOnce') === 'true';
     const intro = setupIntroSequence();
     cleanups.push(setupHeroZoom());
     cleanups.push(intro.cleanup);
@@ -293,6 +337,12 @@
 
 <svelte:head>
   <title>KeveltKit</title>
+  <link
+    rel="preload"
+    as="image"
+    href="/images/hero-cover/hero-cover-white.webp"
+    type="image/webp"
+  />
 </svelte:head>
 
 <div class={styles.page}>
@@ -317,7 +367,7 @@
       <video
         bind:this={heroVideoEl}
         class={styles.heroVideo}
-        autoplay
+        onplaying={() => (isHeroPlaying = true)}
         muted
         loop
         playsinline
@@ -330,29 +380,26 @@
         />
         <source src="/videos/hero-video/hero-video.mp4" type="video/mp4" />
       </video>
+      {#if showHeroPlaceholder && isHeroCoverReady}
+        <picture>
+          <source srcset="/images/hero-cover/hero-cover-white.webp" type="image/webp" />
+          <img
+            src="/images/hero-cover/hero-cover-white.png"
+            alt=""
+            class={`${styles.heroPlaceholder} ${isHeroPlaying ? styles.heroPlaceholderFading : ''}`}
+            onanimationend={() => (showHeroPlaceholder = false)}
+            fetchpriority="high"
+          />
+        </picture>
+      {/if}
       <picture>
-        <source
-          media={media.sp}
-          srcset="/images/hero-cover/hero-cover-sp.webp"
-          type="image/webp"
-        />
-        <source
-          media={media.sp}
-          srcset="/images/hero-cover/hero-cover-sp.png"
-          type="image/png"
-        />
-        <source
-          media={media.tb}
-          srcset="/images/hero-cover/hero-cover-tb.webp"
-          type="image/webp"
-        />
-        <source
-          media={media.tb}
-          srcset="/images/hero-cover/hero-cover-tb.png"
-          type="image/png"
-        />
+        <source media={media.sp} srcset="/images/hero-cover/hero-cover-sp.webp" type="image/webp" />
+        <source media={media.sp} srcset="/images/hero-cover/hero-cover-sp.png" type="image/png" />
+        <source media={media.tb} srcset="/images/hero-cover/hero-cover-tb.webp" type="image/webp" />
+        <source media={media.tb} srcset="/images/hero-cover/hero-cover-tb.png" type="image/png" />
         <source srcset="/images/hero-cover/hero-cover.webp" type="image/webp" />
         <img
+          bind:this={heroCoverEl}
           src="/images/hero-cover/hero-cover.png"
           alt="hero-cover"
           class={styles.heroCover}
