@@ -1,6 +1,6 @@
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { onNavigate } from '$app/navigation';
 import RouteTransition from './RouteTransition.svelte';
 import * as styles from './RouteTransition.css';
@@ -11,6 +11,7 @@ vi.mock('$app/navigation', () => ({
 
 describe('RouteTransition', () => {
   beforeEach(() => {
+    sessionStorage.clear();
     vi.mocked(onNavigate).mockReset();
 
     Object.defineProperty(HTMLMediaElement.prototype, 'play', {
@@ -29,12 +30,17 @@ describe('RouteTransition', () => {
     });
   });
 
+  afterEach(() => {
+    sessionStorage.clear();
+  });
+
   const createTarget = (path: string) => {
     const url = new URL(`https://example.com${path}`);
 
     return {
       url,
       params: {},
+      scroll: { x: 0, y: 0 },
       route: { id: url.pathname }
     };
   };
@@ -47,7 +53,7 @@ describe('RouteTransition', () => {
       event: null,
       willUnload: false,
       complete: Promise.resolve()
-    }) as any;
+    }) as Parameters<Parameters<typeof onNavigate>[0]>[0];
 
   const getNavigateHandler = () => {
     expect(onNavigate).toHaveBeenCalledTimes(1);
@@ -128,7 +134,28 @@ describe('RouteTransition', () => {
     expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
   });
 
-  test('/へ遷移する場合、skipOpeningOnceがsessionStorageに保存される', () => {
+  test.each(['/', '/#top', '/?tab=1'])(
+    'トップページから%sへ遷移する場合、skipOpeningOnceが保存されない',
+    (toPath) => {
+      render(RouteTransition);
+
+      const navigateHandler = getNavigateHandler();
+      const result = navigateHandler(createNavigation('/', toPath));
+
+      expect(result).toBeUndefined();
+      expect(sessionStorage.getItem('skipOpeningOnce')).toBeNull();
+    }
+  );
+
+  test('トップページ以外へ遷移する場合、skipOpeningOnceが保存されない', () => {
+    render(RouteTransition);
+
+    getNavigateHandler()(createNavigation('/', '/about-me'));
+
+    expect(sessionStorage.getItem('skipOpeningOnce')).toBeNull();
+  });
+
+  test('別ページから/へ遷移する場合、skipOpeningOnceがsessionStorageに保存される', () => {
     render(RouteTransition);
 
     const navigateHandler = getNavigateHandler();

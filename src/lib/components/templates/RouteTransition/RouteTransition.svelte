@@ -59,12 +59,12 @@
     if (!from || !to) return;
     if (navigating) return;
 
-    if (to.url.pathname === '/') {
-      sessionStorage.setItem('skipOpeningOnce', 'true');
-    }
-
     if (from.url.pathname === to.url.pathname) {
       return;
+    }
+
+    if (to.url.pathname === '/') {
+      sessionStorage.setItem('skipOpeningOnce', 'true');
     }
 
     const isWorksInternalNavigation =
