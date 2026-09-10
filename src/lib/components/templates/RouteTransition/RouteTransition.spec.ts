@@ -13,6 +13,10 @@ describe('RouteTransition', () => {
   beforeEach(() => {
     sessionStorage.clear();
     vi.mocked(onNavigate).mockReset();
+    Object.defineProperty(document, 'fonts', {
+      configurable: true,
+      get: () => ({ ready: Promise.resolve() })
+    });
 
     Object.defineProperty(HTMLMediaElement.prototype, 'play', {
       configurable: true,
@@ -31,6 +35,9 @@ describe('RouteTransition', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    document.querySelectorAll('[data-transition-test]').forEach((element) => element.remove());
     sessionStorage.clear();
   });
 
@@ -65,6 +72,76 @@ describe('RouteTransition', () => {
     await Promise.resolve();
     await Promise.resolve();
   };
+
+  const finishVideo = async (container: HTMLElement) => {
+    const navigation = getNavigateHandler()(createNavigation('/about-me', '/works'));
+    await flush();
+    await vi.advanceTimersByTimeAsync(0);
+    container.querySelector('video')!.dispatchEvent(new Event('ended'));
+    const afterNavigation = await navigation;
+    if (typeof afterNavigation !== 'function') throw new Error('Missing navigation callback');
+    afterNavigation();
+    await flush();
+  };
+
+  test('遷移先の画像の読み込みまたはデコードが未完了の場合、完了するまでオーバーレイを表示する', async () => {
+    vi.useFakeTimers();
+    const { container } = render(RouteTransition);
+    const img = document.createElement('img');
+    img.dataset.transitionTest = '';
+    img.src = '/delayed-image.png';
+    Object.defineProperty(img, 'complete', { value: false });
+    let decoded!: () => void;
+    img.decode = vi.fn(() => new Promise<void>((resolve) => (decoded = resolve)));
+    document.body.append(img);
+
+    await finishVideo(container);
+    await vi.advanceTimersByTimeAsync(1000);
+    const overlay = container.querySelector(`.${styles.transitionOverlay}`);
+    expect(overlay).toBeInTheDocument();
+    expect(overlay).not.toHaveClass(styles.transitionFadeOut);
+    expect(container.querySelector('video')).not.toBeInTheDocument();
+
+    img.dispatchEvent(new Event('load'));
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(img.decode).toHaveBeenCalled();
+    expect(overlay).not.toHaveClass(styles.transitionFadeOut);
+    decoded();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(overlay).not.toBeInTheDocument();
+  });
+
+  test('フォントの準備が未完了の場合、完了するまでオーバーレイを表示する', async () => {
+    vi.useFakeTimers();
+    let ready!: () => void;
+    vi.spyOn(document, 'fonts', 'get').mockReturnValue({
+      ready: new Promise<void>((resolve) => (ready = resolve))
+    } as unknown as FontFaceSet);
+    const { container } = render(RouteTransition);
+    await finishVideo(container);
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).toBeInTheDocument();
+    ready();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
+  });
+
+  test('画像の読み込みが失敗した場合、オーバーレイを非表示にする', async () => {
+    vi.useFakeTimers();
+    const img = document.createElement('img');
+    img.dataset.transitionTest = '';
+    img.src = '/broken.png';
+    Object.defineProperty(img, 'complete', { value: false });
+    document.body.append(img);
+    const { container } = render(RouteTransition);
+    await finishVideo(container);
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toHaveClass(
+      styles.transitionFadeOut
+    );
+    img.dispatchEvent(new Event('error'));
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(container.querySelector(`.${styles.transitionOverlay}`)).not.toBeInTheDocument();
+  });
 
   test('初期表示の場合、オーバーレイが表示されない', () => {
     const { container } = render(RouteTransition);
