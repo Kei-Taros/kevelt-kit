@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { media } from '$lib/styles/breakpoints';
+import { colors } from '$lib/styles/theme/colors.css';
 
 export const container = style({
   display: 'grid',
@@ -58,7 +59,7 @@ export const filterButton = style({
   selectors: {
     '&:hover': {
       background: 'rgba(255, 255, 255, 0.12)',
-      borderColor: 'rgba(255, 255, 255, 0.18)'
+      borderColor: colors.brand[400]
     },
     '&:focus-visible': {
       outline: '2px solid #ffffff',
@@ -71,8 +72,15 @@ export const filterButton = style({
 });
 
 export const activeFilterButton = style({
-  background: 'rgba(255, 255, 255, 0.18)',
-  borderColor: 'rgba(255, 255, 255, 0.28)'
+  background: colors.brand[600],
+  borderColor: colors.brand[600],
+  color: colors.text.secondary,
+  selectors: {
+    '&:hover': {
+      background: colors.brand[600],
+      borderColor: colors.brand[400]
+    }
+  }
 });
 
 export const grid = style({
