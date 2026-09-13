@@ -12,10 +12,10 @@ export const PROFILE_LIST = [
 export const SKILL_ICONS = [
   'typescript',
   'react',
+  'nextjs',
   'svelte',
   'nestjs',
   'vite',
-  'vitest',
   'nodejs',
   'openapi',
   'docker',
