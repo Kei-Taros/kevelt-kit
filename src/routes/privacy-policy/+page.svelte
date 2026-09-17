@@ -23,7 +23,7 @@
     <div class={spacing.mbL}>
       <Heading label={item.title} number={String(index + 1)} as="h2" variant="privacyPolicy" />
 
-      {#each item.descriptions as description}
+      {#each item.descriptions as description, descriptionIndex (descriptionIndex)}
         <p class={styles.description}>{description}</p>
       {/each}
     </div>

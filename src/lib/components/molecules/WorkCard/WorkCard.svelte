@@ -24,7 +24,7 @@
     <p class={styles.period}>{item.period}</p>
 
     <div class={styles.tagList}>
-      {#each item.tags as tag}
+      {#each item.tags as tag, index (index)}
         <Tag label={tag} />
       {/each}
     </div>

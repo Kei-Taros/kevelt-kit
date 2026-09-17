@@ -22,7 +22,7 @@
       <Heading label={item.title} as="h4" />
     </div>
 
-    {#each item.descriptions as description}
+    {#each item.descriptions as description, index (index)}
       <p>{description}</p>
     {/each}
   </div>

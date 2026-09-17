@@ -113,7 +113,7 @@ describe('Icon', () => {
 
     expect(link).toHaveAttribute('href', 'https://github.com/Kei-Taros');
     expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('rel', 'external noopener noreferrer');
   });
 
   test('copyTextが渡された場合、クリックでテキストがコピーされる', async () => {

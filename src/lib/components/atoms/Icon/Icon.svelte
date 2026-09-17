@@ -127,7 +127,7 @@
     {/if}
   </div>
 {:else if href}
-  <a {href} class={styles.link} target="_blank" rel="noopener noreferrer">
+  <a {href} class={styles.link} target="_blank" rel="external noopener noreferrer">
     {@render icon()}
   </a>
 {:else}

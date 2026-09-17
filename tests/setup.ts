@@ -14,28 +14,26 @@ if (!window.matchMedia) {
     }) as unknown as MediaQueryList;
 }
 
-if (!(globalThis as any).IntersectionObserver) {
-  class IntersectionObserver {
-    constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {}
-
-    observe(_target: Element) {}
-    unobserve(_target: Element) {}
+if (!globalThis.IntersectionObserver) {
+  class MockIntersectionObserver {
+    observe() {}
+    unobserve() {}
     disconnect() {}
     takeRecords(): IntersectionObserverEntry[] {
       return [];
     }
   }
 
-  (globalThis as any).IntersectionObserver = IntersectionObserver;
+  globalThis.IntersectionObserver =
+    MockIntersectionObserver as unknown as typeof IntersectionObserver;
 }
 
-if (!(globalThis as any).ResizeObserver) {
-  class ResizeObserver {
-    constructor(_callback: ResizeObserverCallback) {}
-    observe(_target: Element) {}
-    unobserve(_target: Element) {}
+if (!globalThis.ResizeObserver) {
+  class MockResizeObserver {
+    observe() {}
+    unobserve() {}
     disconnect() {}
   }
 
-  (globalThis as any).ResizeObserver = ResizeObserver;
+  globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 }

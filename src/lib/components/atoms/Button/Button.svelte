@@ -1,5 +1,7 @@
 <script lang="ts">
   import * as styles from './Button.css';
+  import { resolve } from '$app/paths';
+  import type { PathnameWithSearchOrHash } from '$app/types';
   import type { HTMLButtonAttributes } from 'svelte/elements';
   import type { Snippet } from 'svelte';
 
@@ -42,7 +44,10 @@
 </script>
 
 {#if href}
-  <a class={`${styles.button} ${variantClass} ${className}`} {href}>
+  <a
+    class={`${styles.button} ${variantClass} ${className}`}
+    href={resolve(href as PathnameWithSearchOrHash)}
+  >
     {#if children}
       {@render children()}
     {:else}

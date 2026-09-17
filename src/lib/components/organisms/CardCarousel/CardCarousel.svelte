@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import EmblaCarousel from 'embla-carousel';
+  import type { EmblaCarouselType } from 'embla-carousel';
   import Autoplay from 'embla-carousel-autoplay';
   import type { CarouselItem } from '$lib/types/carousel.types';
   import * as styles from './CardCarousel.css';
@@ -14,7 +15,7 @@
 
   let { items, loop = true, onCardClick }: Props = $props();
   let viewportEl: HTMLDivElement | null = null;
-  let embla: any = null;
+  let embla: EmblaCarouselType | null = null;
 
   let selectedIndex = $state(0);
   let canPrev = $state(false);
@@ -140,7 +141,7 @@
     </div>
 
     <div class={styles.dots}>
-      {#each items as _, index}
+      {#each items as item, index (item.id)}
         <button
           type="button"
           class={`${styles.dot} ${selectedIndex === index ? styles.dotSelected : ''}`}

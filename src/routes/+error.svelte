@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Button, Heading } from '$lib/components/atoms';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { ERROR_IMAGE } from '$lib/constants/images';
   import * as styles from './error.css';
   import * as spacing from '$lib/styles/spacing.css';
 
   const handleClick = () => {
-    goto('/');
+    goto(resolve('/'));
   };
 </script>
 

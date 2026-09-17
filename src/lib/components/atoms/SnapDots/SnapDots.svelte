@@ -10,11 +10,11 @@
 
   let { count = 4, activeIndex = 0, onSelect, class: className = '', ...props }: Props = $props();
 
-  const dots = $derived(Array.from({ length: count }));
+  const dots = $derived(Array.from({ length: count }, (_, index) => index));
 </script>
 
 <div class={`${styles.snapDots} ${className}`} {...props}>
-  {#each dots as _, index}
+  {#each dots as index (index)}
     <button
       type="button"
       class={`${styles.snapDot} ${index === activeIndex ? styles.snapDotActive : ''}`}

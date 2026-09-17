@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { Button, Heading } from '$lib/components/atoms';
   import { CardCarousel, NewsItemList } from '$lib/components/organisms';
   import type { PageData } from './$types';
@@ -329,7 +330,7 @@
   });
 
   const openWork = async (id: number) => {
-    await goto('/works', {
+    await goto(resolve('/works'), {
       state: { selectedWorkId: id }
     });
   };
@@ -433,7 +434,7 @@
       </div>
       <div class={styles.grid}>
         <a
-          href="/about-me"
+          href={resolve('/about-me')}
           class={`${styles.gridTile} ${styles.aboutMe} ${
             showGridAbout ? styles.gridTileShow : styles.gridTileHidden
           }`}
@@ -446,7 +447,7 @@
         </a>
 
         <a
-          href="/concept"
+          href={resolve('/concept')}
           class={`${styles.gridTile} ${styles.concept} ${
             showGridConcept ? styles.gridTileShow : styles.gridTileHidden
           }`}
@@ -461,7 +462,7 @@
         <div class={styles.gridBottomRow}>
           <div class={styles.gridLeftBottom}>
             <a
-              href="/news"
+              href={resolve('/news')}
               class={`${styles.gridTile} ${styles.gridHalfTile} ${
                 showGridNews ? styles.gridTileShow : styles.gridTileHidden
               }`}
@@ -474,7 +475,7 @@
             </a>
 
             <a
-              href="/a-break"
+              href={resolve('/a-break')}
               class={`${styles.gridTile} ${styles.gridHalfTile} ${
                 showGridABreak ? styles.gridTileShow : styles.gridTileHidden
               }`}
@@ -488,7 +489,7 @@
           </div>
 
           <a
-            href="/works"
+            href={resolve('/works')}
             class={`${styles.gridTile} ${styles.works} ${
               showGridWorks ? styles.gridTileShow : styles.gridTileHidden
             }`}
