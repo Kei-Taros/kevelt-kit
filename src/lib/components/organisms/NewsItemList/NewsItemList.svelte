@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, Heading } from '$lib/components/atoms';
-  import { NewsItem } from '$lib/components/Molecule';
+  import { NewsItem } from '$lib/components/molecules';
   import type { NewsData } from '$lib/types/news.types';
   import * as styles from './NewsItemList.css';
 

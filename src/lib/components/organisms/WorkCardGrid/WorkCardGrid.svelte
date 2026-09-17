@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as styles from './WorkCardGrid.css';
-  import { WorkCard, type WorkCardItem } from '$lib/components/Molecule';
+  import { WorkCard, type WorkCardItem } from '$lib/components/molecules';
   import type { HTMLAttributes } from 'svelte/elements';
   import * as constants from './constants/workCardGrid';
 

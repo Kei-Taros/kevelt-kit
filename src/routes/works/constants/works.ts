@@ -1,4 +1,4 @@
-import type { WorkCardItem } from '$lib/components/Molecule/';
+import type { WorkCardItem } from '$lib/components/molecules/';
 import type { WorkDetail } from '$lib/components/organisms';
 
 export const WORK_DETAILS: WorkDetail[] = [

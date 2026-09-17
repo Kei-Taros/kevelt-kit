@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Heading } from '$lib/components/atoms';
-  import { NewsCard } from '$lib/components/Molecule';
+  import { NewsCard } from '$lib/components/molecules';
   import type { NewsData } from '$lib/types/news.types';
   import * as styles from './LatestNewsGrid.css';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Heading, Tag, DataItem } from '$lib/components/atoms';
-  import { Modal } from '$lib/components/Molecule';
+  import { Modal } from '$lib/components/molecules';
   import type { WorkDetail } from './WorkModal.types';
   import * as styles from './WorkModal.css';
 

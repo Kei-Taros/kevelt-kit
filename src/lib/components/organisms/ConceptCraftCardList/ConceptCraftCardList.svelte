@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ConceptCraftCard } from '$lib/components/Molecule';
+  import { ConceptCraftCard } from '$lib/components/molecules';
   import type { ConceptCraftData } from '$lib/types/concept.types';
   import * as styles from './ConceptCraftCardList.css';
 
