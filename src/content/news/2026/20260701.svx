@@ -1,7 +1,7 @@
 ---
 title: 'KeveltKit始動します！'
 date: '2026-07-01'
-thumbnail: '/images/news/2026/07/20260701'
+thumbnail: '/images/news/thumbnail/2026/20260701'
 tags: ['news']
 published: true
 ---
