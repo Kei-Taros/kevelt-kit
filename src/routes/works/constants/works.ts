@@ -1,4 +1,4 @@
-import type { WorkCardItem } from '$lib/components/Molecule/';
+import type { WorkCardItem } from '$lib/components/molecules/';
 import type { WorkDetail } from '$lib/components/organisms';
 
 export const WORK_DETAILS: WorkDetail[] = [
@@ -12,11 +12,20 @@ export const WORK_DETAILS: WorkDetail[] = [
     summary: `生成AIを活用した開発プロセスの検証および認証方式刷新を担当。
       生成AIのみで設計から実装まで進められるかPoCを実施し、生産性の計測と改善案の提案を実施。
       また、自前の認証基盤から外部認証基盤への移行に向けた技術選定・顧客提案および採用方式の設計にも対応。`,
-    period:  '2026/05 - 2026/08',
+    period: '2026/05 - 2026/08',
     role: 'SE',
     scope: '設計 / 実装 / テスト / 技術選定 / 技術検証',
     categories: ['Web', 'Frontend', 'Backend'],
-    techStack: ['TypeScript', 'Next.js', 'NestJS', 'OpenAPI', 'Docker', 'Node.js', 'GitHub', 'ClaudeCode'],
+    techStack: [
+      'TypeScript',
+      'Next.js',
+      'NestJS',
+      'OpenAPI',
+      'Docker',
+      'Node.js',
+      'GitHub',
+      'ClaudeCode'
+    ],
     responsibilities: [
       '生成AIのみで設計から実装まで進められるかPoCを実施',
       '作業時間の計測および生産性向上に向けた改善案の提案',
@@ -25,7 +34,7 @@ export const WORK_DETAILS: WorkDetail[] = [
       '認証方式の設計'
     ],
     highlights: [
-      '生成AIを活用した開発プロセスの確立に向け、先行して設計・実装を行い、プロジェクト全体の開発土台を整備',
+      '生成AIを活用した開発プロセスの確立に向け、先行して設計・実装を行い、プロジェクト全体の開発土台を整備'
     ]
   },
   {
@@ -207,7 +216,7 @@ export const WORK_CARD: WorkCardItem[] = [
       png: '/images/works/work-7.png'
     },
     title: 'ブランド品オークションサイト改修',
-    period:  '2026',
+    period: '2026',
     tags: ['Web', 'Frontend', 'Backend', 'TypeScript', 'Next.js', 'NestJS']
   },
   {

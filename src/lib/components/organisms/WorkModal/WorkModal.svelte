@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Heading, Tag, DataItem } from '$lib/components/atoms';
-  import { Modal } from '$lib/components/Molecule';
+  import { Modal } from '$lib/components/molecules';
   import type { WorkDetail } from './WorkModal.types';
   import * as styles from './WorkModal.css';
 
@@ -36,12 +36,12 @@
 
       <div class={styles.tagList}>
         <div class={styles.tagRow}>
-          {#each workDetail.categories as category}
+          {#each workDetail.categories as category, index (index)}
             <Tag label={category} variant="secondary" />
           {/each}
         </div>
         <div class={styles.tagRow}>
-          {#each workDetail.techStack as tech}
+          {#each workDetail.techStack as tech, index (index)}
             <Tag label={tech} />
           {/each}
         </div>
@@ -52,7 +52,7 @@
       <div>
         <Heading label="業務内容" as="h3" />
         <ul class={styles.detailList}>
-          {#each workDetail.responsibilities as item}
+          {#each workDetail.responsibilities as item, index (index)}
             <li>{item}</li>
           {/each}
         </ul>
@@ -60,7 +60,7 @@
       <div>
         <Heading label="実績・取り組み" as="h3" />
         <ul class={styles.detailList}>
-          {#each workDetail.highlights as item}
+          {#each workDetail.highlights as item, index (index)}
             <li>{item}</li>
           {/each}
         </ul>

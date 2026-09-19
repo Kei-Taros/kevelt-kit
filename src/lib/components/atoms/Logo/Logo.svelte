@@ -1,5 +1,7 @@
 <script lang="ts">
   import * as styles from './Logo.css';
+  import { resolve } from '$app/paths';
+  import type { PathnameWithSearchOrHash } from '$app/types';
   import type { HTMLAnchorAttributes } from 'svelte/elements';
 
   interface Props extends HTMLAnchorAttributes {
@@ -25,7 +27,11 @@
   );
 </script>
 
-<a {href} class={`${styles.logo} ${className}`} {...props}>
+<a
+  href={resolve(href as PathnameWithSearchOrHash)}
+  class={`${styles.logo} ${className}`}
+  {...props}
+>
   <img {src} {alt} class={`${styles.image} ${sizeClass}`} />
   <span class={styles.label}>{label}</span>
 </a>

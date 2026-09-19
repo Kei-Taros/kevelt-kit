@@ -75,7 +75,7 @@
             <p class={styles.tocTitle}>目次</p>
 
             <ul class={styles.tocList}>
-              {#each headings as heading}
+              {#each headings as heading (heading.id)}
                 <li class={styles.tocItem}>
                   <a
                     class={styles.tocLink}

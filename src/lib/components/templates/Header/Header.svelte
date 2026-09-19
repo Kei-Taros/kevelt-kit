@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { resolve } from '$app/paths';
   import { Logo } from '$lib/components/atoms';
   import * as styles from './Header.css';
 
@@ -31,11 +32,11 @@
     </div>
 
     <nav class={styles.nav}>
-      <a href="/about-me" class={styles.link}>About Me</a>
-      <a href="/concept" class={styles.link}>Concept</a>
-      <a href="/works" class={styles.link}>Works</a>
-      <a href="/news" class={styles.link}>News</a>
-      <a href="/a-break" class={styles.link}>A Break</a>
+      <a href={resolve('/about-me')} class={styles.link}>About Me</a>
+      <a href={resolve('/concept')} class={styles.link}>Concept</a>
+      <a href={resolve('/works')} class={styles.link}>Works</a>
+      <a href={resolve('/news')} class={styles.link}>News</a>
+      <a href={resolve('/a-break')} class={styles.link}>A Break</a>
     </nav>
   </div>
 </header>

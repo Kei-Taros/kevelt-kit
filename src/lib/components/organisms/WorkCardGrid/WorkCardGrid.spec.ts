@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, within } from '@testing-library/svelte';
 import { describe, test, expect, vi } from 'vitest';
 import WorkCardGrid from './WorkCardGrid.svelte';
-import type { WorkCardItem } from '$lib/components/Molecule';
+import type { WorkCardItem } from '$lib/components/molecules';
 import * as constants from './constants/workCardGrid';
 
 const mockItems: WorkCardItem[] = [

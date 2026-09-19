@@ -3,7 +3,7 @@
   import { pushState, replaceState } from '$app/navigation';
   import { Heading } from '$lib/components/atoms';
   import { WorkCardGrid, WorkModal } from '$lib/components/organisms';
-  import type { WorkCardItem } from '$lib/components/Molecule';
+  import type { WorkCardItem } from '$lib/components/molecules';
   import * as spacing from '$lib/styles/spacing.css';
   import * as layout from '$lib/styles/layout.css';
   import * as constants from './constants/works';

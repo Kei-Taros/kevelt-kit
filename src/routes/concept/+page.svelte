@@ -37,13 +37,13 @@
     </div>
 
     <h2 class={styles.msgMain}>
-      {#each constants.MSG_MAIN as text}
+      {#each constants.MSG_MAIN as text, index (index)}
         {text}<br />
       {/each}
     </h2>
 
     <p class={styles.msgDescription}>
-      {#each constants.MSG_DESCRIPTION as text}
+      {#each constants.MSG_DESCRIPTION as text, index (index)}
         {text}<br />
       {/each}
     </p>
@@ -75,7 +75,8 @@
 
       <div class={spacing.mbXL}>
         <div class={styles.sectionText}>
-          {#each constants.WHATS_KEVELTKIT_TEXTS as text}
+          {#each constants.WHATS_KEVELTKIT_TEXTS as text, index (index)}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted static content -->
             <p>{@html text}</p>
           {/each}
         </div>
@@ -126,7 +127,7 @@
       </div>
 
       <div class={styles.themeText}>
-        {#each constants.THEME_DESCRIPTION as text}
+        {#each constants.THEME_DESCRIPTION as text, index (index)}
           <p>{text}</p>
         {/each}
       </div>
