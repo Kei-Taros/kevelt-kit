@@ -1,4 +1,6 @@
 <script lang="ts">
+  import * as styles from './aBreak.css';
+
   let menuOpen = $state(false);
   let menuButton: HTMLButtonElement;
 
@@ -26,7 +28,7 @@
     fetchpriority="high"
   />
   <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
-  <div class="vignette" aria-hidden="true"></div>
+  <div class={styles.vignette} aria-hidden="true"></div>
   <div class="element-emblem" role="img" aria-label="発光する輪に包まれた炎属性">
     <img class="element-emblem-ring" src="/images/kevat/element-ring/fire-ring.png" alt="" />
     <img class="element-emblem-icon" src="/images/kevat/elements/fire.png" alt="" />
@@ -249,13 +251,6 @@
     object-fit: contain;
     opacity: 0.82;
     mask-image: linear-gradient(to bottom, #000 65%, transparent 100%);
-  }
-
-  .vignette {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at 50% 45%, transparent 30%, #0008 100%);
   }
 
   .element-emblem {
