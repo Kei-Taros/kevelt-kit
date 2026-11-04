@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { HealthLabel } from '$lib/kevat/components/atoms';
   import { EnemyMove } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
@@ -70,11 +71,11 @@
   </div>
 
   <div class="health player-health">
-    <div class="health-label"><span>HP</span><span>200 / 200</span></div>
+    <HealthLabel current={200} max={200} />
     <div class="health-bar" aria-hidden="true"></div>
   </div>
   <div class="health enemy-health">
-    <div class="health-label"><span>HP</span><span>150 / 150</span></div>
+    <HealthLabel current={150} max={150} />
     <meter min="0" max="150" value="150" aria-label="敵のHP">150 / 150</meter>
     <div class="health-bar" aria-hidden="true"></div>
     <div class="enemy-levels" aria-label="敵の属性レベル">
@@ -316,11 +317,6 @@
   }
   .enemy-health {
     right: 3.5%;
-  }
-  .health-label {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
   }
   .health-bar {
     height: clamp(4px, 0.6cqw, 10px);
