@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ElementCycle } from '$lib/kevat/components/atoms';
+  import { BattleMessage, ElementCycle } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
@@ -31,13 +31,12 @@
   />
   <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
   <div class={styles.vignette} aria-hidden="true"></div>
-  <div class="enemy-move">
+  <div class="enemy-move" hidden>
     <EnemyMove element="stone" />
   </div>
-  <p class="battle-hint" hidden>
-    <span>相手の属性を見極め一手を選べ！</span>
-    <span>三すくみを覚えて勝利をつかめ！</span>
-  </p>
+  <div class="battle-hint">
+    <BattleMessage lines={['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！']} />
+  </div>
   <div class="attribute-cycle"><ElementCycle /></div>
   {#if menuOpen}
     <button
@@ -236,37 +235,11 @@
 
   .battle-hint {
     position: absolute;
-    isolation: isolate;
     top: 42%;
     left: 50%;
     z-index: 1;
+    width: min(90cqw, 960px);
     transform: translate(-50%, -50%);
-    margin: 0;
-    color: #f5f5f2;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(16px, 1.8cqw, 36px);
-    font-weight: 600;
-    line-height: 1.8;
-    letter-spacing: 0.16em;
-    text-align: center;
-    text-shadow:
-      0 2px 6px #000,
-      0 0 18px #000;
-    white-space: nowrap;
-  }
-  .battle-hint::before {
-    content: '';
-    position: absolute;
-    inset: -55% -18%;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse at center, #05090de6 0%, #080d10b8 42%, transparent 76%),
-      linear-gradient(90deg, transparent 0%, #02050780 18%, #02050780 82%, transparent 100%);
-    filter: blur(10px);
-  }
-  .battle-hint span {
-    display: block;
   }
 
   .health {
@@ -399,12 +372,6 @@
     .enemy-move {
       top: 40%;
       width: min(72cqw, 48dvh);
-    }
-    .battle-hint {
-      width: 90%;
-      font-size: clamp(14px, 4cqw, 18px);
-      letter-spacing: 0.1em;
-      white-space: normal;
     }
     .attribute-cycle {
       width: min(18cqw, 9.9dvh);
