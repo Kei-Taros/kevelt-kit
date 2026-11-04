@@ -1,4 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
+import { elementColors } from '$lib/kevat/styles/elementColors';
 
 export const container = style({
   position: 'relative',
@@ -15,7 +16,7 @@ export const containerVariants = styleVariants({
     filter: 'drop-shadow(0 0 8px #d4b5ffcc) drop-shadow(0 0 28px #9966ee80)'
   },
   mist: {
-    filter: 'drop-shadow(0 0 8px #8ee3ffcc) drop-shadow(0 0 28px #4bbce580)'
+    filter: `drop-shadow(0 0 8px ${elementColors.mist}cc) drop-shadow(0 0 28px #4bbce580)`
   }
 });
 
@@ -41,7 +42,7 @@ export const icon = style({
 
 export const iconVariants = styleVariants({
   fire: {
-    filter: 'drop-shadow(0 0 14px #ffb061cc)'
+    filter: `drop-shadow(0 0 14px ${elementColors.fire}cc)`
   },
   stone: {
     filter: 'drop-shadow(0 0 14px #d4b5ffcc)'

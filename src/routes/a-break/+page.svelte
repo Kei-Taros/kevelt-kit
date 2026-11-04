@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { EnemyLevelBadge } from '$lib/kevat/components/atoms';
-  import { EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
+  import { EnemyLevels, EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
   let menuOpen = $state(false);
@@ -76,20 +75,7 @@
   <div class="health enemy-health">
     <HealthStatus current={150} max={150} />
     <meter min="0" max="150" value="150" aria-label="敵のHP">150 / 150</meter>
-    <div class="enemy-levels" aria-label="敵の属性レベル">
-      <span class="enemy-level">
-        <img src="/images/kevat/elements/fire.png" alt="FIRE" />
-        <EnemyLevelBadge element="fire" level={1} />
-      </span>
-      <span class="enemy-level">
-        <img src="/images/kevat/elements/stone.png" alt="STONE" />
-        <EnemyLevelBadge element="stone" level={2} />
-      </span>
-      <span class="enemy-level">
-        <img src="/images/kevat/elements/mist.png" alt="MIST" />
-        <EnemyLevelBadge element="mist" level={3} />
-      </span>
-    </div>
+    <EnemyLevels levels={{ fire: 1, stone: 2, mist: 3 }} />
   </div>
 
   <div class="attributes" role="group" aria-label="属性選択（画面プレビュー）">
@@ -316,33 +302,6 @@
   .enemy-health {
     right: 3.5%;
   }
-  .enemy-levels {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(2px, 0.4cqw, 6px);
-    width: 60%;
-    margin-top: clamp(12px, 1.4cqw, 22px);
-    margin-right: 0;
-    margin-left: auto;
-    padding-inline: 4px;
-    color: #f5f5f2;
-    font-size: clamp(10px, 0.85cqw, 14px);
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-  }
-  .enemy-levels > span {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 0;
-  }
-  .enemy-levels img {
-    width: clamp(44px, 4.84cqw, 72.6px);
-    max-width: 100%;
-    aspect-ratio: 1;
-    object-fit: contain;
-    filter: drop-shadow(0 1px 5px #000);
-  }
   meter {
     position: absolute;
     width: 1px;
@@ -470,9 +429,6 @@
     }
     .enemy-health {
       width: 42%;
-    }
-    .enemy-levels img {
-      width: clamp(35.2px, 11cqw, 48.4px);
     }
     .enemy {
       top: 18%;

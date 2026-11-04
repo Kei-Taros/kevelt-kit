@@ -1,4 +1,5 @@
 import { createVar, style, styleVariants } from '@vanilla-extract/css';
+import { elementColors } from '$lib/kevat/styles/elementColors';
 
 const color = createVar();
 const outline = 'polygon(16% 0, 84% 0, 100% 25%, 100% 75%, 84% 100%, 16% 100%, 0 75%, 0 25%)';
@@ -50,9 +51,9 @@ export const badge = style({
 });
 
 export const elementVariants = styleVariants({
-  fire: { vars: { [color]: '#ff9a4a' } },
-  stone: { vars: { [color]: '#c08cff' } },
-  mist: { vars: { [color]: '#8ee3ff' } }
+  fire: { vars: { [color]: elementColors.fire } },
+  stone: { vars: { [color]: elementColors.stone } },
+  mist: { vars: { [color]: elementColors.mist } }
 });
 
 export const digit = style({
