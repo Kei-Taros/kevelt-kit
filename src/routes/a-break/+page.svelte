@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ElementRing } from '$lib/kevat/components/atoms';
   import * as styles from './aBreak.css';
 
   let menuOpen = $state(false);
@@ -30,7 +31,7 @@
   <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
   <div class={styles.vignette} aria-hidden="true"></div>
   <div class="element-emblem" role="img" aria-label="発光する輪に包まれた炎属性">
-    <img class="element-emblem-ring" src="/images/kevat/element-ring/fire-ring.png" alt="" />
+    <div class="element-emblem-ring"><ElementRing element="fire" /></div>
     <img class="element-emblem-icon" src="/images/kevat/elements/fire.png" alt="" />
   </div>
   <p class="battle-hint" hidden>
@@ -268,7 +269,6 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    object-fit: contain;
     pointer-events: none;
   }
   .element-emblem-ring {
@@ -283,6 +283,7 @@
     width: 72%;
     height: 72%;
     transform: translate(-50%, -50%);
+    object-fit: contain;
     opacity: 0.9;
     filter: drop-shadow(0 0 14px #ffb061cc);
   }
