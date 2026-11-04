@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { EnemyLevelBadge } from '$lib/kevat/components/atoms';
   import { EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
@@ -76,17 +77,17 @@
     <HealthStatus current={150} max={150} />
     <meter min="0" max="150" value="150" aria-label="敵のHP">150 / 150</meter>
     <div class="enemy-levels" aria-label="敵の属性レベル">
-      <span class="enemy-level enemy-fire-level">
+      <span class="enemy-level">
         <img src="/images/kevat/elements/fire.png" alt="FIRE" />
-        <span class="enemy-level-badge">Lv.1</span>
+        <EnemyLevelBadge element="fire" level={1} />
       </span>
-      <span class="enemy-level enemy-stone-level">
+      <span class="enemy-level">
         <img src="/images/kevat/elements/stone.png" alt="STONE" />
-        <span class="enemy-level-badge">Lv.1</span>
+        <EnemyLevelBadge element="stone" level={2} />
       </span>
-      <span class="enemy-level enemy-mist-level">
+      <span class="enemy-level">
         <img src="/images/kevat/elements/mist.png" alt="MIST" />
-        <span class="enemy-level-badge">Lv.1</span>
+        <EnemyLevelBadge element="mist" level={3} />
       </span>
     </div>
   </div>
@@ -335,56 +336,12 @@
     align-items: center;
     min-width: 0;
   }
-  .enemy-fire-level {
-    --enemy-level-color: #ff9a4a;
-  }
-  .enemy-stone-level {
-    --enemy-level-color: #c08cff;
-  }
-  .enemy-mist-level {
-    --enemy-level-color: #8ee3ff;
-  }
   .enemy-levels img {
     width: clamp(44px, 4.84cqw, 72.6px);
     max-width: 100%;
     aspect-ratio: 1;
     object-fit: contain;
     filter: drop-shadow(0 1px 5px #000);
-  }
-  .enemy-level-badge {
-    --badge-outline: polygon(16% 0, 84% 0, 100% 25%, 100% 75%, 84% 100%, 16% 100%, 0 75%, 0 25%);
-    position: relative;
-    isolation: isolate;
-    min-width: clamp(46.2px, 4.18cqw, 61.6px);
-    box-sizing: border-box;
-    margin-top: -3px;
-    padding: 6.6px 9.9px;
-    color: #f5f5f2;
-    font-size: clamp(14.3px, 1.155cqw, 17.6px);
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--enemy-level-color) 80%, transparent))
-      drop-shadow(0 0 6px color-mix(in srgb, var(--enemy-level-color) 35%, transparent));
-  }
-  .enemy-level-badge::before,
-  .enemy-level-badge::after {
-    content: '';
-    position: absolute;
-    clip-path: var(--badge-outline);
-    pointer-events: none;
-  }
-  .enemy-level-badge::before {
-    inset: 0;
-    z-index: -2;
-    background: var(--enemy-level-color);
-  }
-  .enemy-level-badge::after {
-    inset: 1.5px;
-    z-index: -1;
-    background: #070b0ef5;
-    box-shadow: inset 0 0 7px color-mix(in srgb, var(--enemy-level-color) 30%, transparent);
   }
   meter {
     position: absolute;
@@ -516,11 +473,6 @@
     }
     .enemy-levels img {
       width: clamp(35.2px, 11cqw, 48.4px);
-    }
-    .enemy-level-badge {
-      min-width: 41.8px;
-      padding: 5.5px 6.6px;
-      font-size: 13.2px;
     }
     .enemy {
       top: 18%;
