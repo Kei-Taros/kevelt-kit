@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ElementRing } from '$lib/kevat/components/atoms';
+  import { EnemyMove } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
   let menuOpen = $state(false);
@@ -30,9 +30,8 @@
   />
   <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
   <div class={styles.vignette} aria-hidden="true"></div>
-  <div class="element-emblem" role="img" aria-label="発光する輪に包まれた炎属性">
-    <div class="element-emblem-ring"><ElementRing element="fire" /></div>
-    <img class="element-emblem-icon" src="/images/kevat/elements/fire.png" alt="" />
+  <div class="enemy-move">
+    <EnemyMove element="stone" />
   </div>
   <p class="battle-hint" hidden>
     <span>相手の属性を見極め一手を選べ！</span>
@@ -254,7 +253,7 @@
     mask-image: linear-gradient(to bottom, #000 65%, transparent 100%);
   }
 
-  .element-emblem {
+  .enemy-move {
     position: absolute;
     top: 37%;
     left: 50%;
@@ -262,30 +261,6 @@
     width: min(38cqw, 58dvh);
     aspect-ratio: 1;
     transform: translate(-50%, -50%);
-    filter: drop-shadow(0 0 8px #fff0d6cc) drop-shadow(0 0 28px #ff7b2080);
-  }
-  .element-emblem-ring,
-  .element-emblem-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    pointer-events: none;
-  }
-  .element-emblem-ring {
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    transform: translate(-50%, -50%);
-    opacity: 0.8;
-  }
-  .element-emblem-icon {
-    z-index: 0;
-    width: 72%;
-    height: 72%;
-    transform: translate(-50%, -50%);
-    object-fit: contain;
-    opacity: 0.9;
-    filter: drop-shadow(0 0 14px #ffb061cc);
   }
 
   .battle-hint {
@@ -541,7 +516,7 @@
   }
 
   @media (max-width: 600px) {
-    .element-emblem {
+    .enemy-move {
       top: 40%;
       width: min(72cqw, 48dvh);
     }
