@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { HealthLabel } from '$lib/kevat/components/atoms';
-  import { EnemyMove } from '$lib/kevat/components/molecules';
+  import { EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
   let menuOpen = $state(false);
@@ -71,13 +70,11 @@
   </div>
 
   <div class="health player-health">
-    <HealthLabel current={200} max={200} />
-    <div class="health-bar" aria-hidden="true"></div>
+    <HealthStatus current={200} max={200} />
   </div>
   <div class="health enemy-health">
-    <HealthLabel current={150} max={150} />
+    <HealthStatus current={150} max={150} />
     <meter min="0" max="150" value="150" aria-label="敵のHP">150 / 150</meter>
-    <div class="health-bar" aria-hidden="true"></div>
     <div class="enemy-levels" aria-label="敵の属性レベル">
       <span class="enemy-level enemy-fire-level">
         <img src="/images/kevat/elements/fire.png" alt="FIRE" />
@@ -318,21 +315,6 @@
   .enemy-health {
     right: 3.5%;
   }
-  .health-bar {
-    height: clamp(4px, 0.6cqw, 10px);
-    margin-top: 0.7cqw;
-    border-radius: 999px;
-    background: #a8e9ac;
-    box-shadow:
-      0 0 8px #a8e9ac99,
-      inset 0 1px 2px #fff8;
-  }
-  .enemy-health .health-bar {
-    background: #ff7775;
-    box-shadow:
-      0 0 8px #ff777599,
-      inset 0 1px 2px #fff8;
-  }
   .enemy-levels {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -528,9 +510,6 @@
     .health {
       width: 37%;
       font-size: 12px;
-    }
-    .health-bar {
-      margin-top: 8px;
     }
     .enemy-health {
       width: 42%;
