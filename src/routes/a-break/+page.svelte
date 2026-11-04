@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ElementCycle } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
   import * as styles from './aBreak.css';
 
@@ -37,11 +38,7 @@
     <span>相手の属性を見極め一手を選べ！</span>
     <span>三すくみを覚えて勝利をつかめ！</span>
   </p>
-  <img
-    class="attribute-cycle"
-    src="/images/kevat/cycle/cycle.png"
-    alt="三すくみ：FIREはMISTに勝ち、MISTはSTONEに勝ち、STONEはFIREに勝つ"
-  />
+  <div class="attribute-cycle"><ElementCycle /></div>
   {#if menuOpen}
     <button
       class="menu-backdrop"
@@ -124,17 +121,6 @@
     top: max(16px, env(safe-area-inset-top));
     left: max(3.5%, env(safe-area-inset-left));
     width: min(11.7cqw, 18dvh);
-    height: auto;
-    opacity: 0.8;
-    box-sizing: border-box;
-    padding: clamp(6px, 1cqw, 14px);
-    background: radial-gradient(
-      ellipse at center,
-      #080d10e6 0%,
-      #080d10b3 40%,
-      #080d1059 60%,
-      transparent 75%
-    );
   }
   .game-menu {
     position: absolute;
