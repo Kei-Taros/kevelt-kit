@@ -1,23 +1,9 @@
 <script lang="ts">
   import { BattleMessage, ElementCycle } from '$lib/kevat/components/atoms';
-  import { EnemyLevels, EnemyMove, HealthStatus } from '$lib/kevat/components/molecules';
+  import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { ElementSelector } from '$lib/kevat/components/organisms';
   import * as styles from './aBreak.css';
-
-  let menuOpen = $state(false);
-  let menuButton: HTMLButtonElement;
-
-  function closeMenu() {
-    menuOpen = false;
-    menuButton?.focus();
-  }
 </script>
-
-<svelte:window
-  onkeydown={(event) => {
-    if (event.key === 'Escape' && menuOpen) closeMenu();
-  }}
-/>
 
 <svelte:head>
   <title>A Break | KeveltKit</title>
@@ -39,32 +25,7 @@
     <BattleMessage lines={['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！']} />
   </div>
   <div class="attribute-cycle"><ElementCycle /></div>
-  {#if menuOpen}
-    <button
-      class="menu-backdrop"
-      type="button"
-      aria-label="メニューを閉じる"
-      tabindex="-1"
-      onclick={closeMenu}
-    ></button>
-  {/if}
-  <div class="game-menu">
-    <button
-      bind:this={menuButton}
-      class="menu-toggle"
-      class:open={menuOpen}
-      type="button"
-      aria-label={menuOpen ? 'メニューを閉じる' : 'メニューを開く'}
-      aria-expanded={menuOpen}
-      aria-controls="game-navigation"
-      onclick={() => (menuOpen = !menuOpen)}
-    >
-      <span></span><span></span><span></span>
-    </button>
-    <nav id="game-navigation" class="menu-panel" aria-label="ゲームメニュー" hidden={!menuOpen}>
-      <a href="/">トップに戻る</a>
-    </nav>
-  </div>
+  <GameMenu />
 
   <div class="health player-health">
     <HealthStatus current={200} max={200} />
@@ -86,76 +47,6 @@
     top: max(16px, env(safe-area-inset-top));
     left: max(3.5%, env(safe-area-inset-left));
     width: min(11.7cqw, 18dvh);
-  }
-  .game-menu {
-    position: absolute;
-    top: max(16px, env(safe-area-inset-top));
-    right: max(3.5%, env(safe-area-inset-right));
-    z-index: 3;
-  }
-  .menu-toggle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 44px;
-    height: 44px;
-    margin-left: auto;
-    border: 1px solid #ffffff40;
-    border-radius: 6px;
-    background: #080d10cc;
-    color: #f5f5f2;
-    cursor: pointer;
-  }
-  .menu-toggle span {
-    width: 22px;
-    height: 1px;
-    background: currentColor;
-  }
-  .menu-toggle.open span:first-child {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .menu-toggle.open span:nth-child(2) {
-    opacity: 0;
-  }
-  .menu-toggle.open span:last-child {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-  .menu-panel {
-    position: absolute;
-    top: 56px;
-    right: 0;
-    width: 180px;
-    padding: 8px;
-    border: 1px solid #ffffff40;
-    border-radius: 6px;
-    background: #080d10f5;
-    box-shadow: 0 8px 24px #0008;
-  }
-  .menu-panel a {
-    display: block;
-    padding: 14px 16px;
-    color: #f5f5f2;
-    text-decoration: none;
-    font-size: 14px;
-  }
-  .menu-panel a:hover,
-  .menu-toggle:hover {
-    background: #28313a;
-  }
-  .menu-panel a:focus-visible,
-  .menu-toggle:focus-visible {
-    outline: 2px solid #e6f5ff;
-    outline-offset: 3px;
-  }
-  .menu-backdrop {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    border: 0;
-    padding: 0;
-    background: rgba(0, 0, 0, 0.4);
   }
   .arena {
     position: relative;
