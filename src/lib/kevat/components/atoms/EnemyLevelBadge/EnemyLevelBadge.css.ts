@@ -40,13 +40,6 @@ export const badge = style({
       background: '#070b0ef5',
       boxShadow: `inset 0 0 7px color-mix(in srgb, ${color} 30%, transparent)`
     }
-  },
-  '@media': {
-    '(max-width: 600px)': {
-      width: '41.8px',
-      padding: '5.5px 6.6px',
-      fontSize: '13.2px'
-    }
   }
 });
 

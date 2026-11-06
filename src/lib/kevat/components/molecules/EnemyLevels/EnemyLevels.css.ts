@@ -27,10 +27,5 @@ export const icon = style({
   width: 'clamp(44px, 4.84cqw, 72.6px)',
   maxWidth: '100%',
   aspectRatio: '1',
-  filter: 'drop-shadow(0 1px 5px #000)',
-  '@media': {
-    '(max-width: 600px)': {
-      width: 'clamp(35.2px, 11cqw, 48.4px)'
-    }
-  }
+  filter: 'drop-shadow(0 1px 5px #000)'
 });

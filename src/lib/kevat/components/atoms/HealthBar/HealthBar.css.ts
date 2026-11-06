@@ -7,13 +7,7 @@ export const track = style({
   overflow: 'hidden',
   border: '1px solid #ffffff66',
   borderRadius: '999px',
-  background: '#070b0e99',
-
-  '@media': {
-    '(max-width: 600px)': {
-      marginTop: '8px'
-    }
-  }
+  background: '#070b0e99'
 });
 
 export const value = style({

@@ -24,11 +24,6 @@ export const button = style({
       outline: '3px solid white',
       outlineOffset: 7
     }
-  },
-  '@media': {
-    '(max-width: 600px)': {
-      width: 'min(24cqw, 24dvh)'
-    }
   }
 });
 
