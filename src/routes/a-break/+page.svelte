@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BattleMessage, ElementCycle } from '$lib/kevat/components/atoms';
+  import { BattleBackground, BattleMessage, ElementCycle } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { ElementSelector } from '$lib/kevat/components/organisms';
   import * as styles from './aBreak.css';
@@ -10,12 +10,7 @@
 </svelte:head>
 
 <section class="arena" aria-label="KEVAT 対戦画面">
-  <img
-    class="background"
-    src="/images/kevat/backgrounds/background-01.png"
-    alt=""
-    fetchpriority="high"
-  />
+  <BattleBackground background="01" />
   <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
   <div class={styles.vignette} aria-hidden="true"></div>
   <div class="enemy-move" hidden>
@@ -58,15 +53,6 @@
     background: #080d10;
     color: #f5f5f2;
     container-type: inline-size;
-  }
-
-  .background {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
   }
 
   .enemy {
