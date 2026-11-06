@@ -7,7 +7,61 @@
   } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { ElementSelector } from '$lib/kevat/components/organisms';
+  import { resolveTurn } from '$lib/kevat/game/battleRules';
+  import type { FighterState } from '$lib/kevat/game/battleRules';
+  import type { ElementLevel, ElementType } from '$lib/kevat/types/element.types';
   import * as styles from './aBreak.css';
+  import * as constants from './constants/aBreak';
+
+  const elements: ElementType[] = ['fire', 'stone', 'mist'];
+  const initialLevels = (): Record<ElementType, ElementLevel> => ({
+    fire: 1,
+    stone: 1,
+    mist: 1
+  });
+
+  function chooseEnemyMove(levels: Record<ElementType, ElementLevel>): ElementType | null {
+    const available = elements.filter((element) => levels[element] !== 0);
+    if (available.length === 0) return null;
+    return available[Math.floor(Math.random() * available.length)];
+  }
+
+  let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
+  let enemy = $state<FighterState>({ hp: 150, levels: initialLevels() });
+  let nextEnemyMove = $state<ElementType | null>(chooseEnemyMove(initialLevels()));
+  let revealedEnemyMove = $state<ElementType | null>(null);
+  let messageLines = $state<readonly string[]>(constants.BATTLE_MESSAGE);
+
+  function selectElement(element: ElementType) {
+    if (player.hp === 0 || enemy.hp === 0) return;
+    if (player.levels[element] === 0) {
+      revealedEnemyMove = null;
+      messageLines = ['Lv0は使用できません'];
+      return;
+    }
+    if (nextEnemyMove === null) {
+      revealedEnemyMove = null;
+      messageLines = ['敵が手を選べません'];
+      return;
+    }
+
+    const enemyMove = nextEnemyMove;
+    const result = resolveTurn({
+      player: { ...player, move: element },
+      enemy: { ...enemy, move: enemyMove }
+    });
+    player = result.player;
+    enemy = result.enemy;
+
+    if (enemy.hp === 0 || player.hp === 0) {
+      revealedEnemyMove = null;
+      messageLines = [enemy.hp === 0 ? 'PLAYER WIN' : 'GAME OVER'];
+      return;
+    }
+
+    revealedEnemyMove = enemyMove;
+    nextEnemyMove = chooseEnemyMove(enemy.levels);
+  }
 </script>
 
 <svelte:head>
@@ -18,24 +72,23 @@
   <BattleBackground background="01" />
   <div class={styles.enemy}><EnemyImage enemy="01" /></div>
   <div class={styles.vignette} aria-hidden="true"></div>
-  <div class={styles.enemyMove} hidden>
-    <EnemyMove element="stone" />
-  </div>
-  <div class={styles.battleHint}>
-    <BattleMessage lines={['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！']} />
-  </div>
+  {#if revealedEnemyMove}
+    <div class={styles.enemyMove}><EnemyMove element={revealedEnemyMove} /></div>
+  {:else}
+    <div class={styles.battleHint}><BattleMessage lines={messageLines} /></div>
+  {/if}
   <div class={styles.attributeCycle}><ElementCycle /></div>
   <GameMenu />
 
   <div class={`${styles.health} ${styles.playerHealth}`}>
-    <HealthStatus current={200} max={200} />
+    <HealthStatus current={player.hp} max={200} />
   </div>
   <div class={`${styles.health} ${styles.enemyHealth}`}>
-    <HealthStatus current={150} max={150} />
-    <EnemyLevels levels={{ fire: 1, stone: 2, mist: 3 }} />
+    <HealthStatus current={enemy.hp} max={150} />
+    <EnemyLevels levels={enemy.levels} />
   </div>
 
   <div class={styles.attributes}>
-    <ElementSelector levels={{ fire: 1, stone: 2, mist: 3 }} />
+    <ElementSelector levels={player.levels} onselect={selectElement} />
   </div>
 </section>
