@@ -8,3 +8,4 @@ export { default as BattleMessage } from './BattleMessage/BattleMessage.svelte';
 export { default as LevelBadge } from './LevelBadge/LevelBadge.svelte';
 export { default as MenuButton } from './MenuButton/MenuButton.svelte';
 export { default as BattleBackground } from './BattleBackground/BattleBackground.svelte';
+export { default as EnemyImage } from './EnemyImage/EnemyImage.svelte';

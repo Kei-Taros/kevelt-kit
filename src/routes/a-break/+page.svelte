@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { BattleBackground, BattleMessage, ElementCycle } from '$lib/kevat/components/atoms';
+  import {
+    BattleBackground,
+    BattleMessage,
+    ElementCycle,
+    EnemyImage
+  } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { ElementSelector } from '$lib/kevat/components/organisms';
   import * as styles from './aBreak.css';
@@ -11,7 +16,7 @@
 
 <section class="arena" aria-label="KEVAT 対戦画面">
   <BattleBackground background="01" />
-  <img class="enemy" src="/images/kevat/enemy/enemy-01.png" alt="霧をまとった敵" />
+  <div class="enemy"><EnemyImage enemy="01" /></div>
   <div class={styles.vignette} aria-hidden="true"></div>
   <div class="enemy-move" hidden>
     <EnemyMove element="stone" />
@@ -61,9 +66,6 @@
     left: 55%;
     width: 38%;
     height: 58%;
-    object-fit: contain;
-    opacity: 0.82;
-    mask-image: linear-gradient(to bottom, #000 65%, transparent 100%);
   }
 
   .enemy-move {
