@@ -6,3 +6,4 @@ export { default as HealthLabel } from './HealthLabel/HealthLabel.svelte';
 export { default as ElementCycle } from './ElementCycle/ElementCycle.svelte';
 export { default as BattleMessage } from './BattleMessage/BattleMessage.svelte';
 export { default as LevelBadge } from './LevelBadge/LevelBadge.svelte';
+export { default as MenuButton } from './MenuButton/MenuButton.svelte';
