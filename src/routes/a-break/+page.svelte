@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import {
     BattleBackground,
     BattleMessage,
@@ -31,9 +32,14 @@
   let nextEnemyMove = $state<ElementType | null>(chooseEnemyMove(initialLevels()));
   let revealedEnemyMove = $state<ElementType | null>(null);
   let messageLines = $state<readonly string[]>(constants.BATTLE_MESSAGE);
+  let revealTimer: ReturnType<typeof setTimeout> | undefined;
+
+  onDestroy(() => {
+    if (revealTimer) clearTimeout(revealTimer);
+  });
 
   function selectElement(element: ElementType) {
-    if (player.hp === 0 || enemy.hp === 0) return;
+    if (player.hp === 0 || enemy.hp === 0 || revealedEnemyMove) return;
     if (player.levels[element] === 0) {
       revealedEnemyMove = null;
       messageLines = ['Lv0は使用できません'];
@@ -61,6 +67,11 @@
 
     revealedEnemyMove = enemyMove;
     nextEnemyMove = chooseEnemyMove(enemy.levels);
+    revealTimer = setTimeout(() => {
+      revealedEnemyMove = null;
+      messageLines = constants.BATTLE_MESSAGE;
+      revealTimer = undefined;
+    }, 1200);
   }
 </script>
 
