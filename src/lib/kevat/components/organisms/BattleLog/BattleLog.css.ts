@@ -67,6 +67,7 @@ export const list = style({
   padding: '6px 4px 5px',
   overflowX: 'hidden',
   overflowY: 'auto',
+  scrollbarGutter: 'stable',
   listStyle: 'none',
   scrollbarColor: '#65dafa66 transparent',
   scrollbarWidth: 'thin'
