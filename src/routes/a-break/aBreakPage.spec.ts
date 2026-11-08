@@ -6,7 +6,7 @@ import Page from './+page.svelte';
 describe('aBreakPage', () => {
   beforeEach(() => {
     vi.spyOn(Math, 'random').mockReturnValue(0);
-    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
@@ -16,6 +16,11 @@ describe('aBreakPage', () => {
 
   async function beginNextTurn() {
     vi.advanceTimersByTime(1200);
+    await tick();
+  }
+
+  async function finishHealthAnimation() {
+    await vi.advanceTimersByTimeAsync(1800);
     await tick();
   }
 
@@ -29,6 +34,7 @@ describe('aBreakPage', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
     expect(screen.getByRole('img', { name: 'Enemy Move: FIRE' })).toBeInTheDocument();
+    await finishHealthAnimation();
     expect(screen.getByText('140 / 150')).toBeInTheDocument();
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
     const optionGroup = screen.getByRole('group', { name: 'Element selection' });
@@ -45,6 +51,7 @@ describe('aBreakPage', () => {
 
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
 
+    await finishHealthAnimation();
     expect(screen.getByText('190 / 200')).toBeInTheDocument();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
   });
@@ -56,10 +63,12 @@ describe('aBreakPage', () => {
     await beginNextTurn();
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     await beginNextTurn();
+    await finishHealthAnimation();
     expect(screen.getByText('120 / 150')).toBeInTheDocument();
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
+    await finishHealthAnimation();
     expect(screen.getByText('70 / 150')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Element selection' })).toHaveTextContent('Lv.0');
 

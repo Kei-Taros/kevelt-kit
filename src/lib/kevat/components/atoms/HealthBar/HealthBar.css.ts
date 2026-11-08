@@ -12,7 +12,11 @@ export const track = style({
 
 export const value = style({
   height: '100%',
-  borderRadius: 'inherit'
+  borderRadius: 'inherit',
+  transition: 'width 1200ms ease-out, background-color 1200ms ease-out, box-shadow 1200ms ease-out',
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { transition: 'none' }
+  }
 });
 
 export const statusVariants = styleVariants({
