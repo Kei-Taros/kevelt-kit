@@ -33,4 +33,10 @@ describe('LevelBadge', () => {
     });
     expect(container.firstElementChild).toHaveAttribute('id', 'fire-level');
   });
+
+  test('level=3の場合、黄色のクラスが適用される', () => {
+    const { container } = render(LevelBadge, { props: { element: 'fire', level: 3 } });
+
+    expect(container.firstElementChild).toHaveClass(styles.levelThree);
+  });
 });
