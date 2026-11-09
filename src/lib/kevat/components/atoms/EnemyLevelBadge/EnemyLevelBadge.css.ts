@@ -49,6 +49,15 @@ export const elementVariants = styleVariants({
   mist: { vars: { [color]: elementColors.mist } }
 });
 
+export const levelThree = style({
+  color: '#ffe06a'
+});
+
+export const levelZero = style({
+  vars: { [color]: '#9ba2a8' },
+  color: '#c8ced3'
+});
+
 export const digit = style({
   display: 'inline-block',
   width: '1ch',

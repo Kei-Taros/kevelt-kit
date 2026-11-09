@@ -29,3 +29,8 @@ export const icon = style({
   aspectRatio: '1',
   filter: 'drop-shadow(0 1px 5px #000)'
 });
+
+export const iconUnavailable = style({
+  opacity: 0.55,
+  filter: 'grayscale(1) drop-shadow(0 1px 5px #000)'
+});

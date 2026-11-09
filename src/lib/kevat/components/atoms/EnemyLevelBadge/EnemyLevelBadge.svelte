@@ -12,6 +12,8 @@
   const displayedLevel = $derived([0, 1, 2, 3].includes(level) ? level : 0);
 </script>
 
-<span class={`${styles.badge} ${styles.elementVariants[element]}`}>
+<span
+  class={`${styles.badge} ${styles.elementVariants[element]} ${displayedLevel === 3 ? styles.levelThree : ''} ${displayedLevel === 0 ? styles.levelZero : ''}`}
+>
   Lv.<span class={styles.digit}>{displayedLevel}</span>
 </span>
