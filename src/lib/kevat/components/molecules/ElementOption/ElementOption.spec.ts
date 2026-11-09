@@ -22,12 +22,52 @@ describe('ElementOption', () => {
     expect(container.querySelector(`#${element}-level`)).toHaveTextContent(`Lv.${level}`);
   });
 
+  test.each([{ element: 'fire' }, { element: 'stone' }, { element: 'mist' }] as const)(
+    'element=$elementの場合、ホバー用の三すくみ画像にWebPとPNGが設定される',
+    ({ element }) => {
+      render(ElementOption, { props: { element, level: 1 } });
+      const button = screen.getByRole('button', { name: element.toUpperCase() });
+      const sources = button.querySelectorAll('source[type="image/webp"]');
+
+      expect(sources).toHaveLength(2);
+      expect(sources[1]).toHaveAttribute('srcset', `/images/kevat/cycle/${element}-cycle.webp`);
+      expect(
+        button.querySelector(`img[src="/images/kevat/cycle/${element}-cycle.png"]`)
+      ).toBeInTheDocument();
+    }
+  );
+
   test('onclickが渡された場合、クリック時に呼び出される', async () => {
     const onclick = vi.fn();
     render(ElementOption, { props: { element: 'fire', level: 1, onclick } });
 
     await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
 
+    expect(onclick).toHaveBeenCalledOnce();
+  });
+
+  test('レベル表示を押した場合、三すくみの固定表示が切り替わり攻撃しない', async () => {
+    const onclick = vi.fn();
+    render(ElementOption, { props: { element: 'fire', level: 1, onclick } });
+    const levelButton = screen.getByRole('button', { name: 'FIRE matchup' });
+
+    await fireEvent.click(levelButton);
+    expect(levelButton).toHaveAttribute('aria-pressed', 'true');
+    expect(onclick).not.toHaveBeenCalled();
+
+    await fireEvent.click(levelButton);
+    expect(levelButton).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('三すくみを固定表示中に属性ボタンを押した場合、表示を解除して攻撃する', async () => {
+    const onclick = vi.fn();
+    render(ElementOption, { props: { element: 'fire', level: 1, onclick } });
+    const levelButton = screen.getByRole('button', { name: 'FIRE matchup' });
+
+    await fireEvent.click(levelButton);
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+
+    expect(levelButton).toHaveAttribute('aria-pressed', 'false');
     expect(onclick).toHaveBeenCalledOnce();
   });
 });

@@ -11,10 +11,19 @@
   let { levels, onselect }: Props = $props();
 
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
+  let previewReset = $state(0);
 </script>
 
 <div class={styles.selector} role="group" aria-label="Element selection">
   {#each elements as element}
-    <ElementOption {element} level={levels[element]} onclick={() => onselect?.(element)} />
+    <ElementOption
+      {element}
+      level={levels[element]}
+      {previewReset}
+      onclick={() => {
+        previewReset += 1;
+        onselect?.(element);
+      }}
+    />
   {/each}
 </div>

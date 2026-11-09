@@ -12,7 +12,7 @@ describe('ElementSelector', () => {
     expect(group).toBeInTheDocument();
     expect(
       screen.getAllByRole('button').map((button) => button.getAttribute('aria-label'))
-    ).toEqual(['FIRE', 'STONE', 'MIST']);
+    ).toEqual(['FIRE', 'FIRE matchup', 'STONE', 'STONE matchup', 'MIST', 'MIST matchup']);
     expect(group).toHaveTextContent('Lv.1');
     expect(group).toHaveTextContent('Lv.2');
     expect(group).toHaveTextContent('Lv.3');
@@ -24,6 +24,35 @@ describe('ElementSelector', () => {
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
+    expect(onselect).toHaveBeenCalledExactlyOnceWith('stone');
+  });
+
+  test('3つのレベル表示を押した場合、3つの三すくみを同時に固定表示できる', async () => {
+    render(ElementSelector, { props: { levels } });
+
+    for (const element of ['FIRE', 'STONE', 'MIST']) {
+      await fireEvent.click(screen.getByRole('button', { name: `${element} matchup` }));
+    }
+
+    for (const element of ['FIRE', 'STONE', 'MIST']) {
+      expect(screen.getByRole('button', { name: `${element} matchup` })).toHaveAttribute(
+        'aria-pressed',
+        'true'
+      );
+    }
+  });
+
+  test('FIREの三すくみを表示中にSTONEで攻撃した場合、FIREの表示も解除される', async () => {
+    const onselect = vi.fn();
+    render(ElementSelector, { props: { levels, onselect } });
+    const fireLevel = screen.getByRole('button', { name: 'FIRE matchup' });
+
+    await fireEvent.click(fireLevel);
+    expect(fireLevel).toHaveAttribute('aria-pressed', 'true');
+
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+
+    expect(fireLevel).toHaveAttribute('aria-pressed', 'false');
     expect(onselect).toHaveBeenCalledExactlyOnceWith('stone');
   });
 });
