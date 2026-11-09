@@ -39,4 +39,13 @@ describe('LevelBadge', () => {
 
     expect(container.firstElementChild).toHaveClass(styles.levelThree);
   });
+
+  test.each(['fire', 'stone', 'mist'] as const)(
+    'element=%sかつlevel=0の場合、共通のグレー色クラスが適用される',
+    (element) => {
+      const { container } = render(LevelBadge, { props: { element, level: 0 } });
+
+      expect(container.firstElementChild).toHaveClass(styles.levelZero);
+    }
+  );
 });

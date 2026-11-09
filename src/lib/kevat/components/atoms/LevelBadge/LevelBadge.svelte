@@ -15,7 +15,7 @@
 
 <span
   {id}
-  class={`${styles.badge} ${styles.elementVariants[element]} ${displayedLevel === 3 ? styles.levelThree : ''}`}
+  class={`${styles.badge} ${styles.elementVariants[element]} ${displayedLevel === 3 ? styles.levelThree : ''} ${displayedLevel === 0 ? styles.levelZero : ''}`}
 >
   Lv.<span class={styles.digit}>{displayedLevel}</span>
 </span>

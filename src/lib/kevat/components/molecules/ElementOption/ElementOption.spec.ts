@@ -70,4 +70,18 @@ describe('ElementOption', () => {
     expect(levelButton).toHaveAttribute('aria-pressed', 'false');
     expect(onclick).toHaveBeenCalledOnce();
   });
+
+  test.each(['fire', 'stone', 'mist'] as const)(
+    'element=%sかつlevel=0の場合、ボタンが共通のグレー色になりLv表示を押せない',
+    (element) => {
+      render(ElementOption, { props: { element, level: 0 } });
+
+      expect(screen.getByRole('button', { name: element.toUpperCase() })).toHaveClass(
+        styles.levelZero
+      );
+      expect(
+        screen.getByRole('button', { name: `${element.toUpperCase()} matchup` })
+      ).toBeDisabled();
+    }
+  );
 });

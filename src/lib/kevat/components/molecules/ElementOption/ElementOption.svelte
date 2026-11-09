@@ -16,6 +16,7 @@
 
   $effect(() => {
     previewReset;
+    level;
     previewPinned = false;
   });
 
@@ -28,13 +29,18 @@
   const levelId = $derived(`${element}-level`);
 </script>
 
-<div class={styles.option} data-preview-pinned={previewPinned || undefined}>
+<div
+  class={styles.option}
+  data-preview-pinned={previewPinned || undefined}
+  data-level-zero={level === 0 || undefined}
+>
   <button
-    class={`${styles.button} ${styles.elementVariants[element]}`}
+    class={`${styles.button} ${styles.elementVariants[element]} ${level === 0 ? styles.levelZero : ''}`}
     type="button"
     aria-label={labels[element]}
     aria-describedby={levelId}
     data-suppress-hover={hoverSuppressed || undefined}
+    data-level-zero={level === 0 || undefined}
     {...buttonProps}
     onpointerleave={() => (hoverSuppressed = false)}
     onblur={() => (hoverSuppressed = false)}
@@ -57,6 +63,7 @@
     type="button"
     aria-label={`${labels[element]} matchup`}
     aria-pressed={previewPinned}
+    disabled={level === 0}
     onclick={() => (previewPinned = !previewPinned)}
   >
     <LevelBadge {element} {level} id={levelId} />

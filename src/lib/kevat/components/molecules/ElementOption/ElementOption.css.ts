@@ -29,7 +29,7 @@ export const button = style({
   background: 'radial-gradient(circle, #0a1119b3 30%, #03070bef 75%)',
   boxShadow: '0 0 12px #bce3ff80, inset 0 0 12px #bce3ff40',
   selectors: {
-    '&:hover, &:focus-visible': {
+    '&:hover:not([data-level-zero]), &:focus-visible:not([data-level-zero])': {
       boxShadow: softGlow,
       animation: `${breatheGlow} 1.5s ease-in-out infinite`
     },
@@ -40,7 +40,11 @@ export const button = style({
   },
   '@media': {
     '(prefers-reduced-motion: reduce)': {
-      selectors: { '&:hover, &:focus-visible': { animation: 'none' } }
+      selectors: {
+        '&:hover:not([data-level-zero]), &:focus-visible:not([data-level-zero])': {
+          animation: 'none'
+        }
+      }
     }
   }
 });
@@ -63,6 +67,12 @@ export const elementVariants = styleVariants({
   }
 });
 
+export const levelZero = style({
+  borderColor: '#c5cdd5',
+  background: '#111519',
+  boxShadow: '0 0 6px #c5cdd555, inset 0 0 10px #c5cdd533'
+});
+
 export const icon = style({
   display: 'block',
   width: '94%',
@@ -71,16 +81,17 @@ export const icon = style({
   transform: 'scale(1)',
   transition: 'opacity 350ms ease-out, transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]) &`]: {
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
       opacity: 0.25,
       transform: 'scale(1.1)',
       transitionDelay: '0.5s, 0s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]) &`]: {
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
       opacity: 0.25,
       transform: 'scale(1.1)'
     },
-    [`${option}[data-preview-pinned] &`]: { opacity: 0.25, transform: 'scale(1.1)' }
+    [`${option}[data-preview-pinned] &`]: { opacity: 0.25, transform: 'scale(1.1)' },
+    [`${option}[data-level-zero] &`]: { opacity: 0.55, filter: 'grayscale(1)' }
   },
   '@media': {
     '(prefers-reduced-motion: reduce)': { transition: 'none' }
@@ -101,8 +112,13 @@ export const cycle = style({
   transition: 'opacity 350ms ease-out',
   pointerEvents: 'none',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]) &`]: { opacity: 1, transitionDelay: '0.5s' },
-    [`${button}:focus-visible:not([data-suppress-hover]) &`]: { opacity: 1 },
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
+      opacity: 1,
+      transitionDelay: '0.5s'
+    },
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
+      opacity: 1
+    },
     [`${option}[data-preview-pinned] &`]: { opacity: 1 }
   },
   '@media': {
@@ -121,11 +137,11 @@ export const cycleImage = style({
   willChange: 'transform',
   transition: 'transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]) &`]: {
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
       transform: 'translateZ(0) scale(1)',
       transitionDelay: '0.5s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]) &`]: {
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
       transform: 'translateZ(0) scale(1)'
     },
     [`${option}[data-preview-pinned] &`]: { transform: 'translateZ(0) scale(1)' }

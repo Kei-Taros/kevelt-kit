@@ -46,6 +46,11 @@ export const levelThree = style({
   }
 });
 
+export const levelZero = style({
+  vars: { [color]: '#9ba2a8' },
+  color: '#c8ced3'
+});
+
 export const digit = style({
   display: 'inline-block',
   width: '1ch',
