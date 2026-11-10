@@ -1,4 +1,15 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+
+const mistEffectAppear = keyframes({
+  from: { opacity: 0, filter: 'blur(8px)' },
+  to: { opacity: 1, filter: 'blur(0)' }
+});
+
+const mistEffectBreathe = keyframes({
+  from: { opacity: 0.9 },
+  '50%': { opacity: 0.6 },
+  to: { opacity: 0.9 }
+});
 
 export const levels = style({
   display: 'grid',
@@ -23,11 +34,34 @@ export const level = style({
 });
 
 export const icon = style({
+  position: 'relative',
+  zIndex: 2,
   display: 'block',
   width: 'clamp(44px, 4.84cqw, 72.6px)',
   maxWidth: '100%',
   aspectRatio: '1',
+  transform: 'translateY(-3px)',
   filter: 'drop-shadow(0 1px 5px #000)'
+});
+
+export const mistEffect = style({
+  position: 'absolute',
+  top: 'calc(50% + 16px)',
+  left: '50%',
+  width: 130,
+  height: 130,
+  transform: 'translate(-50%, -50%)',
+  animation: `${mistEffectAppear} 800ms ease-out both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 1 }
+  }
+});
+
+globalStyle(`${mistEffect} img`, {
+  animation: `${mistEffectBreathe} 2s ease-in-out infinite`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0.85 }
+  }
 });
 
 export const iconUnavailable = style({
