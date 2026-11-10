@@ -100,9 +100,13 @@ describe('resolveTurn', () => {
     });
   });
 
-  test.each(['fire', 'stone', 'mist'] as const)(
-    '%sがLv3で勝つ場合、50ダメージを与え使用属性がLv0になる',
-    (move) => {
+  test.each([
+    ['fire', 50],
+    ['stone', 30],
+    ['mist', 50]
+  ] as const)(
+    '%sがLv3で勝つ場合、%iダメージを与え使用属性がLv0になる',
+    (move, damage) => {
       const losesTo: Record<ElementType, ElementType> = {
         fire: 'mist',
         stone: 'fire',
@@ -113,8 +117,8 @@ describe('resolveTurn', () => {
         enemy: fighter(150, losesTo[move])
       });
 
-      expect(result.damage).toBe(50);
-      expect(result.enemy.hp).toBe(100);
+      expect(result.damage).toBe(damage);
+      expect(result.enemy.hp).toBe(150 - damage);
       expect(result.player.levels[move]).toBe(0);
     }
   );
@@ -130,14 +134,14 @@ describe('resolveTurn', () => {
     expect(result.player.levels.fire).toBe(0);
   });
 
-  test('敵のLv3が勝つ場合、プレイヤーに50ダメージを与える', () => {
+  test('敵のSTONE Lv3が勝つ場合、プレイヤーに30ダメージを与える', () => {
     const result = resolveTurn({
       player: fighter(200, 'fire'),
       enemy: fighter(150, 'stone', 3)
     });
 
-    expect(result.player.hp).toBe(150);
-    expect(result.damage).toBe(50);
+    expect(result.player.hp).toBe(170);
+    expect(result.damage).toBe(30);
     expect(result.enemy.levels.stone).toBe(0);
   });
 

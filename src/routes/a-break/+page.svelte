@@ -4,7 +4,8 @@
     BattleBackground,
     BattleMessage,
     ElementCycle,
-    EnemyImage
+    EnemyImage,
+    StoneEffectBadge
   } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { BattleLog, ElementSelector } from '$lib/kevat/components/organisms';
@@ -34,6 +35,8 @@
   let revealedEnemyMove = $state<ElementType | null>(null);
   let battleLogs = $state<BattleLogEntry[]>([]);
   let messageLines = $state<readonly string[]>(constants.BATTLE_MESSAGE);
+  let playerStoneEffectActive = $state(false);
+  let enemyStoneEffectActive = $state(false);
   let revealTimer: ReturnType<typeof setTimeout> | undefined;
 
   onDestroy(() => {
@@ -67,12 +70,18 @@
       },
       ...battleLogs
     ];
+    const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
+    const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
+    playerStoneEffectActive = false;
+    enemyStoneEffectActive = false;
     player = result.player;
     enemy = result.enemy;
 
     if (enemy.hp === 0 || player.hp === 0) {
       revealedEnemyMove = null;
       messageLines = [enemy.hp === 0 ? 'PLAYER WIN' : 'GAME OVER'];
+      playerStoneEffectActive = nextPlayerStoneEffectActive;
+      enemyStoneEffectActive = nextEnemyStoneEffectActive;
       return;
     }
 
@@ -81,6 +90,8 @@
     revealTimer = setTimeout(() => {
       revealedEnemyMove = null;
       messageLines = constants.BATTLE_MESSAGE;
+      playerStoneEffectActive = nextPlayerStoneEffectActive;
+      enemyStoneEffectActive = nextEnemyStoneEffectActive;
       revealTimer = undefined;
     }, 1200);
   }
@@ -105,10 +116,20 @@
 
   <div class={`${styles.health} ${styles.playerHealth}`}>
     <HealthStatus current={player.hp} max={200} />
+    {#if playerStoneEffectActive}
+      <div class={`${styles.playerStoneEffectBadge} ${styles.stoneEffectBadgeAppear}`}>
+        <StoneEffectBadge />
+      </div>
+    {/if}
   </div>
   <div class={`${styles.health} ${styles.enemyHealth}`}>
     <HealthStatus current={enemy.hp} max={150} />
     <EnemyLevels levels={enemy.levels} />
+    {#if enemyStoneEffectActive}
+      <div class={`${styles.enemyStoneEffectBadge} ${styles.stoneEffectBadgeAppear}`}>
+        <StoneEffectBadge />
+      </div>
+    {/if}
   </div>
 
   <div class={styles.attributes}>

@@ -56,7 +56,7 @@ describe('aBreakPage', () => {
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
   });
 
-  test('Lv3の属性を選んだ場合、50ダメージを与えてLv0になる', async () => {
+  test('STONEのLv3で勝った場合、30ダメージを与えてLv0になる', async () => {
     render(Page);
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
@@ -69,14 +69,14 @@ describe('aBreakPage', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
     await finishHealthAnimation();
-    expect(screen.getByText('70 / 150')).toBeInTheDocument();
+    expect(screen.getByText('90 / 150')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Element selection' })).toHaveTextContent('Lv.0');
 
     await beginNextTurn();
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
     expect(screen.getByText('Lv0は使用できません')).toBeInTheDocument();
-    expect(screen.getByText('70 / 150')).toBeInTheDocument();
+    expect(screen.getByText('90 / 150')).toBeInTheDocument();
   });
 
   test('ターンが確定した場合、勝敗と双方の手が新しい順にバトルログへ追加される', async () => {
@@ -136,20 +136,21 @@ describe('aBreakPage', () => {
       'MIST',
       'STONE',
       'STONE',
-      'STONE'
+      'STONE',
+      'MIST'
     ].entries()) {
       await fireEvent.click(screen.getByRole('button', { name: element }));
-      if (index < 6) await beginNextTurn();
+      if (index < 7) await beginNextTurn();
     }
 
     expect(screen.getByText('PLAYER WIN')).toBeInTheDocument();
     const rows = within(log).getAllByRole('listitem');
-    expect(rows).toHaveLength(7);
-    expect(rows[0]).toHaveTextContent('07');
+    expect(rows).toHaveLength(8);
+    expect(rows[0]).toHaveTextContent('08');
     expect(rows[0]).toHaveTextContent('WIN');
-    expect(within(rows[0]).getByRole('img', { name: 'STONE vs FIRE' })).toBeInTheDocument();
+    expect(within(rows[0]).getByRole('img', { name: 'MIST vs STONE' })).toBeInTheDocument();
 
     await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
-    expect(within(log).getAllByRole('listitem')).toHaveLength(7);
+    expect(within(log).getAllByRole('listitem')).toHaveLength(8);
   });
 });

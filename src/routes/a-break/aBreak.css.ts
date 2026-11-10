@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 export const arena = style({
   position: 'relative',
@@ -70,6 +70,31 @@ export const playerHealth = style({
   left: 400,
   top: 'auto',
   bottom: 'max(350px, env(safe-area-inset-bottom))'
+});
+
+export const playerStoneEffectBadge = style({
+  position: 'absolute',
+  top: '50%',
+  left: 'calc(100% + 14px)',
+  transform: 'translateY(-50%)'
+});
+
+export const enemyStoneEffectBadge = style({
+  position: 'absolute',
+  right: 'calc(60% + 12px)',
+  bottom: 0
+});
+
+const stoneEffectBadgeFadeIn = keyframes({
+  from: { opacity: 0, filter: 'blur(5px)' },
+  to: { opacity: 1, filter: 'blur(0)' }
+});
+
+export const stoneEffectBadgeAppear = style({
+  animation: `${stoneEffectBadgeFadeIn} 500ms ease-out both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
 });
 
 export const enemyHealth = style({
