@@ -10,3 +10,4 @@ export { default as MenuButton } from './MenuButton/MenuButton.svelte';
 export { default as BattleBackground } from './BattleBackground/BattleBackground.svelte';
 export { default as EnemyImage } from './EnemyImage/EnemyImage.svelte';
 export { default as StoneEffectBadge } from './StoneEffectBadge/StoneEffectBadge.svelte';
+export { default as MistEffect } from './MistEffect/MistEffect.svelte';
