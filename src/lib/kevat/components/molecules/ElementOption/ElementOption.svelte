@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ElementIcon, LevelBadge } from '$lib/kevat/components/atoms';
+  import { ElementIcon, LevelBadge, MistEffect } from '$lib/kevat/components/atoms';
   import type { ElementLevel, ElementType } from '$lib/kevat/types/element.types';
   import type { HTMLButtonAttributes } from 'svelte/elements';
   import * as styles from './ElementOption.css';
@@ -7,16 +7,25 @@
   interface Props extends Omit<HTMLButtonAttributes, 'type'> {
     element: ElementType;
     level: ElementLevel;
+    sealed?: boolean;
     previewReset?: number;
   }
 
-  let { element, level, previewReset = 0, onclick, ...buttonProps }: Props = $props();
+  let {
+    element,
+    level,
+    sealed = false,
+    previewReset = 0,
+    onclick,
+    ...buttonProps
+  }: Props = $props();
   let previewPinned = $state(false);
   let hoverSuppressed = $state(false);
 
   $effect(() => {
     previewReset;
     level;
+    sealed;
     previewPinned = false;
   });
 
@@ -33,6 +42,7 @@
   class={styles.option}
   data-preview-pinned={previewPinned || undefined}
   data-level-zero={level === 0 || undefined}
+  data-sealed={sealed || undefined}
 >
   <button
     class={`${styles.button} ${styles.elementVariants[element]} ${level === 0 ? styles.levelZero : ''}`}
@@ -41,7 +51,9 @@
     aria-describedby={levelId}
     data-suppress-hover={hoverSuppressed || undefined}
     data-level-zero={level === 0 || undefined}
+    data-sealed={sealed || undefined}
     {...buttonProps}
+    disabled={sealed}
     onpointerleave={() => (hoverSuppressed = false)}
     onblur={() => (hoverSuppressed = false)}
     onclick={(event) => {
@@ -63,9 +75,12 @@
     type="button"
     aria-label={`${labels[element]} matchup`}
     aria-pressed={previewPinned}
-    disabled={level === 0}
+    disabled={level === 0 || sealed}
     onclick={() => (previewPinned = !previewPinned)}
   >
     <LevelBadge {element} {level} id={levelId} />
   </button>
+  {#if sealed}
+    <MistEffect class={styles.sealEffect} />
+  {/if}
 </div>

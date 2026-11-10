@@ -5,10 +5,11 @@
 
   interface Props {
     levels: Record<ElementType, ElementLevel>;
+    sealedElement?: ElementType | null;
     onselect?: (element: ElementType) => void;
   }
 
-  let { levels, onselect }: Props = $props();
+  let { levels, sealedElement = null, onselect }: Props = $props();
 
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
   let previewReset = $state(0);
@@ -19,6 +20,7 @@
     <ElementOption
       {element}
       level={levels[element]}
+      sealed={sealedElement === element}
       {previewReset}
       onclick={() => {
         previewReset += 1;

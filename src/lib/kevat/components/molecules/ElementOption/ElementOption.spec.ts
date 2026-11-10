@@ -46,6 +46,19 @@ describe('ElementOption', () => {
     expect(onclick).toHaveBeenCalledOnce();
   });
 
+  test('封印中の場合、属性ボタンを無効化して霧を表示する', () => {
+    const { container } = render(ElementOption, {
+      props: { element: 'fire', level: 1, sealed: true }
+    });
+
+    const button = screen.getByRole('button', { name: 'FIRE' });
+    expect(button).toBeDisabled();
+    expect(button).not.toHaveClass(styles.levelZero);
+    expect(
+      container.querySelector('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+    ).toBeInTheDocument();
+  });
+
   test('レベル表示を押した場合、三すくみの固定表示が切り替わり攻撃しない', async () => {
     const onclick = vi.fn();
     render(ElementOption, { props: { element: 'fire', level: 1, onclick } });

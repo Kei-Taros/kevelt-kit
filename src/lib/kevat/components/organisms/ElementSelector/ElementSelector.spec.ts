@@ -27,6 +27,17 @@ describe('ElementSelector', () => {
     expect(onselect).toHaveBeenCalledExactlyOnceWith('stone');
   });
 
+  test('属性ボタンが1つ封印された場合、その属性だけを無効化してほかの属性は選択できる', async () => {
+    const onselect = vi.fn();
+    render(ElementSelector, { props: { levels, sealedElement: 'stone', onselect } });
+
+    expect(screen.getByRole('button', { name: 'STONE' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'MIST' })).toBeEnabled();
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+    expect(onselect).toHaveBeenCalledExactlyOnceWith('fire');
+  });
+
   test('3つのレベル表示を押した場合、3つの三すくみを同時に固定表示できる', async () => {
     render(ElementSelector, { props: { levels } });
 

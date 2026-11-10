@@ -1,4 +1,15 @@
-import { createVar, keyframes, style, styleVariants } from '@vanilla-extract/css';
+import { createVar, globalStyle, keyframes, style, styleVariants } from '@vanilla-extract/css';
+
+const sealAppear = keyframes({
+  from: { opacity: 0, filter: 'blur(8px)' },
+  to: { opacity: 1, filter: 'blur(0)' }
+});
+
+const sealBreathe = keyframes({
+  from: { opacity: 0.9 },
+  '50%': { opacity: 0.7 },
+  to: { opacity: 0.9 }
+});
 
 const glowColor = createVar();
 const softGlow = `0 0 12px 2px color-mix(in srgb, ${glowColor} 65%, transparent), 0 0 26px color-mix(in srgb, ${glowColor} 35%, transparent), inset 0 0 16px color-mix(in srgb, ${glowColor} 30%, transparent)`;
@@ -29,10 +40,12 @@ export const button = style({
   background: 'radial-gradient(circle, #0a1119b3 30%, #03070bef 75%)',
   boxShadow: '0 0 12px #bce3ff80, inset 0 0 12px #bce3ff40',
   selectors: {
-    '&:hover:not([data-level-zero]), &:focus-visible:not([data-level-zero])': {
-      boxShadow: softGlow,
-      animation: `${breatheGlow} 1.5s ease-in-out infinite`
-    },
+    '&:disabled:not([data-level-zero])': { opacity: 1 },
+    '&:hover:not([data-level-zero]):not([data-sealed]), &:focus-visible:not([data-level-zero]):not([data-sealed])':
+      {
+        boxShadow: softGlow,
+        animation: `${breatheGlow} 1.5s ease-in-out infinite`
+      },
     '&:focus-visible': {
       outline: '3px solid white',
       outlineOffset: 7
@@ -41,9 +54,10 @@ export const button = style({
   '@media': {
     '(prefers-reduced-motion: reduce)': {
       selectors: {
-        '&:hover:not([data-level-zero]), &:focus-visible:not([data-level-zero])': {
-          animation: 'none'
-        }
+        '&:hover:not([data-level-zero]):not([data-sealed]), &:focus-visible:not([data-level-zero]):not([data-sealed])':
+          {
+            animation: 'none'
+          }
       }
     }
   }
@@ -81,15 +95,16 @@ export const icon = style({
   transform: 'scale(1)',
   transition: 'opacity 350ms ease-out, transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       opacity: 0.25,
       transform: 'scale(1.1)',
       transitionDelay: '0.5s, 0s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
-      opacity: 0.25,
-      transform: 'scale(1.1)'
-    },
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+      {
+        opacity: 0.25,
+        transform: 'scale(1.1)'
+      },
     [`${option}[data-preview-pinned] &`]: { opacity: 0.25, transform: 'scale(1.1)' },
     [`${option}[data-level-zero] &`]: { opacity: 0.55, filter: 'grayscale(1)' }
   },
@@ -112,13 +127,14 @@ export const cycle = style({
   transition: 'opacity 350ms ease-out',
   pointerEvents: 'none',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       opacity: 1,
       transitionDelay: '0.5s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
-      opacity: 1
-    },
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+      {
+        opacity: 1
+      },
     [`${option}[data-preview-pinned] &`]: { opacity: 1 }
   },
   '@media': {
@@ -137,13 +153,14 @@ export const cycleImage = style({
   willChange: 'transform',
   transition: 'transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]) &`]: {
+    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       transform: 'translateZ(0) scale(1)',
       transitionDelay: '0.5s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]) &`]: {
-      transform: 'translateZ(0) scale(1)'
-    },
+    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+      {
+        transform: 'translateZ(0) scale(1)'
+      },
     [`${option}[data-preview-pinned] &`]: { transform: 'translateZ(0) scale(1)' }
   },
   '@media': {
@@ -163,5 +180,27 @@ export const level = style({
   cursor: 'default',
   selectors: {
     '&:focus-visible': { outline: '2px solid white', outlineOffset: 4 }
+  }
+});
+
+export const sealEffect = style({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  zIndex: 2,
+  width: '140%',
+  aspectRatio: '1',
+  transform: 'translate(-50%, -50%)',
+  pointerEvents: 'none',
+  animation: `${sealAppear} 800ms ease-out both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
+});
+
+globalStyle(`${sealEffect} img`, {
+  animation: `${sealBreathe} 2s ease-in-out infinite`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0.85 }
   }
 });
