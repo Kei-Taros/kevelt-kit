@@ -46,6 +46,17 @@ describe('aBreakPage', () => {
     expect(screen.getByText(/三すくみを覚えて/)).toBeInTheDocument();
   });
 
+  test('プレイヤーと敵が同じ属性を選んだ場合、両者のHPが10減る', async () => {
+    render(Page);
+
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+    await finishHealthAnimation();
+
+    expect(screen.getByText('190 / 200')).toBeInTheDocument();
+    expect(screen.getByText('140 / 150')).toBeInTheDocument();
+    expect(screen.getByRole('complementary', { name: 'Battle Log' })).toHaveTextContent('DRAW');
+  });
+
   test('プレイヤーがMISTを選んでFIREに負けた場合、プレイヤーのHPが減る', async () => {
     render(Page);
 

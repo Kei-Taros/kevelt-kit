@@ -63,16 +63,16 @@ describe('resolveTurn', () => {
     expect(result.enemy.levels.stone).toBe(3);
   });
 
-  test('あいこの場合、HPは変わらず両者の使用属性が上がる', () => {
+  test('あいこの場合、両者が10ダメージを受けて使用属性が上がる', () => {
     const result = resolveTurn({
       player: fighter(200, 'stone'),
       enemy: fighter(150, 'stone', 2)
     });
 
     expect(result.winner).toBe('draw');
-    expect(result.damage).toBe(0);
-    expect(result.player.hp).toBe(200);
-    expect(result.enemy.hp).toBe(150);
+    expect(result.damage).toBe(10);
+    expect(result.player.hp).toBe(190);
+    expect(result.enemy.hp).toBe(140);
     expect(result.player.levels.stone).toBe(2);
     expect(result.enemy.levels.stone).toBe(3);
   });
@@ -200,15 +200,49 @@ describe('resolveTurn', () => {
     expect(result.enemy.levels.stone).toBe(0);
   });
 
-  test('Lv3であいこの場合、ダメージなしで両者の使用属性がLv0になる', () => {
+  test('Lv3であいこの場合、両者が10ダメージを受けて使用属性がLv0になる', () => {
     const result = resolveTurn({
       player: fighter(200, 'fire', 3),
       enemy: fighter(150, 'fire', 3)
     });
 
-    expect(result.damage).toBe(0);
+    expect(result.damage).toBe(10);
+    expect(result.player.hp).toBe(190);
+    expect(result.enemy.hp).toBe(140);
     expect(result.player.levels.fire).toBe(0);
     expect(result.enemy.levels.fire).toBe(0);
+  });
+
+  test('あいこでプレイヤーにSTONEの軽減がある場合、プレイヤーは5ダメージ敵は10ダメージを受ける', () => {
+    const result = resolveTurn({
+      player: { ...fighter(200, 'fire'), stoneGuard: true },
+      enemy: fighter(150, 'fire')
+    });
+
+    expect(result.damage).toBe(10);
+    expect(result.player.hp).toBe(195);
+    expect(result.enemy.hp).toBe(140);
+    expect(result.player.stoneGuard).toBeUndefined();
+  });
+
+  test('あいこで両者にSTONEの軽減がある場合、両者が5ダメージを受ける', () => {
+    const result = resolveTurn({
+      player: { ...fighter(200, 'fire'), stoneGuard: true },
+      enemy: { ...fighter(150, 'fire'), stoneGuard: true }
+    });
+
+    expect(result.player.hp).toBe(195);
+    expect(result.enemy.hp).toBe(145);
+  });
+
+  test('あいこのダメージで両者のHPが尽きる場合、どちらも0で止まる', () => {
+    const result = resolveTurn({
+      player: fighter(5, 'fire'),
+      enemy: fighter(5, 'fire')
+    });
+
+    expect(result.player.hp).toBe(0);
+    expect(result.enemy.hp).toBe(0);
   });
 
   test('ターン開始時にLv0だった属性は別の属性を使うとLv1に戻る', () => {

@@ -96,7 +96,7 @@
 
     if (enemy.hp === 0 || player.hp === 0) {
       revealedEnemyMove = null;
-      messageLines = [enemy.hp === 0 ? 'PLAYER WIN' : 'GAME OVER'];
+      messageLines = [player.hp === 0 ? 'GAME OVER' : 'PLAYER WIN'];
       playerStoneEffectActive = nextPlayerStoneEffectActive;
       enemyStoneEffectActive = nextEnemyStoneEffectActive;
       return;

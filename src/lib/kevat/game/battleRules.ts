@@ -77,7 +77,7 @@ export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResul
   const winner = determineWinner(player.move, enemy.move);
   const winningMove = winner === 'player' ? player.move : enemy.move;
   const winningLevel = winner === 'player' ? playerLevel : enemyLevel;
-  let baseDamage = 0;
+  let baseDamage = 10;
   if (winner !== 'draw') {
     if (winningMove === 'mist' && winningLevel === 3) {
       baseDamage = 20;
@@ -87,14 +87,17 @@ export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResul
       baseDamage = getAttackDamage(winningLevel);
     }
   }
-  const defenderHasStoneGuard = winner === 'player' ? enemy.stoneGuard : player.stoneGuard;
-  const damage = defenderHasStoneGuard ? Math.ceil(baseDamage / 2) : baseDamage;
+  const playerDamage =
+    winner === 'player' ? 0 : player.stoneGuard ? Math.ceil(baseDamage / 2) : baseDamage;
+  const enemyDamage =
+    winner === 'enemy' ? 0 : enemy.stoneGuard ? Math.ceil(baseDamage / 2) : baseDamage;
+  const damage = winner === 'draw' ? baseDamage : winner === 'player' ? enemyDamage : playerDamage;
 
   return {
     winner,
     damage,
     player: {
-      hp: winner === 'enemy' ? Math.max(0, player.hp - damage) : player.hp,
+      hp: Math.max(0, player.hp - playerDamage),
       levels: nextPlayerLevels,
       ...(winner === 'player' && player.move === 'stone' && playerLevel === 3
         ? { stoneGuard: true }
@@ -104,7 +107,7 @@ export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResul
         : {})
     },
     enemy: {
-      hp: winner === 'player' ? Math.max(0, enemy.hp - damage) : enemy.hp,
+      hp: Math.max(0, enemy.hp - enemyDamage),
       levels: nextEnemyLevels,
       ...(winner === 'enemy' && enemy.move === 'stone' && enemyLevel === 3
         ? { stoneGuard: true }
