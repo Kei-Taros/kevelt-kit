@@ -13,6 +13,13 @@ describe('EnemyImage', () => {
       const image = container.querySelector('img');
 
       expect(picture).toHaveClass(styles.picture);
+      if (enemy === '01') {
+        expect(picture).toHaveClass(styles.mistShroudedFloat);
+        expect(image).toHaveClass(styles.mistShroudedFade);
+      } else {
+        expect(picture).not.toHaveClass(styles.mistShroudedFloat);
+        expect(image).not.toHaveClass(styles.mistShroudedFade);
+      }
       expect(source).toHaveAttribute('type', 'image/webp');
       expect(source).toHaveAttribute('srcset', `/images/kevat/enemy/enemy-${enemy}.webp`);
       expect(image).toHaveAttribute('src', `/images/kevat/enemy/enemy-${enemy}.png`);

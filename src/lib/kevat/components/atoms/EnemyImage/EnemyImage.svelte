@@ -19,7 +19,11 @@
   const alt = $derived(descriptions[enemy]);
 </script>
 
-<picture class={styles.picture}>
+<picture class={`${styles.picture} ${enemy === '01' ? styles.mistShroudedFloat : ''}`}>
   <source srcset={`${imagePath}.webp`} type="image/webp" />
-  <img class={styles.image} src={`${imagePath}.png`} {alt} />
+  <img
+    class={`${styles.image} ${enemy === '01' ? styles.mistShroudedFade : ''}`}
+    src={`${imagePath}.png`}
+    {alt}
+  />
 </picture>
