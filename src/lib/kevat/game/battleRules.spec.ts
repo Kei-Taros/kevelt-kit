@@ -4,9 +4,9 @@ import type { ElementType } from '../types/element.types';
 
 const levels = { fire: 1, stone: 1, mist: 1 } as const;
 
-function fighter(hp: number, move: ElementType, level: 1 | 2 | 3 = 1) {
+const fighter = (hp: number, move: ElementType, level: 1 | 2 | 3 = 1) => {
   return { hp, move, levels: { ...levels, [move]: level } };
-}
+};
 
 describe('determineWinner', () => {
   test.each([

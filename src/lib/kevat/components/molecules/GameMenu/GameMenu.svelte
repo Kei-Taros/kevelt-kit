@@ -5,10 +5,10 @@
   let open = $state(false);
   let menuRoot: HTMLDivElement;
 
-  function closeMenu() {
+  const closeMenu = (): void => {
     open = false;
     menuRoot?.querySelector('button')?.focus();
-  }
+  };
 </script>
 
 <svelte:window

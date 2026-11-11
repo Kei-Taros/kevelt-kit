@@ -23,16 +23,16 @@
     mist: 1
   });
 
-  function chooseEnemyMove(
+  const chooseEnemyMove = (
     levels: Record<ElementType, ElementLevel>,
     sealedElement?: ElementType
-  ): ElementType | null {
+  ): ElementType | null => {
     const available = elements.filter(
       (element) => levels[element] !== 0 && element !== sealedElement
     );
     if (available.length === 0) return null;
     return available[Math.floor(Math.random() * available.length)];
-  }
+  };
 
   let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
   let enemy = $state<FighterState>({ hp: 150, levels: initialLevels() });
@@ -50,7 +50,7 @@
     if (revealTimer) clearTimeout(revealTimer);
   });
 
-  function selectElement(element: ElementType) {
+  const selectElement = (element: ElementType): void => {
     if (player.hp === 0 || enemy.hp === 0 || revealedEnemyMove) return;
     if (player.levels[element] === 0) {
       revealedEnemyMove = null;
@@ -113,7 +113,7 @@
       visiblePlayerSealedElement = player.sealedElement ?? null;
       revealTimer = undefined;
     }, 1200);
-  }
+  };
 </script>
 
 <svelte:head>

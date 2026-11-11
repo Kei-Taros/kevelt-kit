@@ -9,12 +9,12 @@
 
   const maxLength = 15;
 
-  function shorten(line: string): string {
+  const shorten = (line: string): string => {
     const characters = Array.from(line);
     if (characters.length <= maxLength) return line;
 
     return characters.slice(0, maxLength).join('');
-  }
+  };
 </script>
 
 <p class={styles.message}>

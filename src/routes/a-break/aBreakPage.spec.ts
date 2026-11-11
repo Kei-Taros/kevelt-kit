@@ -14,15 +14,15 @@ describe('aBreakPage', () => {
     vi.restoreAllMocks();
   });
 
-  async function beginNextTurn() {
+  const beginNextTurn = async (): Promise<void> => {
     vi.advanceTimersByTime(1200);
     await tick();
-  }
+  };
 
-  async function finishHealthAnimation() {
+  const finishHealthAnimation = async (): Promise<void> => {
     await vi.advanceTimersByTimeAsync(1800);
     await tick();
-  }
+  };
 
   test('プレイヤーがSTONEを選んだ場合、敵のFIREを公開しHPと両者のレベルを更新する', async () => {
     render(Page);
