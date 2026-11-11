@@ -7,17 +7,20 @@ export interface FighterTurn {
   move: ElementType;
   levels: Record<ElementType, ElementLevel>;
   stoneGuard?: boolean;
+  sealedElement?: ElementType;
 }
 
 export interface TurnInput {
   player: FighterTurn;
   enemy: FighterTurn;
+  sealTarget?: ElementType;
 }
 
 export interface FighterState {
   hp: number;
   levels: Record<ElementType, ElementLevel>;
   stoneGuard?: boolean;
+  sealedElement?: ElementType;
 }
 
 export interface TurnResult {
@@ -46,33 +49,44 @@ export const getAttackDamage = (level: ElementLevel): number => {
 
 const advanceLevels = (
   levels: Record<ElementType, ElementLevel>,
-  move: ElementType
+  move: ElementType,
+  sealedElement?: ElementType
 ): Record<ElementType, ElementLevel> => {
   const level = levels[move];
   if (level === 0) throw new RangeError('Lv0の属性は使用できません');
 
-  return {
+  const nextLevels: Record<ElementType, ElementLevel> = {
     fire: levels.fire === 0 && move !== 'fire' ? 1 : levels.fire,
     stone: levels.stone === 0 && move !== 'stone' ? 1 : levels.stone,
     mist: levels.mist === 0 && move !== 'mist' ? 1 : levels.mist,
     [move]: level === 1 ? 2 : level === 2 ? 3 : 0
   };
+
+  if (sealedElement) {
+    nextLevels[sealedElement] = Math.min(nextLevels[sealedElement] + 1, 3) as ElementLevel;
+  }
+
+  return nextLevels;
 };
 
-export const resolveTurn = ({ player, enemy }: TurnInput): TurnResult => {
+export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResult => {
   const playerLevel = player.levels[player.move];
   const enemyLevel = enemy.levels[enemy.move];
-  const nextPlayerLevels = advanceLevels(player.levels, player.move);
-  const nextEnemyLevels = advanceLevels(enemy.levels, enemy.move);
+  const nextPlayerLevels = advanceLevels(player.levels, player.move, player.sealedElement);
+  const nextEnemyLevels = advanceLevels(enemy.levels, enemy.move, enemy.sealedElement);
   const winner = determineWinner(player.move, enemy.move);
   const winningMove = winner === 'player' ? player.move : enemy.move;
   const winningLevel = winner === 'player' ? playerLevel : enemyLevel;
-  const baseDamage =
-    winner === 'draw'
-      ? 0
-      : winningMove === 'stone' && winningLevel === 3
-        ? 30
-        : getAttackDamage(winningLevel);
+  let baseDamage = 0;
+  if (winner !== 'draw') {
+    if (winningMove === 'mist' && winningLevel === 3) {
+      baseDamage = 20;
+    } else if (winningMove === 'stone' && winningLevel === 3) {
+      baseDamage = 30;
+    } else {
+      baseDamage = getAttackDamage(winningLevel);
+    }
+  }
   const defenderHasStoneGuard = winner === 'player' ? enemy.stoneGuard : player.stoneGuard;
   const damage = defenderHasStoneGuard ? Math.ceil(baseDamage / 2) : baseDamage;
 
@@ -84,6 +98,9 @@ export const resolveTurn = ({ player, enemy }: TurnInput): TurnResult => {
       levels: nextPlayerLevels,
       ...(winner === 'player' && player.move === 'stone' && playerLevel === 3
         ? { stoneGuard: true }
+        : {}),
+      ...(winner === 'enemy' && enemy.move === 'mist' && enemyLevel === 3 && sealTarget
+        ? { sealedElement: sealTarget }
         : {})
     },
     enemy: {
@@ -91,6 +108,9 @@ export const resolveTurn = ({ player, enemy }: TurnInput): TurnResult => {
       levels: nextEnemyLevels,
       ...(winner === 'enemy' && enemy.move === 'stone' && enemyLevel === 3
         ? { stoneGuard: true }
+        : {}),
+      ...(winner === 'player' && player.move === 'mist' && playerLevel === 3 && sealTarget
+        ? { sealedElement: sealTarget }
         : {})
     }
   };

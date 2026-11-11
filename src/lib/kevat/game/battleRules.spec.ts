@@ -103,25 +103,80 @@ describe('resolveTurn', () => {
   test.each([
     ['fire', 50],
     ['stone', 30],
-    ['mist', 50]
-  ] as const)(
-    '%sがLv3で勝つ場合、%iダメージを与え使用属性がLv0になる',
-    (move, damage) => {
-      const losesTo: Record<ElementType, ElementType> = {
-        fire: 'mist',
-        stone: 'fire',
-        mist: 'stone'
-      };
-      const result = resolveTurn({
-        player: fighter(200, move, 3),
-        enemy: fighter(150, losesTo[move])
-      });
+    ['mist', 20]
+  ] as const)('%s Lv3で勝つ場合、%iダメージを与え使用属性がLv0になる', (move, damage) => {
+    const losesTo: Record<ElementType, ElementType> = {
+      fire: 'mist',
+      stone: 'fire',
+      mist: 'stone'
+    };
+    const result = resolveTurn({
+      player: fighter(200, move, 3),
+      enemy: fighter(150, losesTo[move])
+    });
 
-      expect(result.damage).toBe(damage);
-      expect(result.enemy.hp).toBe(150 - damage);
-      expect(result.player.levels[move]).toBe(0);
-    }
-  );
+    expect(result.damage).toBe(damage);
+    expect(result.enemy.hp).toBe(150 - damage);
+    expect(result.player.levels[move]).toBe(0);
+  });
+
+  test('プレイヤーがMIST Lv3で勝った場合、20ダメージを与えて敵属性をランダムに1つ封印する', () => {
+    const result = resolveTurn({
+      player: fighter(200, 'mist', 3),
+      enemy: fighter(150, 'stone'),
+      sealTarget: 'fire'
+    });
+
+    expect(result.damage).toBe(20);
+    expect(result.enemy.sealedElement).toBe('fire');
+  });
+
+  test.each([
+    [0, 2],
+    [1, 2],
+    [2, 3],
+    [3, 3]
+  ] as const)('敵のSTONEがLv%iで封印中の場合、解除時にLv%iになる', (sealedLevel, expectedLevel) => {
+    const result = resolveTurn({
+      player: fighter(200, 'fire'),
+      enemy: {
+        ...fighter(150, 'mist'),
+        levels: { fire: 1, stone: sealedLevel, mist: 1 },
+        sealedElement: 'stone'
+      }
+    });
+
+    expect(result.enemy.sealedElement).toBeUndefined();
+    expect(result.enemy.levels.stone).toBe(expectedLevel);
+  });
+
+  test('敵のMIST Lv3が勝つ場合、プレイヤーに20ダメージを与えて抽選された属性を封印する', () => {
+    const result = resolveTurn({
+      player: fighter(200, 'stone'),
+      enemy: fighter(150, 'mist', 3),
+      sealTarget: 'fire'
+    });
+
+    expect(result.winner).toBe('enemy');
+    expect(result.damage).toBe(20);
+    expect(result.player.hp).toBe(180);
+    expect(result.player.sealedElement).toBe('fire');
+  });
+
+  test('プレイヤーの属性が封印中の場合、解除時にLvが1上がる', () => {
+    const result = resolveTurn({
+      player: {
+        hp: 200,
+        move: 'fire',
+        levels: { fire: 1, stone: 1, mist: 2 },
+        sealedElement: 'mist'
+      },
+      enemy: fighter(150, 'fire')
+    });
+
+    expect(result.player.levels.mist).toBe(3);
+    expect(result.player.sealedElement).toBeUndefined();
+  });
 
   test('Lv3で負ける場合、効果は発動せず使用属性がLv0になる', () => {
     const result = resolveTurn({

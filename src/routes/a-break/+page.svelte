@@ -9,7 +9,7 @@
   } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { BattleLog, ElementSelector } from '$lib/kevat/components/organisms';
-  import { resolveTurn } from '$lib/kevat/game/battleRules';
+  import { determineWinner, resolveTurn } from '$lib/kevat/game/battleRules';
   import type { FighterState } from '$lib/kevat/game/battleRules';
   import type { BattleLogEntry } from '$lib/kevat/types/battleLog.types';
   import type { ElementLevel, ElementType } from '$lib/kevat/types/element.types';
@@ -23,8 +23,13 @@
     mist: 1
   });
 
-  function chooseEnemyMove(levels: Record<ElementType, ElementLevel>): ElementType | null {
-    const available = elements.filter((element) => levels[element] !== 0);
+  function chooseEnemyMove(
+    levels: Record<ElementType, ElementLevel>,
+    sealedElement?: ElementType
+  ): ElementType | null {
+    const available = elements.filter(
+      (element) => levels[element] !== 0 && element !== sealedElement
+    );
     if (available.length === 0) return null;
     return available[Math.floor(Math.random() * available.length)];
   }
@@ -37,6 +42,8 @@
   let messageLines = $state<readonly string[]>(constants.BATTLE_MESSAGE);
   let playerStoneEffectActive = $state(false);
   let enemyStoneEffectActive = $state(false);
+  let visibleEnemySealedElement = $state<ElementType | null>(null);
+  let visiblePlayerSealedElement = $state<ElementType | null>(null);
   let revealTimer: ReturnType<typeof setTimeout> | undefined;
 
   onDestroy(() => {
@@ -50,6 +57,7 @@
       messageLines = ['Lv0は使用できません'];
       return;
     }
+    if (player.sealedElement === element) return;
     if (nextEnemyMove === null) {
       revealedEnemyMove = null;
       messageLines = ['敵が手を選べません'];
@@ -57,9 +65,16 @@
     }
 
     const enemyMove = nextEnemyMove;
+    const winner = determineWinner(element, enemyMove);
+    const sealTarget =
+      (winner === 'player' && element === 'mist' && player.levels.mist === 3) ||
+      (winner === 'enemy' && enemyMove === 'mist' && enemy.levels.mist === 3)
+        ? elements[Math.floor(Math.random() * elements.length)]
+        : undefined;
     const result = resolveTurn({
       player: { ...player, move: element },
-      enemy: { ...enemy, move: enemyMove }
+      enemy: { ...enemy, move: enemyMove },
+      sealTarget
     });
     battleLogs = [
       {
@@ -74,6 +89,8 @@
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
     playerStoneEffectActive = false;
     enemyStoneEffectActive = false;
+    visibleEnemySealedElement = null;
+    visiblePlayerSealedElement = null;
     player = result.player;
     enemy = result.enemy;
 
@@ -86,12 +103,14 @@
     }
 
     revealedEnemyMove = enemyMove;
-    nextEnemyMove = chooseEnemyMove(enemy.levels);
+    nextEnemyMove = chooseEnemyMove(enemy.levels, enemy.sealedElement);
     revealTimer = setTimeout(() => {
       revealedEnemyMove = null;
       messageLines = constants.BATTLE_MESSAGE;
       playerStoneEffectActive = nextPlayerStoneEffectActive;
       enemyStoneEffectActive = nextEnemyStoneEffectActive;
+      visibleEnemySealedElement = enemy.sealedElement ?? null;
+      visiblePlayerSealedElement = player.sealedElement ?? null;
       revealTimer = undefined;
     }, 1200);
   }
@@ -124,7 +143,7 @@
   </div>
   <div class={`${styles.health} ${styles.enemyHealth}`}>
     <HealthStatus current={enemy.hp} max={150} />
-    <EnemyLevels levels={enemy.levels} />
+    <EnemyLevels levels={enemy.levels} sealedElement={visibleEnemySealedElement} />
     {#if enemyStoneEffectActive}
       <div class={`${styles.enemyStoneEffectBadge} ${styles.stoneEffectBadgeAppear}`}>
         <StoneEffectBadge />
@@ -133,6 +152,10 @@
   </div>
 
   <div class={styles.attributes}>
-    <ElementSelector levels={player.levels} onselect={selectElement} />
+    <ElementSelector
+      levels={player.levels}
+      sealedElement={visiblePlayerSealedElement}
+      onselect={selectElement}
+    />
   </div>
 </section>

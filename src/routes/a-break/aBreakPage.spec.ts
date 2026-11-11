@@ -24,7 +24,7 @@ describe('aBreakPage', () => {
     await tick();
   }
 
-  test('STONEを選んだ場合、敵の手を公開しHPと両者のレベルを更新する', async () => {
+  test('プレイヤーがSTONEを選んだ場合、敵のFIREを公開しHPと両者のレベルを更新する', async () => {
     render(Page);
 
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe('aBreakPage', () => {
     expect(screen.getByText(/三すくみを覚えて/)).toBeInTheDocument();
   });
 
-  test('MISTを選んで負けた場合、プレイヤーHPが減る', async () => {
+  test('プレイヤーがMISTを選んでFIREに負けた場合、プレイヤーのHPが減る', async () => {
     render(Page);
 
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
@@ -56,7 +56,73 @@ describe('aBreakPage', () => {
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
   });
 
-  test('STONEのLv3で勝った場合、30ダメージを与えてLv0になる', async () => {
+  test('プレイヤーがMIST Lv3で勝った場合、20ダメージを与えて敵の属性をランダムに1つ封印する', async () => {
+    for (const value of [0.4, 0.4, 0.4, 0]) {
+      vi.mocked(Math.random).mockReturnValueOnce(value);
+    }
+    render(Page);
+
+    for (let turn = 0; turn < 3; turn++) {
+      await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
+      await beginNextTurn();
+    }
+
+    const groups = screen.getAllByRole('group');
+    const enemyFire = groups.find((group) => group.getAttribute('aria-label') === 'FIRE');
+    expect(
+      enemyFire?.querySelector('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+    ).toBeInTheDocument();
+    await finishHealthAnimation();
+    expect(screen.getByText('100 / 150')).toBeInTheDocument();
+
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+    expect(screen.getByRole('img', { name: 'Enemy Move: MIST' })).toBeInTheDocument();
+    await beginNextTurn();
+    expect(
+      enemyFire?.querySelector('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+    ).not.toBeInTheDocument();
+  });
+
+  test('敵がMIST Lv3で勝った場合、プレイヤーの属性をランダムに1つ封印する', async () => {
+    for (const value of [0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0]) {
+      vi.mocked(Math.random).mockReturnValueOnce(value);
+    }
+    render(Page);
+
+    for (const element of [
+      'STONE',
+      'STONE',
+      'STONE',
+      'FIRE',
+      'STONE',
+      'STONE',
+      'FIRE',
+      'FIRE',
+      'STONE',
+      'FIRE',
+      'FIRE',
+      'STONE'
+    ]) {
+      await fireEvent.click(screen.getByRole('button', { name: element }));
+      await beginNextTurn();
+    }
+
+    const fireButton = screen.getByRole('button', { name: 'FIRE' });
+    expect(fireButton).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'STONE' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'MIST' })).toBeEnabled();
+    expect(
+      screen
+        .getByRole('group', { name: 'Element selection' })
+        .querySelectorAll('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+    ).toHaveLength(1);
+
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await beginNextTurn();
+    expect(fireButton).toBeEnabled();
+  });
+
+  test('プレイヤーがSTONE Lv3でFIREに勝った場合、30ダメージを与えてSTONEがLv0になる', async () => {
     render(Page);
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
@@ -79,7 +145,7 @@ describe('aBreakPage', () => {
     expect(screen.getByText('90 / 150')).toBeInTheDocument();
   });
 
-  test('ターンが確定した場合、勝敗と双方の手が新しい順にバトルログへ追加される', async () => {
+  test('対戦ターンが確定した場合、勝敗とプレイヤー・敵の手が新しい順にバトルログへ追加される', async () => {
     render(Page);
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
     expect(within(log).queryByRole('listitem')).not.toBeInTheDocument();
@@ -109,7 +175,7 @@ describe('aBreakPage', () => {
     expect(within(rows[0]).getByRole('img', { name: 'FIRE vs FIRE' })).toBeInTheDocument();
   });
 
-  test('Lv0の属性を選んだ場合、バトルログに記録を追加しない', async () => {
+  test('プレイヤーがLv0の属性を選んだ場合、バトルログに記録を追加しない', async () => {
     render(Page);
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
 
@@ -125,7 +191,7 @@ describe('aBreakPage', () => {
     expect(within(log).getAllByRole('listitem')).toHaveLength(3);
   });
 
-  test('敵のHPが0になった場合、最終ターンを記録して終了後も履歴を保持する', async () => {
+  test('プレイヤーが敵のHPを0にした場合、最終ターンを記録して終了後も履歴を保持する', async () => {
     render(Page);
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
 
