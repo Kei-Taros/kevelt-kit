@@ -55,6 +55,19 @@ export const battleHint = style({
   transform: 'translate(-50%, -50%)'
 });
 
+const battleHintFade = keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0 }
+});
+
+export const battleHintFadeOut = style({
+  pointerEvents: 'none',
+  animation: `${battleHintFade} 500ms ease-in forwards`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0 }
+  }
+});
+
 export const health = style({
   position: 'absolute',
   zIndex: 2,

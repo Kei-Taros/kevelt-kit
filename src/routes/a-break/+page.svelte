@@ -44,10 +44,13 @@
   let enemyStoneEffectActive = $state(false);
   let visibleEnemySealedElement = $state<ElementType | null>(null);
   let visiblePlayerSealedElement = $state<ElementType | null>(null);
+  let messageFading = $state(false);
   let revealTimer: ReturnType<typeof setTimeout> | undefined;
+  let messageTimer: ReturnType<typeof setTimeout> | undefined;
 
   onDestroy(() => {
     if (revealTimer) clearTimeout(revealTimer);
+    if (messageTimer) clearTimeout(messageTimer);
   });
 
   const selectElement = (element: ElementType): void => {
@@ -103,6 +106,11 @@
     }
 
     revealedEnemyMove = enemyMove;
+    messageFading = true;
+    messageTimer = setTimeout(() => {
+      messageFading = false;
+      messageTimer = undefined;
+    }, 500);
     nextEnemyMove = chooseEnemyMove(enemy.levels, enemy.sealedElement);
     revealTimer = setTimeout(() => {
       revealedEnemyMove = null;
@@ -126,8 +134,11 @@
   <div class={styles.vignette} aria-hidden="true"></div>
   {#if revealedEnemyMove}
     <div class={styles.enemyMove}><EnemyMove element={revealedEnemyMove} /></div>
-  {:else}
-    <div class={styles.battleHint}><BattleMessage lines={messageLines} /></div>
+  {/if}
+  {#if !revealedEnemyMove || messageFading}
+    <div class={`${styles.battleHint} ${messageFading ? styles.battleHintFadeOut : ''}`}>
+      <BattleMessage lines={messageLines} />
+    </div>
   {/if}
   <div class={styles.attributeCycle}><ElementCycle /></div>
   <BattleLog logs={battleLogs} />
