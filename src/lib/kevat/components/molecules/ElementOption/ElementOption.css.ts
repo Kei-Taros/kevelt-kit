@@ -41,7 +41,7 @@ export const button = style({
   boxShadow: '0 0 12px #bce3ff80, inset 0 0 12px #bce3ff40',
   selectors: {
     '&:disabled:not([data-level-zero])': { opacity: 1 },
-    '&:hover:not([data-level-zero]):not([data-sealed]), &:focus-visible:not([data-level-zero]):not([data-sealed])':
+    '&:hover:not(:disabled):not([data-level-zero]):not([data-sealed]), &:focus-visible:not(:disabled):not([data-level-zero]):not([data-sealed])':
       {
         boxShadow: softGlow,
         animation: `${breatheGlow} 1.5s ease-in-out infinite`
@@ -54,7 +54,7 @@ export const button = style({
   '@media': {
     '(prefers-reduced-motion: reduce)': {
       selectors: {
-        '&:hover:not([data-level-zero]):not([data-sealed]), &:focus-visible:not([data-level-zero]):not([data-sealed])':
+        '&:hover:not(:disabled):not([data-level-zero]):not([data-sealed]), &:focus-visible:not(:disabled):not([data-level-zero]):not([data-sealed])':
           {
             animation: 'none'
           }
@@ -81,6 +81,34 @@ export const elementVariants = styleVariants({
   }
 });
 
+const rippleColor = createVar();
+const rippleExpand = keyframes({
+  from: { opacity: 0.85, transform: 'translateX(-50%) scale(0.95)' },
+  to: { opacity: 0, transform: 'translateX(-50%) scale(1.55)' }
+});
+
+export const ripple = style({
+  position: 'absolute',
+  top: 0,
+  left: '50%',
+  zIndex: 0,
+  width: 'min(15.6cqw, 27dvh)',
+  aspectRatio: '1',
+  boxSizing: 'border-box',
+  border: `3px solid ${rippleColor}`,
+  borderRadius: '50%',
+  boxShadow: `0 0 14px ${rippleColor}, inset 0 0 10px ${rippleColor}`,
+  pointerEvents: 'none',
+  animation: `${rippleExpand} 700ms ease-out forwards`,
+  '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0 } }
+});
+
+export const rippleVariants = styleVariants({
+  fire: { vars: { [rippleColor]: '#ff7b20' } },
+  stone: { vars: { [rippleColor]: '#9966ee' } },
+  mist: { vars: { [rippleColor]: '#65cfff' } }
+});
+
 export const levelZero = style({
   borderColor: '#c5cdd5',
   background: '#111519',
@@ -95,12 +123,12 @@ export const icon = style({
   transform: 'scale(1)',
   transition: 'opacity 350ms ease-out, transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
+    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       opacity: 0.25,
       transform: 'scale(1.1)',
-      transitionDelay: '0.5s, 0s'
+      transitionDelay: '0.8s, 0s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+    [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         opacity: 0.25,
         transform: 'scale(1.1)'
@@ -127,11 +155,11 @@ export const cycle = style({
   transition: 'opacity 350ms ease-out',
   pointerEvents: 'none',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
+    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       opacity: 1,
-      transitionDelay: '0.5s'
+      transitionDelay: '0.8s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+    [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         opacity: 1
       },
@@ -153,11 +181,11 @@ export const cycleImage = style({
   willChange: 'transform',
   transition: 'transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
+    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
       transform: 'translateZ(0) scale(1)',
-      transitionDelay: '0.5s'
+      transitionDelay: '0.8s'
     },
-    [`${button}:focus-visible:not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+    [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         transform: 'translateZ(0) scale(1)'
       },

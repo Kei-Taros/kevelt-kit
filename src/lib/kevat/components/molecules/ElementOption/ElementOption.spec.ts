@@ -46,6 +46,23 @@ describe('ElementOption', () => {
     expect(onclick).toHaveBeenCalledOnce();
   });
 
+  test.each(['fire', 'stone', 'mist'] as const)(
+    'element=%sのボタンを押した場合、属性色の波紋を表示する',
+    async (element) => {
+      const { container } = render(ElementOption, { props: { element, level: 1 } });
+      const button = screen.getByRole('button', { name: element.toUpperCase() });
+      expect(container.querySelector(`.${styles.ripple}`)).not.toBeInTheDocument();
+
+      await fireEvent.click(button);
+      const firstRipple = container.querySelector(`.${styles.ripple}`);
+      expect(firstRipple).toHaveClass(styles.rippleVariants[element]);
+      expect(firstRipple).toHaveAttribute('aria-hidden', 'true');
+
+      await fireEvent.click(button);
+      expect(container.querySelector(`.${styles.ripple}`)).not.toBe(firstRipple);
+    }
+  );
+
   test('封印中の場合、属性ボタンを無効化して霧を表示する', () => {
     const { container } = render(ElementOption, {
       props: { element: 'fire', level: 1, sealed: true }

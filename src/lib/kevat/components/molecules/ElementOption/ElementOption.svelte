@@ -15,12 +15,14 @@
     element,
     level,
     sealed = false,
+    disabled = false,
     previewReset = 0,
     onclick,
     ...buttonProps
   }: Props = $props();
   let previewPinned = $state(false);
   let hoverSuppressed = $state(false);
+  let rippleKey = $state(0);
 
   $effect(() => {
     previewReset;
@@ -53,12 +55,13 @@
     data-level-zero={level === 0 || undefined}
     data-sealed={sealed || undefined}
     {...buttonProps}
-    disabled={sealed}
+    disabled={sealed || disabled}
     onpointerleave={() => (hoverSuppressed = false)}
     onblur={() => (hoverSuppressed = false)}
     onclick={(event) => {
       previewPinned = false;
       hoverSuppressed = true;
+      if (level !== 0) rippleKey += 1;
       onclick?.(event);
     }}
   >
@@ -70,12 +73,17 @@
       <img class={styles.cycleImage} src={`/images/kevat/cycle/${element}-cycle.png`} alt="" />
     </picture>
   </button>
+  {#if rippleKey > 0}
+    {#key rippleKey}
+      <span class={`${styles.ripple} ${styles.rippleVariants[element]}`} aria-hidden="true"></span>
+    {/key}
+  {/if}
   <button
     class={styles.level}
     type="button"
     aria-label={`${labels[element]} matchup`}
     aria-pressed={previewPinned}
-    disabled={level === 0 || sealed}
+    disabled={level === 0 || sealed || disabled}
     onclick={() => (previewPinned = !previewPinned)}
   >
     <LevelBadge {element} {level} id={levelId} />
