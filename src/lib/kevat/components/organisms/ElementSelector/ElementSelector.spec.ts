@@ -38,6 +38,14 @@ describe('ElementSelector', () => {
     expect(onselect).toHaveBeenCalledExactlyOnceWith('fire');
   });
 
+  test('disabledが渡された場合、属性ボタンをすべて無効化する', () => {
+    render(ElementSelector, { props: { levels, disabled: true } });
+
+    for (const button of screen.getAllByRole('button')) {
+      expect(button).toBeDisabled();
+    }
+  });
+
   test('3つのレベル表示を押した場合、3つの三すくみを同時に固定表示できる', async () => {
     render(ElementSelector, { props: { levels } });
 
