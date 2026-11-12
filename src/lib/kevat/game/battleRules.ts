@@ -50,6 +50,7 @@ export const getAttackDamage = (level: ElementLevel): number => {
 const advanceLevels = (
   levels: Record<ElementType, ElementLevel>,
   move: ElementType,
+  isDraw: boolean,
   sealedElement?: ElementType
 ): Record<ElementType, ElementLevel> => {
   const level = levels[move];
@@ -59,7 +60,7 @@ const advanceLevels = (
     fire: levels.fire === 0 && move !== 'fire' ? 1 : levels.fire,
     stone: levels.stone === 0 && move !== 'stone' ? 1 : levels.stone,
     mist: levels.mist === 0 && move !== 'mist' ? 1 : levels.mist,
-    [move]: level === 1 ? 2 : level === 2 ? 3 : 0
+    [move]: level === 1 ? 2 : level === 2 || isDraw ? 3 : 0
   };
 
   if (sealedElement) {
@@ -72,9 +73,19 @@ const advanceLevels = (
 export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResult => {
   const playerLevel = player.levels[player.move];
   const enemyLevel = enemy.levels[enemy.move];
-  const nextPlayerLevels = advanceLevels(player.levels, player.move, player.sealedElement);
-  const nextEnemyLevels = advanceLevels(enemy.levels, enemy.move, enemy.sealedElement);
   const winner = determineWinner(player.move, enemy.move);
+  const nextPlayerLevels = advanceLevels(
+    player.levels,
+    player.move,
+    winner === 'draw',
+    player.sealedElement
+  );
+  const nextEnemyLevels = advanceLevels(
+    enemy.levels,
+    enemy.move,
+    winner === 'draw',
+    enemy.sealedElement
+  );
   const winningMove = winner === 'player' ? player.move : enemy.move;
   const winningLevel = winner === 'player' ? playerLevel : enemyLevel;
   let baseDamage = 10;

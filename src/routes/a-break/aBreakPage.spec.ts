@@ -128,7 +128,7 @@ describe('aBreakPage', () => {
         .querySelectorAll('source[srcset="/images/kevat/effects/mist-effect.webp"]')
     ).toHaveLength(1);
 
-    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
     await beginNextTurn();
     expect(fireButton).toBeEnabled();
   });

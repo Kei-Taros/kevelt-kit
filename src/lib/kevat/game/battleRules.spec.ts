@@ -200,17 +200,34 @@ describe('resolveTurn', () => {
     expect(result.enemy.levels.stone).toBe(0);
   });
 
-  test('Lv3であいこの場合、両者が10ダメージを受けて使用属性がLv0になる', () => {
+  test.each(['fire', 'stone', 'mist'] as const)(
+    '%s Lv3であいこの場合、両者が10ダメージを受けて使用属性がLv3のままになる',
+    (move) => {
+      const result = resolveTurn({
+        player: fighter(200, move, 3),
+        enemy: fighter(150, move, 3)
+      });
+
+      expect(result.damage).toBe(10);
+      expect(result.player.hp).toBe(190);
+      expect(result.enemy.hp).toBe(140);
+      expect(result.player.levels[move]).toBe(3);
+      expect(result.enemy.levels[move]).toBe(3);
+      expect(result.player.stoneGuard).toBeUndefined();
+      expect(result.enemy.stoneGuard).toBeUndefined();
+      expect(result.player.sealedElement).toBeUndefined();
+      expect(result.enemy.sealedElement).toBeUndefined();
+    }
+  );
+
+  test('Lv3とLv1であいこの場合、Lv3は維持されLv1はLv2になる', () => {
     const result = resolveTurn({
       player: fighter(200, 'fire', 3),
-      enemy: fighter(150, 'fire', 3)
+      enemy: fighter(150, 'fire', 1)
     });
 
-    expect(result.damage).toBe(10);
-    expect(result.player.hp).toBe(190);
-    expect(result.enemy.hp).toBe(140);
-    expect(result.player.levels.fire).toBe(0);
-    expect(result.enemy.levels.fire).toBe(0);
+    expect(result.player.levels.fire).toBe(3);
+    expect(result.enemy.levels.fire).toBe(2);
   });
 
   test('あいこでプレイヤーにSTONEの軽減がある場合、プレイヤーは5ダメージ敵は10ダメージを受ける', () => {
