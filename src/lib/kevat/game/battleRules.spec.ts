@@ -120,7 +120,7 @@ describe('resolveTurn', () => {
     expect(result.player.levels[move]).toBe(0);
   });
 
-  test('プレイヤーがMIST Lv3で勝った場合、20ダメージを与えて敵属性をランダムに1つ封印する', () => {
+  test('プレイヤーがMIST Lv3で勝利した場合、20ダメージを与えて敵属性をランダムに1つ封印する', () => {
     const result = resolveTurn({
       player: fighter(200, 'mist', 3),
       enemy: fighter(150, 'stone'),

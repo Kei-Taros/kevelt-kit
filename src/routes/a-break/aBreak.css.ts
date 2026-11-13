@@ -46,6 +46,16 @@ export const enemyMove = style({
   transform: 'translate(-50%, -50%)'
 });
 
+export const movePreview = style({
+  position: 'absolute',
+  top: '37%',
+  left: '50%',
+  zIndex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  transform: 'translate(-50%, -50%)'
+});
+
 export const battleHint = style({
   position: 'absolute',
   top: '42%',

@@ -10,119 +10,13 @@
   } from '$lib/kevat/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
   import { BattleLog, ElementSelector } from '$lib/kevat/components/organisms';
-  import { determineWinner, resolveTurn } from '$lib/kevat/game/battleRules';
-  import type { FighterState } from '$lib/kevat/game/battleRules';
-  import type { BattleLogEntry } from '$lib/kevat/types/battleLog.types';
-  import type { ElementLevel, ElementType } from '$lib/kevat/types/element.types';
+  import { createBattleSequence } from '$lib/kevat/game/battleSequence.svelte';
   import * as styles from './aBreak.css';
+  import * as animationStyles from './battleAnimation.css';
   import * as constants from './constants/aBreak';
 
-  const elements: ElementType[] = ['fire', 'stone', 'mist'];
-  const initialLevels = (): Record<ElementType, ElementLevel> => ({
-    fire: 1,
-    stone: 1,
-    mist: 1
-  });
-
-  const chooseEnemyMove = (
-    levels: Record<ElementType, ElementLevel>,
-    sealedElement?: ElementType
-  ): ElementType | null => {
-    const available = elements.filter(
-      (element) => levels[element] !== 0 && element !== sealedElement
-    );
-    if (available.length === 0) return null;
-    return available[Math.floor(Math.random() * available.length)];
-  };
-
-  let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
-  let enemy = $state<FighterState>({ hp: 150, levels: initialLevels() });
-  let nextEnemyMove = $state<ElementType | null>(chooseEnemyMove(initialLevels()));
-  let revealedEnemyMove = $state<ElementType | null>(null);
-  let battleLogs = $state<BattleLogEntry[]>([]);
-  let messageLines = $state<readonly string[]>(constants.BATTLE_MESSAGE);
-  let playerStoneEffectActive = $state(false);
-  let enemyStoneEffectActive = $state(false);
-  let visibleEnemySealedElement = $state<ElementType | null>(null);
-  let visiblePlayerSealedElement = $state<ElementType | null>(null);
-  let messageFading = $state(false);
-  let revealTimer: ReturnType<typeof setTimeout> | undefined;
-  let messageTimer: ReturnType<typeof setTimeout> | undefined;
-
-  onDestroy(() => {
-    if (revealTimer) clearTimeout(revealTimer);
-    if (messageTimer) clearTimeout(messageTimer);
-  });
-
-  const selectElement = (element: ElementType): void => {
-    if (player.hp === 0 || enemy.hp === 0 || revealedEnemyMove) return;
-    if (player.levels[element] === 0) {
-      revealedEnemyMove = null;
-      messageLines = ['Lv0は使用できません'];
-      return;
-    }
-    if (player.sealedElement === element) return;
-    if (nextEnemyMove === null) {
-      revealedEnemyMove = null;
-      messageLines = ['敵が手を選べません'];
-      return;
-    }
-
-    const enemyMove = nextEnemyMove;
-    const winner = determineWinner(element, enemyMove);
-    const sealTarget =
-      (winner === 'player' && element === 'mist' && player.levels.mist === 3) ||
-      (winner === 'enemy' && enemyMove === 'mist' && enemy.levels.mist === 3)
-        ? elements[Math.floor(Math.random() * elements.length)]
-        : undefined;
-    const result = resolveTurn({
-      player: { ...player, move: element },
-      enemy: { ...enemy, move: enemyMove },
-      sealTarget
-    });
-    battleLogs = [
-      {
-        turn: String(battleLogs.length + 1).padStart(2, '0'),
-        result: result.winner === 'player' ? 'win' : result.winner === 'enemy' ? 'lose' : 'draw',
-        player: element,
-        enemy: enemyMove
-      },
-      ...battleLogs
-    ];
-    const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
-    const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
-    playerStoneEffectActive = false;
-    enemyStoneEffectActive = false;
-    visibleEnemySealedElement = null;
-    visiblePlayerSealedElement = null;
-    player = result.player;
-    enemy = result.enemy;
-
-    if (enemy.hp === 0 || player.hp === 0) {
-      revealedEnemyMove = null;
-      messageLines = [player.hp === 0 ? 'GAME OVER' : 'PLAYER WIN'];
-      playerStoneEffectActive = nextPlayerStoneEffectActive;
-      enemyStoneEffectActive = nextEnemyStoneEffectActive;
-      return;
-    }
-
-    revealedEnemyMove = enemyMove;
-    messageFading = true;
-    messageTimer = setTimeout(() => {
-      messageFading = false;
-      messageTimer = undefined;
-    }, 500);
-    nextEnemyMove = chooseEnemyMove(enemy.levels, enemy.sealedElement);
-    revealTimer = setTimeout(() => {
-      revealedEnemyMove = null;
-      messageLines = constants.BATTLE_MESSAGE;
-      playerStoneEffectActive = nextPlayerStoneEffectActive;
-      enemyStoneEffectActive = nextEnemyStoneEffectActive;
-      visibleEnemySealedElement = enemy.sealedElement ?? null;
-      visiblePlayerSealedElement = player.sealedElement ?? null;
-      revealTimer = undefined;
-    }, 1200);
-  };
+  const battle = createBattleSequence(constants.BATTLE_MESSAGE);
+  onDestroy(battle.destroy);
 </script>
 
 <svelte:head>
@@ -133,30 +27,42 @@
   <BattleBackground background="01" />
   <div class={styles.enemy}><EnemyImage enemy="01" /></div>
   <div class={styles.vignette} aria-hidden="true"></div>
-  {#if revealedEnemyMove}
-    <div class={styles.enemyMove}><EnemyMove element={revealedEnemyMove} /></div>
+  {#if battle.winPhase && battle.previewPlayerMove && battle.revealedEnemyMove}
+    <div
+      class={`${styles.movePreview} ${battle.moveWinner !== 'draw' ? animationStyles.movePreviewWinSequence : ''} ${battle.moveWinner === 'enemy' ? animationStyles.movePreviewEnemyWin : ''} ${battle.moveWinner === 'draw' ? animationStyles.movePreviewDraw : ''} ${battle.winPhase !== 'clash' && battle.moveWinner !== 'draw' ? animationStyles.movePreviewWin : ''} ${battle.winPhase !== 'clash' && battle.moveWinner === 'draw' ? animationStyles.movePreviewDrawResolve : ''} ${battle.winPhase === 'winner' && battle.moveWinner !== 'draw' ? animationStyles.movePreviewFadeOut : ''}`}
+    >
+      <div class={animationStyles.previewMove}>
+        <EnemyMove element={battle.previewPlayerMove} />
+      </div>
+      <img class={animationStyles.previewSparks} src="/images/kevat/effects/sparks.svg" alt="" />
+      <div class={animationStyles.previewMove}>
+        <EnemyMove element={battle.revealedEnemyMove} />
+      </div>
+    </div>
+  {:else if battle.revealedEnemyMove}
+    <div class={styles.enemyMove}><EnemyMove element={battle.revealedEnemyMove} /></div>
   {/if}
-  {#if !revealedEnemyMove || messageFading}
-    <div class={`${styles.battleHint} ${messageFading ? styles.battleHintFadeOut : ''}`}>
-      <BattleMessage lines={messageLines} />
+  {#if !battle.revealedEnemyMove || battle.messageReady || battle.messageFading}
+    <div class={`${styles.battleHint} ${battle.messageFading ? styles.battleHintFadeOut : ''}`}>
+      <BattleMessage lines={battle.messageLines} />
     </div>
   {/if}
   <div class={styles.attributeCycle}><ElementCycle /></div>
-  <BattleLog logs={battleLogs} />
+  <BattleLog logs={battle.battleLogs} />
   <GameMenu />
 
   <div class={`${styles.health} ${styles.playerHealth}`}>
-    <HealthStatus current={player.hp} max={200} />
-    {#if playerStoneEffectActive}
+    <HealthStatus current={battle.player.hp} max={200} />
+    {#if battle.playerStoneEffectActive}
       <div class={styles.playerStoneEffectBadge} out:fade={{ duration: 500 }}>
         <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
       </div>
     {/if}
   </div>
   <div class={`${styles.health} ${styles.enemyHealth}`}>
-    <HealthStatus current={enemy.hp} max={150} />
-    <EnemyLevels levels={enemy.levels} sealedElement={visibleEnemySealedElement} />
-    {#if enemyStoneEffectActive}
+    <HealthStatus current={battle.enemy.hp} max={150} />
+    <EnemyLevels levels={battle.enemy.levels} sealedElement={battle.visibleEnemySealedElement} />
+    {#if battle.enemyStoneEffectActive}
       <div class={styles.enemyStoneEffectBadge} out:fade={{ duration: 500 }}>
         <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
       </div>
@@ -165,9 +71,10 @@
 
   <div class={styles.attributes}>
     <ElementSelector
-      levels={player.levels}
-      sealedElement={visiblePlayerSealedElement}
-      onselect={selectElement}
+      levels={battle.player.levels}
+      sealedElement={battle.visiblePlayerSealedElement}
+      disabled={battle.controlsDisabled}
+      onselect={battle.selectElement}
     />
   </div>
 </section>
