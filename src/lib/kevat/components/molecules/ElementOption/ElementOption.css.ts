@@ -220,7 +220,7 @@ export const sealEffect = style({
   aspectRatio: '1',
   transform: 'translate(-50%, -50%)',
   pointerEvents: 'none',
-  animation: `${sealAppear} 800ms ease-out both`,
+  animation: `${sealAppear} 800ms ease-out backwards`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }

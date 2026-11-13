@@ -51,7 +51,7 @@ export const mistEffect = style({
   width: 130,
   height: 130,
   transform: 'translate(-50%, -50%)',
-  animation: `${mistEffectAppear} 800ms ease-out both`,
+  animation: `${mistEffectAppear} 800ms ease-out backwards`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 1 }
   }

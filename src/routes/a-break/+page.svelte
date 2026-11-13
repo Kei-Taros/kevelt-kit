@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
+  import { fade } from 'svelte/transition';
   import {
     BattleBackground,
     BattleMessage,
@@ -147,8 +148,8 @@
   <div class={`${styles.health} ${styles.playerHealth}`}>
     <HealthStatus current={player.hp} max={200} />
     {#if playerStoneEffectActive}
-      <div class={`${styles.playerStoneEffectBadge} ${styles.stoneEffectBadgeAppear}`}>
-        <StoneEffectBadge />
+      <div class={styles.playerStoneEffectBadge} out:fade={{ duration: 500 }}>
+        <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
       </div>
     {/if}
   </div>
@@ -156,8 +157,8 @@
     <HealthStatus current={enemy.hp} max={150} />
     <EnemyLevels levels={enemy.levels} sealedElement={visibleEnemySealedElement} />
     {#if enemyStoneEffectActive}
-      <div class={`${styles.enemyStoneEffectBadge} ${styles.stoneEffectBadgeAppear}`}>
-        <StoneEffectBadge />
+      <div class={styles.enemyStoneEffectBadge} out:fade={{ duration: 500 }}>
+        <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
       </div>
     {/if}
   </div>
