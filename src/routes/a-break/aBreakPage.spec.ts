@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import Page from './+page.svelte';
+import { BATTLE_MESSAGES } from '$lib/kevat/constants/battleMessages';
 import * as styles from './aBreak.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/kevat/components/atoms/HealthBar/HealthBar.css';
@@ -13,6 +14,8 @@ vi.mock('$lib/kevat/game/enemyAi', async () => {
       randomEnemyMove(enemy)
   };
 });
+
+const fireMessage = BATTLE_MESSAGES['01'][0].lines[0];
 
 describe('aBreakPage', () => {
   beforeEach(() => {
@@ -121,15 +124,15 @@ describe('aBreakPage', () => {
     vi.advanceTimersByTime(3500);
     await tick();
     expect(container.querySelector(`.${animationStyles.movePreviewFadeOut}`)).toBeInTheDocument();
-    expect(screen.queryByText(/三すくみを覚えて/)).not.toBeInTheDocument();
+    expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(1499);
     await tick();
-    expect(screen.queryByText(/三すくみを覚えて/)).not.toBeInTheDocument();
+    expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(1);
     await tick();
-    expect(screen.getByText(/三すくみを覚えて/)).toBeInTheDocument();
+    expect(screen.getByText(fireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーが勝利した場合、拡大したアイコンを0.6秒表示した後にHPとログを更新する', async () => {
@@ -149,7 +152,7 @@ describe('aBreakPage', () => {
     await tick();
     expect(enemyBar.style.width).not.toBe('100%');
     expect(within(log).getAllByRole('listitem')).toHaveLength(1);
-    expect(screen.queryByText(/三すくみを覚えて/)).not.toBeInTheDocument();
+    expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
   });
 
   test('プレイヤーが負けた場合、2秒後に敵の手が中央へ移りプレイヤーの手が退場する', async () => {
@@ -191,7 +194,7 @@ describe('aBreakPage', () => {
     await beginNextTurn();
 
     expect(container.querySelector(`.${animationStyles.movePreviewFadeOut}`)).toBeInTheDocument();
-    expect(screen.getByText(/三すくみを覚えて/)).toBeInTheDocument();
+    expect(screen.getByText(fireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーと敵が同じ属性を選んだ場合、両者のHPが10減る', async () => {
@@ -236,15 +239,15 @@ describe('aBreakPage', () => {
     expect(
       container.querySelector(`.${animationStyles.movePreviewDrawResolve}`)
     ).toBeInTheDocument();
-    expect(screen.queryByText(/三すくみを覚えて/)).not.toBeInTheDocument();
+    expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(849);
     await tick();
-    expect(screen.queryByText(/三すくみを覚えて/)).not.toBeInTheDocument();
+    expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(1);
     await tick();
-    expect(screen.getByText(/三すくみを覚えて/)).toBeInTheDocument();
+    expect(screen.getByText(fireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーがMISTを選んでFIREに負けた場合、プレイヤーのHPが減る', async () => {
@@ -345,6 +348,9 @@ describe('aBreakPage', () => {
     await beginNextTurn();
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
+    expect(screen.queryByText('Lv0は使用できません')).not.toBeInTheDocument();
+    vi.advanceTimersByTime(150);
+    await tick();
     expect(screen.getByText('Lv0は使用できません')).toBeInTheDocument();
     expect(screen.getByText('90 / 150')).toBeInTheDocument();
   });
@@ -423,6 +429,9 @@ describe('aBreakPage', () => {
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
 
+    expect(screen.queryByText('Lv0は使用できません')).not.toBeInTheDocument();
+    vi.advanceTimersByTime(150);
+    await tick();
     expect(screen.getByText('Lv0は使用できません')).toBeInTheDocument();
     expect(within(log).getAllByRole('listitem')).toHaveLength(3);
   });

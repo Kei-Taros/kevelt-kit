@@ -13,9 +13,9 @@
   import { createBattleSequence } from '$lib/kevat/game/battleSequence.svelte';
   import * as styles from './aBreak.css';
   import * as animationStyles from './battleAnimation.css';
-  import * as constants from './constants/aBreak';
+  import { BATTLE_MESSAGES } from '$lib/kevat/constants/battleMessages';
 
-  const battle = createBattleSequence(constants.BATTLE_MESSAGE, '01');
+  const battle = createBattleSequence(BATTLE_MESSAGES['01'], '01');
   onDestroy(battle.destroy);
 </script>
 
@@ -46,7 +46,12 @@
   {/if}
   {#if !battle.revealedEnemyMove || battle.messageReady || battle.messageFading}
     <div class={`${styles.battleHint} ${battle.messageFading ? styles.battleHintFadeOut : ''}`}>
-      <BattleMessage lines={battle.messageLines} />
+      <BattleMessage
+        lines={battle.messageLines}
+        immediate={battle.messageImmediate}
+        fading={battle.messageTextFading}
+        duration={battle.messageTextDuration}
+      />
     </div>
   {/if}
   <div class={styles.attributeCycle}><ElementCycle /></div>

@@ -1,3 +1,5 @@
+import { createBattleMessageSelector } from './battleMessages';
+import type { BattleMessagePattern } from '../types/battleMessage.types';
 import { chooseEnemyMove } from './enemyAi';
 import type { StageId } from '../types/stage.types';
 import { determineWinner, resolveTurn } from './battleRules';
@@ -15,9 +17,12 @@ const timing = {
 } as const;
 
 export const createBattleSequence = (
-  initialMessageLines: readonly string[],
+  messagePatterns: readonly BattleMessagePattern[],
   stage: StageId = '01'
 ) => {
+  const selectMessage = createBattleMessageSelector(messagePatterns);
+  const enemyMaxHp = 150;
+  let consecutiveDraws = 0;
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
   const initialLevels = (): Record<ElementType, ElementLevel> => ({
     fire: 1,
@@ -26,22 +31,23 @@ export const createBattleSequence = (
   });
 
   let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
-  let enemy = $state<FighterState>({ hp: 150, levels: initialLevels() });
-  let nextEnemyMove = $state<ElementType | null>(
-    chooseEnemyMove(stage, { hp: 150, levels: initialLevels() })
-  );
+  let enemy = $state<FighterState>({ hp: enemyMaxHp, levels: initialLevels() });
+  let nextEnemyMove = chooseEnemyMove(stage, { hp: enemyMaxHp, levels: initialLevels() });
   let revealedEnemyMove = $state<ElementType | null>(null);
   let previewPlayerMove = $state<ElementType | null>(null);
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
   let winPhase = $state<'clash' | 'resolve' | 'winner' | null>(null);
   let battleLogs = $state<BattleLogEntry[]>([]);
-  let messageLines = $state<readonly string[]>(initialMessageLines);
+  let messageLines = $state<readonly string[]>(selectMessage(nextEnemyMove));
   let messageReady = $state(false);
   let playerStoneEffectActive = $state(false);
   let enemyStoneEffectActive = $state(false);
   let visibleEnemySealedElement = $state<ElementType | null>(null);
   let visiblePlayerSealedElement = $state<ElementType | null>(null);
   let messageFading = $state(false);
+  let messageImmediate = $state(false);
+  let messageTextFading = $state(false);
+  let messageTextDuration = $state(500);
   let selectionPending = $state(false);
   const controlsDisabled = $derived(
     selectionPending || (winPhase !== null && !messageReady) || player.hp === 0 || enemy.hp === 0
@@ -50,6 +56,8 @@ export const createBattleSequence = (
   let messageTimer: ReturnType<typeof setTimeout> | undefined;
   let selectionTimer: ReturnType<typeof setTimeout> | undefined;
   let winTimer: ReturnType<typeof setTimeout> | undefined;
+  let warningTimer: ReturnType<typeof setTimeout> | undefined;
+  let originalMessageLines: readonly string[] | undefined;
   let hpTimer: ReturnType<typeof setTimeout> | undefined;
 
   const destroy = (): void => {
@@ -58,6 +66,7 @@ export const createBattleSequence = (
     if (selectionTimer) clearTimeout(selectionTimer);
     if (winTimer) clearTimeout(winTimer);
     if (hpTimer) clearTimeout(hpTimer);
+    if (warningTimer) clearTimeout(warningTimer);
   };
 
   const selectElement = (element: ElementType): void => {
@@ -76,7 +85,26 @@ export const createBattleSequence = (
     }
     if (player.levels[element] === 0) {
       revealedEnemyMove = null;
-      messageLines = ['Lv0は使用できません'];
+      originalMessageLines ??= messageLines;
+      if (warningTimer) clearTimeout(warningTimer);
+      messageFading = false;
+      messageImmediate = true;
+      messageTextDuration = 150;
+      messageTextFading = true;
+      warningTimer = setTimeout(() => {
+        messageLines = ['Lv0は使用できません'];
+        messageTextFading = false;
+        warningTimer = setTimeout(() => {
+          messageTextDuration = 500;
+          messageTextFading = true;
+          warningTimer = setTimeout(() => {
+            messageLines = originalMessageLines ?? messageLines;
+            messageTextFading = false;
+            originalMessageLines = undefined;
+            warningTimer = undefined;
+          }, 500);
+        }, 1350);
+      }, 150);
       return;
     }
     if (player.sealedElement === element) return;
@@ -86,6 +114,13 @@ export const createBattleSequence = (
       return;
     }
 
+    if (warningTimer) clearTimeout(warningTimer);
+    warningTimer = undefined;
+    if (originalMessageLines) messageLines = originalMessageLines;
+    originalMessageLines = undefined;
+    messageFading = false;
+    messageTextFading = false;
+    messageTextDuration = 500;
     selectionPending = true;
     messageTimer = setTimeout(() => {
       messageFading = true;
@@ -104,6 +139,7 @@ export const createBattleSequence = (
     enemyStoneEffectActive = false;
     visibleEnemySealedElement = null;
     visiblePlayerSealedElement = null;
+    consecutiveDraws = result.winner === 'draw' ? consecutiveDraws + 1 : 0;
     player = result.player;
     enemy = result.enemy;
     battleLogs = [logEntry, ...battleLogs];
@@ -132,8 +168,18 @@ export const createBattleSequence = (
     };
     const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
-    const showTurnMessage = (lines: readonly string[]): void => {
-      messageLines = lines;
+    const showTurnMessage = (): void => {
+      messageLines =
+        player.hp === 0
+          ? ['GAME OVER']
+          : enemy.hp === 0
+            ? ['PLAYER WIN']
+            : selectMessage(nextEnemyMove, {
+                enemyHp: enemy.hp / enemyMaxHp,
+                draw: consecutiveDraws
+              });
+      messageImmediate = false;
+      messageTextDuration = 500;
       messageReady = true;
       playerStoneEffectActive = nextPlayerStoneEffectActive;
       enemyStoneEffectActive = nextEnemyStoneEffectActive;
@@ -156,9 +202,7 @@ export const createBattleSequence = (
       revealTimer = setTimeout(() => {
         winPhase = 'winner';
         messageTimer = setTimeout(() => {
-          showTurnMessage(
-            player.hp === 0 ? ['GAME OVER'] : enemy.hp === 0 ? ['PLAYER WIN'] : initialMessageLines
-          );
+          showTurnMessage();
           messageTimer = undefined;
         }, timing.winnerMessage);
         revealTimer = undefined;
@@ -181,7 +225,7 @@ export const createBattleSequence = (
     }, timing.resolve);
     revealTimer = setTimeout(() => {
       winPhase = 'winner';
-      showTurnMessage(player.hp === 0 ? ['GAME OVER'] : initialMessageLines);
+      showTurnMessage();
       revealTimer = undefined;
     }, timing.winner);
   };
@@ -225,6 +269,15 @@ export const createBattleSequence = (
     },
     get visiblePlayerSealedElement() {
       return visiblePlayerSealedElement;
+    },
+    get messageTextDuration() {
+      return messageTextDuration;
+    },
+    get messageTextFading() {
+      return messageTextFading;
+    },
+    get messageImmediate() {
+      return messageImmediate;
     },
     get messageFading() {
       return messageFading;

@@ -3,9 +3,12 @@
 
   interface Props {
     lines: readonly string[];
+    immediate?: boolean;
+    fading?: boolean;
+    duration?: number;
   }
 
-  let { lines }: Props = $props();
+  let { lines, immediate = false, fading = false, duration = 500 }: Props = $props();
 
   const maxLength = 15;
 
@@ -18,7 +21,13 @@
 </script>
 
 <p class={styles.message}>
-  {#each lines.slice(0, 2) as line}
-    <span class={styles.line}>{shorten(line)}</span>
-  {/each}
+  {#key lines}
+    {#each lines.slice(0, 2) as line, index (index)}
+      <span
+        class={`${styles.line} ${fading ? styles.lineFadeOut : ''}`}
+        style:animation-duration={`${duration}ms`}
+        style:animation-delay={immediate ? '0ms' : undefined}>{shorten(line)}</span
+      >
+    {/each}
+  {/key}
 </p>

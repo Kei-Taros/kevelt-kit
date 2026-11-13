@@ -84,3 +84,15 @@ export const line = style({
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
 });
+
+const textDisappear = keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0 }
+});
+
+export const lineFadeOut = style({
+  animation: `${textDisappear} 500ms ease-in forwards`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0 }
+  }
+});
