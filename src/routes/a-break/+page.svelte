@@ -23,6 +23,8 @@
   <title>A Break | KeveltKit</title>
 </svelte:head>
 
+<svelte:window oncontextmenu={(event) => event.preventDefault()} />
+
 <section class={styles.arena}>
   <BattleBackground background="01" />
   <div class={styles.enemy}><EnemyImage enemy="01" /></div>
