@@ -72,3 +72,8 @@ export const list = style({
   scrollbarColor: '#65dafa66 transparent',
   scrollbarWidth: 'thin'
 });
+
+export const listItem = style({
+  minHeight: 0,
+  listStyle: 'none'
+});

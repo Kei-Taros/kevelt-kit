@@ -16,7 +16,7 @@
   const resultLabels: Record<Result, string> = { win: 'WIN', draw: 'DRAW', lose: 'LOSE' };
 </script>
 
-<li class={`${styles.row} ${styles.outcomeVariants[result]}`}>
+<div class={`${styles.row} ${styles.outcomeVariants[result]} ${styles.entranceVariants[result]}`}>
   <div class={styles.turn}>
     <span class={styles.turnLabel}>TURN</span>
     <strong class={styles.turnNumber}>{turn}</strong>
@@ -35,4 +35,4 @@
   <div class={styles.resultArea}>
     <strong class={styles.result}>{resultLabels[result]}</strong>
   </div>
-</li>
+</div>

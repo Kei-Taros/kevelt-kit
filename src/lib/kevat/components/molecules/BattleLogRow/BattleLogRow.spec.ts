@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/svelte';
 import { describe, expect, test } from 'vitest';
 import BattleLogRow from './BattleLogRow.svelte';
+import * as styles from './BattleLogRow.css';
 
 describe('BattleLogRow', () => {
   test.each([
@@ -18,6 +19,7 @@ describe('BattleLogRow', () => {
       expect(screen.getByText('04')).toBeInTheDocument();
       expect(screen.getByText(label)).toBeInTheDocument();
       expect(screen.getByRole('img', { name: 'FIRE vs STONE' })).toBeInTheDocument();
+      expect(container.firstElementChild).toHaveClass(styles.entranceVariants[result]);
       expect(
         Array.from(container.querySelectorAll('source[type="image/webp"]')).map((source) =>
           source.getAttribute('srcset')

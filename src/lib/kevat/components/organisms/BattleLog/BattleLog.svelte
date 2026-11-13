@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { flip } from 'svelte/animate';
   import { BattleLogRow } from '$lib/kevat/components/molecules';
   import type { BattleLogEntry } from '$lib/kevat/types/battleLog.types';
   import * as styles from './BattleLog.css';
@@ -47,12 +48,14 @@
   {/if}
   <ol class={styles.list}>
     {#each logs as entry (entry.turn)}
-      <BattleLogRow
-        turn={entry.turn}
-        result={entry.result}
-        player={entry.player}
-        enemy={entry.enemy}
-      />
+      <li class={styles.listItem} animate:flip={{ duration: 400 }}>
+        <BattleLogRow
+          turn={entry.turn}
+          result={entry.result}
+          player={entry.player}
+          enemy={entry.enemy}
+        />
+      </li>
     {/each}
   </ol>
 </aside>

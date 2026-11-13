@@ -46,4 +46,19 @@ describe('BattleLog', () => {
     expect(row).toHaveTextContent('DRAW');
     expect(within(row).getByRole('img', { name: 'MIST vs MIST' })).toBeInTheDocument();
   });
+
+  test('新しいターンが追加された場合、既存のログ行は同じ要素のまま残る', async () => {
+    const firstLog = { turn: '01', result: 'draw', player: 'mist', enemy: 'mist' } as const;
+    const { rerender } = render(BattleLog, { props: { logs: [firstLog] } });
+    const log = screen.getByRole('complementary', { name: 'Battle Log' });
+    const existingRow = within(log).getByRole('listitem');
+
+    await rerender({
+      logs: [{ turn: '02', result: 'win', player: 'fire', enemy: 'mist' }, firstLog]
+    });
+
+    const rows = within(log).getAllByRole('listitem');
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toBe(existingRow);
+  });
 });

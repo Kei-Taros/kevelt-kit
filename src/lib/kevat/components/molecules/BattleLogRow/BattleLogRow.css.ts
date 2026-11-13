@@ -1,6 +1,18 @@
-import { createVar, style, styleVariants } from '@vanilla-extract/css';
+import { createVar, keyframes, style, styleVariants } from '@vanilla-extract/css';
 
 const logAccent = createVar();
+const enterFromLeft = keyframes({
+  from: { opacity: 0, transform: 'translateX(-18px)' },
+  to: { opacity: 1, transform: 'translateX(0)' }
+});
+const enterFromRight = keyframes({
+  from: { opacity: 0, transform: 'translateX(18px)' },
+  to: { opacity: 1, transform: 'translateX(0)' }
+});
+const enterFromTop = keyframes({
+  from: { opacity: 0, transform: 'translateY(-12px)' },
+  to: { opacity: 1, transform: 'translateY(0)' }
+});
 
 export const row = style({
   position: 'relative',
@@ -10,6 +22,7 @@ export const row = style({
   columnGap: 4,
   alignItems: 'center',
   minHeight: 0,
+  height: '100%',
   boxSizing: 'border-box',
   padding: '8px 7px',
   color: '#f6f4ed',
@@ -31,6 +44,21 @@ export const outcomeVariants = styleVariants({
   win: { vars: { [logAccent]: '#30f08f' } },
   lose: { vars: { [logAccent]: '#ff4b6e' } },
   draw: { vars: { [logAccent]: '#ffd54f' } }
+});
+
+export const entranceVariants = styleVariants({
+  win: {
+    animation: `${enterFromLeft} 400ms ease-out both`,
+    '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } }
+  },
+  lose: {
+    animation: `${enterFromRight} 400ms ease-out both`,
+    '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } }
+  },
+  draw: {
+    animation: `${enterFromTop} 400ms ease-out both`,
+    '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } }
+  }
 });
 
 export const turn = style({
