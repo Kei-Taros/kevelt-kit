@@ -15,7 +15,7 @@
   import * as animationStyles from './battleAnimation.css';
   import * as constants from './constants/aBreak';
 
-  const battle = createBattleSequence(constants.BATTLE_MESSAGE);
+  const battle = createBattleSequence(constants.BATTLE_MESSAGE, '01');
   onDestroy(battle.destroy);
 </script>
 

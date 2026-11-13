@@ -1,3 +1,5 @@
+import { chooseEnemyMove } from './enemyAi';
+import type { StageId } from '../types/stage.types';
 import { determineWinner, resolveTurn } from './battleRules';
 import type { FighterState, TurnResult } from './battleRules';
 import type { BattleLogEntry } from '../types/battleLog.types';
@@ -12,7 +14,10 @@ const timing = {
   winnerMessage: 1500
 } as const;
 
-export const createBattleSequence = (initialMessageLines: readonly string[]) => {
+export const createBattleSequence = (
+  initialMessageLines: readonly string[],
+  stage: StageId = '01'
+) => {
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
   const initialLevels = (): Record<ElementType, ElementLevel> => ({
     fire: 1,
@@ -20,20 +25,11 @@ export const createBattleSequence = (initialMessageLines: readonly string[]) => 
     mist: 1
   });
 
-  const chooseEnemyMove = (
-    levels: Record<ElementType, ElementLevel>,
-    sealedElement?: ElementType
-  ): ElementType | null => {
-    const available = elements.filter(
-      (element) => levels[element] !== 0 && element !== sealedElement
-    );
-    if (available.length === 0) return null;
-    return available[Math.floor(Math.random() * available.length)];
-  };
-
   let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
   let enemy = $state<FighterState>({ hp: 150, levels: initialLevels() });
-  let nextEnemyMove = $state<ElementType | null>(chooseEnemyMove(initialLevels()));
+  let nextEnemyMove = $state<ElementType | null>(
+    chooseEnemyMove(stage, { hp: 150, levels: initialLevels() })
+  );
   let revealedEnemyMove = $state<ElementType | null>(null);
   let previewPlayerMove = $state<ElementType | null>(null);
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
@@ -168,7 +164,7 @@ export const createBattleSequence = (initialMessageLines: readonly string[]) => 
         revealTimer = undefined;
       }, timing.winner);
       if (result.player.hp !== 0 && result.enemy.hp !== 0)
-        nextEnemyMove = chooseEnemyMove(result.enemy.levels, result.enemy.sealedElement);
+        nextEnemyMove = chooseEnemyMove(stage, result.enemy);
       return;
     }
 
@@ -177,7 +173,7 @@ export const createBattleSequence = (initialMessageLines: readonly string[]) => 
     revealedEnemyMove = enemyMove;
     winPhase = 'clash';
     if (result.player.hp !== 0 && result.enemy.hp !== 0)
-      nextEnemyMove = chooseEnemyMove(result.enemy.levels, result.enemy.sealedElement);
+      nextEnemyMove = chooseEnemyMove(stage, result.enemy);
     winTimer = setTimeout(() => {
       winPhase = 'resolve';
       winTimer = undefined;

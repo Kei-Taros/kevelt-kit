@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import * as enemyAi from './enemyAi';
+import { randomEnemyMove } from '../../../../tests/helpers/randomEnemyMove';
 import { createBattleSequence } from './battleSequence.svelte';
 
 const messages = ['一手を選べ', '勝利をつかめ'] as const;
@@ -7,12 +9,31 @@ describe('battleSequence', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
+    vi.spyOn(enemyAi, 'chooseEnemyMove').mockImplementation((_stage, enemy) =>
+      randomEnemyMove(enemy)
+    );
   });
 
   afterEach(() => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+  });
+
+  test('ステージ01の場合、敵はMISTを優先し、Lv0になった次のターンは乱数に応じてFIREを選ぶ', () => {
+    vi.mocked(enemyAi.chooseEnemyMove).mockRestore();
+    const battle = createBattleSequence(messages, '01');
+    for (let turn = 0; turn < 3; turn++) {
+      battle.selectElement('fire');
+      vi.advanceTimersByTime(1300);
+      expect(battle.revealedEnemyMove).toBe('mist');
+      vi.advanceTimersByTime(5000);
+    }
+    expect(battle.enemy.levels.mist).toBe(0);
+    battle.selectElement('stone');
+    vi.advanceTimersByTime(1300);
+    expect(battle.revealedEnemyMove).toBe('fire');
+    battle.destroy();
   });
 
   test('初期状態の場合、HPとメッセージを表示してElementとログを表示しない', () => {

@@ -6,6 +6,14 @@ import * as styles from './aBreak.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/kevat/components/atoms/HealthBar/HealthBar.css';
 
+vi.mock('$lib/kevat/game/enemyAi', async () => {
+  const { randomEnemyMove } = await import('../../../tests/helpers/randomEnemyMove');
+  return {
+    chooseEnemyMove: (_stage: unknown, enemy: Parameters<typeof randomEnemyMove>[0]) =>
+      randomEnemyMove(enemy)
+  };
+});
+
 describe('aBreakPage', () => {
   beforeEach(() => {
     vi.spyOn(Math, 'random').mockReturnValue(0);
