@@ -7,13 +7,13 @@
     ElementCycle,
     EnemyImage,
     StoneEffectBadge
-  } from '$lib/kevat/components/atoms';
-  import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/kevat/components/molecules';
-  import { BattleLog, ElementSelector } from '$lib/kevat/components/organisms';
-  import { createBattleSequence } from '$lib/kevat/game/battleSequence.svelte';
+  } from '$lib/ketria/components/atoms';
+  import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
+  import { BattleLog, ElementSelector } from '$lib/ketria/components/organisms';
+  import { createBattleSequence } from '$lib/ketria/game/battleSequence.svelte';
   import * as styles from './aBreak.css';
   import * as animationStyles from './battleAnimation.css';
-  import { BATTLE_MESSAGES } from '$lib/kevat/constants/battleMessages';
+  import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 
   const battle = createBattleSequence(BATTLE_MESSAGES['01'], '01');
   onDestroy(battle.destroy);
@@ -36,7 +36,7 @@
       <div class={animationStyles.previewMove}>
         <EnemyMove element={battle.previewPlayerMove} />
       </div>
-      <img class={animationStyles.previewSparks} src="/images/kevat/effects/sparks.svg" alt="" />
+      <img class={animationStyles.previewSparks} src="/images/ketria/effects/sparks.svg" alt="" />
       <div class={animationStyles.previewMove}>
         <EnemyMove element={battle.revealedEnemyMove} />
       </div>

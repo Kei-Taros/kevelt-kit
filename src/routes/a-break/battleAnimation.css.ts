@@ -1,5 +1,5 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
-import { container, ring } from '$lib/kevat/components/molecules/EnemyMove/EnemyMove.css';
+import { container, ring } from '$lib/ketria/components/molecules/EnemyMove/EnemyMove.css';
 
 const moveVibration = keyframes({
   '0%, 100%': { transform: 'translate(0, 0)' },

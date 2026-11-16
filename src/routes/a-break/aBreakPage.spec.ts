@@ -2,12 +2,12 @@ import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import Page from './+page.svelte';
-import { BATTLE_MESSAGES } from '$lib/kevat/constants/battleMessages';
+import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 import * as styles from './aBreak.css';
 import * as animationStyles from './battleAnimation.css';
-import * as healthBarStyles from '$lib/kevat/components/atoms/HealthBar/HealthBar.css';
+import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
 
-vi.mock('$lib/kevat/game/enemyAi', async () => {
+vi.mock('$lib/ketria/game/enemyAi', async () => {
   const { randomEnemyMove } = await import('../../../tests/helpers/randomEnemyMove');
   return {
     chooseEnemyMove: (_stage: unknown, enemy: Parameters<typeof randomEnemyMove>[0]) =>
@@ -274,7 +274,7 @@ describe('aBreakPage', () => {
     const groups = screen.getAllByRole('group');
     const enemyFire = groups.find((group) => group.getAttribute('aria-label') === 'FIRE');
     expect(
-      enemyFire?.querySelector('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+      enemyFire?.querySelector('source[srcset="/images/ketria/effects/mist-effect.webp"]')
     ).toBeInTheDocument();
     await finishHealthAnimation();
     expect(screen.getByText('100 / 150')).toBeInTheDocument();
@@ -286,7 +286,7 @@ describe('aBreakPage', () => {
     await vi.advanceTimersByTimeAsync(600);
     await tick();
     expect(
-      enemyFire?.querySelector('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+      enemyFire?.querySelector('source[srcset="/images/ketria/effects/mist-effect.webp"]')
     ).not.toBeInTheDocument();
   });
 
@@ -321,7 +321,7 @@ describe('aBreakPage', () => {
     expect(
       screen
         .getByRole('group', { name: 'Element selection' })
-        .querySelectorAll('source[srcset="/images/kevat/effects/mist-effect.webp"]')
+        .querySelectorAll('source[srcset="/images/ketria/effects/mist-effect.webp"]')
     ).toHaveLength(1);
 
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));

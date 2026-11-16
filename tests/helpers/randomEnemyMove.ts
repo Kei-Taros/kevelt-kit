@@ -1,5 +1,5 @@
-import type { FighterState } from '../../src/lib/kevat/game/battleRules';
-import type { ElementType } from '../../src/lib/kevat/types/element.types';
+import type { FighterState } from '../../src/lib/ketria/game/battleRules';
+import type { ElementType } from '../../src/lib/ketria/types/element.types';
 
 export const randomEnemyMove = (enemy: FighterState): ElementType | null => {
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
