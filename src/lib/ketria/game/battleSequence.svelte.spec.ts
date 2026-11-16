@@ -21,6 +21,53 @@ describe('battleSequence', () => {
     vi.restoreAllMocks();
   });
 
+  test.each([
+    { stage: '01' as const, max: 150 },
+    { stage: '02' as const, max: 200 },
+    { stage: '03' as const, max: 300 },
+    { stage: '04' as const, max: 500 }
+  ])('ステージ$stageを開始した場合、敵HPを$maxに設定する', ({ stage, max }) => {
+    const battle = createBattleSequence(messagePatterns, stage);
+    expect(battle.enemyMaxHp).toBe(max);
+    expect(battle.enemy.hp).toBe(max);
+    expect(battle.player.hp).toBe(200);
+    battle.destroy();
+  });
+
+  test('次の手が確定した状態から復元した場合、敵の手を再抽選しない', () => {
+    const first = createBattleSequence(messagePatterns);
+    const snapshot = JSON.parse(JSON.stringify(first.snapshot));
+    first.destroy();
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    const restored = createBattleSequence(messagePatterns, '01', snapshot);
+    restored.selectElement('stone');
+    vi.advanceTimersByTime(1300);
+    expect(restored.revealedEnemyMove).toBe('fire');
+    restored.destroy();
+  });
+
+  test('STONE Lv3の結果確定後に復元した場合、半減効果とLv0とログを保持し次のターンを進められる', () => {
+    const first = createBattleSequence(messagePatterns);
+    for (let turn = 0; turn < 3; turn++) {
+      first.selectElement('stone');
+      vi.advanceTimersByTime(6300);
+    }
+    const snapshot = JSON.parse(JSON.stringify(first.snapshot));
+    first.destroy();
+    const restored = createBattleSequence(messagePatterns, '01', snapshot);
+    expect(restored.enemy.hp).toBe(90);
+    expect(restored.player.levels.stone).toBe(0);
+    expect(restored.playerStoneEffectActive).toBe(true);
+    expect(restored.battleLogs).toHaveLength(3);
+    expect(restored.controlsDisabled).toBe(false);
+    restored.selectElement('mist');
+    vi.advanceTimersByTime(6300);
+    expect(restored.battleLogs).toHaveLength(4);
+    expect(restored.player.levels.stone).toBe(1);
+    expect(restored.playerStoneEffectActive).toBe(false);
+    restored.destroy();
+  });
+
   test('ステージ01の場合、敵はMISTを優先し、Lv0になった次のターンは乱数に応じてFIREを選ぶ', () => {
     vi.mocked(enemyAi.chooseEnemyMove).mockRestore();
     const battle = createBattleSequence(messagePatterns, '01');

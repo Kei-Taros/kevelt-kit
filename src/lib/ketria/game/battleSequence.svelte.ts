@@ -1,4 +1,6 @@
+import { ENEMY_MAX_HP } from '../constants/stages';
 import { createBattleMessageSelector } from './battleMessages';
+import type { BattleSnapshot } from '../types/battleSession.types';
 import type { BattleMessagePattern } from '../types/battleMessage.types';
 import { chooseEnemyMove } from './enemyAi';
 import type { StageId } from '../types/stage.types';
@@ -18,11 +20,12 @@ const timing = {
 
 export const createBattleSequence = (
   messagePatterns: readonly BattleMessagePattern[],
-  stage: StageId = '01'
+  stage: StageId = '01',
+  snapshot?: BattleSnapshot
 ) => {
-  const selectMessage = createBattleMessageSelector(messagePatterns);
-  const enemyMaxHp = 150;
-  let consecutiveDraws = 0;
+  const selectMessage = createBattleMessageSelector(messagePatterns, snapshot?.messageSelection);
+  const enemyMaxHp = ENEMY_MAX_HP[stage];
+  let consecutiveDraws = snapshot?.consecutiveDraws ?? 0;
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
   const initialLevels = (): Record<ElementType, ElementLevel> => ({
     fire: 1,
@@ -30,20 +33,25 @@ export const createBattleSequence = (
     mist: 1
   });
 
-  let player = $state<FighterState>({ hp: 200, levels: initialLevels() });
-  let enemy = $state<FighterState>({ hp: enemyMaxHp, levels: initialLevels() });
-  let nextEnemyMove = chooseEnemyMove(stage, { hp: enemyMaxHp, levels: initialLevels() });
+  let player = $state<FighterState>(snapshot?.player ?? { hp: 200, levels: initialLevels() });
+  let enemy = $state<FighterState>(snapshot?.enemy ?? { hp: enemyMaxHp, levels: initialLevels() });
+  let nextEnemyMove = snapshot
+    ? snapshot.nextEnemyMove
+    : chooseEnemyMove(stage, { hp: enemyMaxHp, levels: initialLevels() });
   let revealedEnemyMove = $state<ElementType | null>(null);
   let previewPlayerMove = $state<ElementType | null>(null);
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
   let winPhase = $state<'clash' | 'resolve' | 'winner' | null>(null);
-  let battleLogs = $state<BattleLogEntry[]>([]);
-  let messageLines = $state<readonly string[]>(selectMessage(nextEnemyMove));
-  let messageReady = $state(false);
-  let playerStoneEffectActive = $state(false);
-  let enemyStoneEffectActive = $state(false);
-  let visibleEnemySealedElement = $state<ElementType | null>(null);
-  let visiblePlayerSealedElement = $state<ElementType | null>(null);
+  let battleLogs = $state<BattleLogEntry[]>(snapshot?.battleLogs ?? []);
+  const initialMessageLines = snapshot?.messageLines ?? selectMessage(nextEnemyMove);
+  let messageLines = $state<readonly string[]>(initialMessageLines);
+  let messageReady = $state(snapshot !== undefined);
+  let playerStoneEffectActive = $state(snapshot?.player.stoneGuard === true);
+  let enemyStoneEffectActive = $state(snapshot?.enemy.stoneGuard === true);
+  let visibleEnemySealedElement = $state<ElementType | null>(snapshot?.enemy.sealedElement ?? null);
+  let visiblePlayerSealedElement = $state<ElementType | null>(
+    snapshot?.player.sealedElement ?? null
+  );
   let messageFading = $state(false);
   let messageImmediate = $state(false);
   let messageTextFading = $state(false);
@@ -59,6 +67,19 @@ export const createBattleSequence = (
   let warningTimer: ReturnType<typeof setTimeout> | undefined;
   let originalMessageLines: readonly string[] | undefined;
   let hpTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const createSnapshot = (lines: readonly string[]): BattleSnapshot => ({
+    stage,
+    player: { ...player, levels: { ...player.levels } },
+    enemy: { ...enemy, levels: { ...enemy.levels } },
+    nextEnemyMove,
+    battleLogs: battleLogs.map((entry) => ({ ...entry })),
+    messageLines: [...lines],
+    consecutiveDraws,
+    messageSelection: selectMessage.getSnapshot()
+  });
+  let turnMessageLines = initialMessageLines;
+  let checkpoint = $state.raw<BattleSnapshot>(createSnapshot(initialMessageLines));
 
   const destroy = (): void => {
     if (revealTimer) clearTimeout(revealTimer);
@@ -143,6 +164,16 @@ export const createBattleSequence = (
     player = result.player;
     enemy = result.enemy;
     battleLogs = [logEntry, ...battleLogs];
+    turnMessageLines =
+      player.hp === 0
+        ? ['GAME OVER']
+        : enemy.hp === 0
+          ? ['PLAYER WIN']
+          : selectMessage(nextEnemyMove, {
+              enemyHp: enemy.hp / enemyMaxHp,
+              draw: consecutiveDraws
+            });
+    checkpoint = createSnapshot(turnMessageLines);
   };
 
   const resolveSelection = (element: ElementType): void => {
@@ -169,15 +200,7 @@ export const createBattleSequence = (
     const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
     const showTurnMessage = (): void => {
-      messageLines =
-        player.hp === 0
-          ? ['GAME OVER']
-          : enemy.hp === 0
-            ? ['PLAYER WIN']
-            : selectMessage(nextEnemyMove, {
-                enemyHp: enemy.hp / enemyMaxHp,
-                draw: consecutiveDraws
-              });
+      messageLines = turnMessageLines;
       messageImmediate = false;
       messageTextDuration = 500;
       messageReady = true;
@@ -231,6 +254,12 @@ export const createBattleSequence = (
   };
 
   return {
+    get snapshot() {
+      return checkpoint;
+    },
+    get enemyMaxHp() {
+      return enemyMaxHp;
+    },
     get player() {
       return player;
     },

@@ -166,4 +166,20 @@ describe('createBattleMessageSelector', () => {
     expect(select('fire', battleState)).toEqual(['通常']);
     expect(createBattleMessageSelector(patterns)('fire', battleState)).toEqual(['HP']);
   });
+  test('コメント選択状態を復元した場合、通常コメントの続きから表示し使用済みHPコメントは再使用しない', () => {
+    const patterns: readonly BattleMessagePattern[] = [
+      { lines: ['通常一'], moves: ['mist'] },
+      { lines: ['通常二'], moves: ['mist'] },
+      { lines: ['HP'], moves: ['mist'], when: { enemyHp: 0.5 } }
+    ];
+    const select = createBattleMessageSelector(patterns);
+    expect(select('mist')).toEqual(['通常一']);
+    expect(select('mist', { enemyHp: 0.5, draw: 0 })).toEqual(['HP']);
+    const restored = createBattleMessageSelector(
+      patterns,
+      JSON.parse(JSON.stringify(select.getSnapshot()))
+    );
+    expect(restored('mist', { enemyHp: 0.4, draw: 0 })).toEqual(['通常二']);
+    expect(restored('mist', { enemyHp: 0.3, draw: 0 })).toEqual(['通常一']);
+  });
 });
