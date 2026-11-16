@@ -51,7 +51,7 @@ export const message = style({
       pointerEvents: 'none',
       background: mistBackground,
       filter: 'blur(10px)',
-      animation: `${mistAppear} 900ms ease-out both`
+      animation: `${mistAppear} 900ms ease-out 1000ms both`
     },
     '&::after': {
       content: "''",
@@ -61,7 +61,8 @@ export const message = style({
       pointerEvents: 'none',
       background: mistBackground,
       filter: 'blur(14px)',
-      animation: `${gentleBreathing} 4s ease-in-out 900ms infinite both, ${mistDrift} 8s ease-in-out 900ms infinite both`
+      opacity: 0,
+      animation: `${gentleBreathing} 4s ease-in-out 1900ms infinite forwards, ${mistDrift} 8s ease-in-out 1900ms infinite both`
     }
   },
   '@media': {
@@ -76,9 +77,9 @@ export const message = style({
 
 export const line = style({
   display: 'block',
-  animation: `${textAppear} 500ms ease-out 900ms both`,
+  animation: `${textAppear} 500ms ease-out 1900ms both`,
   selectors: {
-    '&:nth-child(2)': { animationDelay: '1450ms' }
+    '&:nth-child(2)': { animationDelay: '2450ms' }
   },
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }

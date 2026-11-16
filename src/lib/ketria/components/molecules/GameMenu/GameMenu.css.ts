@@ -39,3 +39,15 @@ export const backdrop = style({
   padding: 0,
   background: 'rgba(0, 0, 0, 0.6)'
 });
+
+export const action = style([
+  link,
+  {
+    width: '100%',
+    border: 0,
+    background: 'transparent',
+    fontFamily: 'inherit',
+    textAlign: 'left',
+    cursor: 'pointer'
+  }
+]);

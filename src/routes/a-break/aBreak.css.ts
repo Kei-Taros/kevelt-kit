@@ -1,4 +1,4 @@
-import { keyframes, style } from '@vanilla-extract/css';
+import { createVar, keyframes, style } from '@vanilla-extract/css';
 
 export const arena = style({
   position: 'relative',
@@ -6,7 +6,7 @@ export const arena = style({
   width: '100%',
   height: '100vh',
   overflow: 'hidden',
-  background: '#080d10',
+  background: '#000',
   color: '#f5f5f2',
   containerType: 'inline-size',
   '@supports': {
@@ -129,4 +129,132 @@ export const attributes = style({
   top: 'min(68%, calc(100% - min(15.6cqw, 27dvh) - 64px - env(safe-area-inset-bottom)))',
   left: '50%',
   transform: 'translateX(-50%)'
+});
+
+export const titleShade = style({
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+  background:
+    'radial-gradient(ellipse at 50% 38%, #02070b1a 0%, #02070b55 55%, #0009 100%), linear-gradient(180deg, #02070b30, transparent 60%)'
+});
+
+const titleMistDrift = keyframes({
+  from: { transform: 'translate3d(-50%, 0, 0)' },
+  to: { transform: 'translate3d(0, 0, 0)' }
+});
+
+// 左右端に同じ雲を配置し、各タイルの濃さと傾きを連続させる。
+const titleMistNear = [
+  'radial-gradient(ellipse 26.4% 50.4% at 0% 62%, #e8f3fa48, #e8f3fa18 45%, #e8f3fa00 100%)',
+  'radial-gradient(ellipse 26.4% 50.4% at 100% 62%, #e8f3fa48, #e8f3fa18 45%, #e8f3fa00 100%)',
+  'radial-gradient(ellipse 31.2% 39.6% at 42% 76%, #e8f3fa55, #e8f3fa18 45%, #e8f3fa00 100%)',
+  'radial-gradient(ellipse 26.4% 33.6% at 72% 38%, #e8f3fa38, #e8f3fa10 45%, #e8f3fa00 100%)'
+].join(', ');
+
+const titleMistFar = [
+  'radial-gradient(ellipse 38.4% 36% at 0% 36%, #edf6ff48, #edf6ff12 45%, #edf6ff00 100%)',
+  'radial-gradient(ellipse 38.4% 36% at 100% 36%, #edf6ff48, #edf6ff12 45%, #edf6ff00 100%)',
+  'radial-gradient(ellipse 40.8% 48% at 51% 60%, #edf6ff48, #edf6ff18 45%, #edf6ff00 100%)'
+].join(', ');
+
+export const titleMist = style({
+  position: 'absolute',
+  inset: '50% 0 0',
+  zIndex: 1,
+  overflow: 'hidden',
+  pointerEvents: 'none',
+  maskImage: 'linear-gradient(to bottom, transparent, #000 30%)',
+  background: 'linear-gradient(to bottom, #e8f3fa08, #e8f3fa18)',
+  selectors: {
+    '&::before, &::after': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      width: '200%',
+      backgroundSize: '50% 100%',
+      backgroundRepeat: 'repeat-x',
+      animation: `${titleMistDrift} 20s linear infinite`
+    },
+    '&::before': {
+      backgroundImage: titleMistNear,
+      opacity: 0.85
+    },
+    '&::after': {
+      backgroundImage: titleMistFar,
+      opacity: 0.6,
+      animationDuration: '30s',
+      animationDelay: '-9s'
+    }
+  },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': {
+      selectors: { '&::before, &::after': { animation: 'none' } }
+    }
+  }
+});
+
+export const battleResultActions = style({
+  position: 'absolute',
+  top: '56%',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  zIndex: 3,
+  display: 'flex',
+  gap: 'clamp(12px, 2vw, 30px)'
+});
+
+export const battleResultButton = style({
+  padding: '12px 18px',
+  border: '1px solid #ffb06170',
+  background: '#060c12cc',
+  color: '#f6f7fa',
+  fontFamily: 'Arial, sans-serif',
+  fontSize: 'clamp(12px, 1.2vw, 20px)',
+  letterSpacing: '0.12em',
+  whiteSpace: 'nowrap',
+  cursor: 'pointer',
+  selectors: {
+    '&:hover': { borderColor: '#ffb061', color: '#ffb061' },
+    '&:focus-visible': { outline: '1px solid #ffb061', outlineOffset: 4 }
+  }
+});
+
+export const screenBlackout = style({
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1000,
+  background: '#000'
+});
+
+export const screenBlackoutOpening = style({
+  background: 'transparent'
+});
+
+export const screenContent = style({
+  position: 'absolute',
+  inset: 0
+});
+
+export const screenContentHidden = style({
+  opacity: 0
+});
+
+const revealRadius = createVar({
+  syntax: '<percentage>',
+  inherits: false,
+  initialValue: '-25%'
+});
+
+const revealScreen = keyframes({
+  from: { vars: { [revealRadius]: '-25%' }, opacity: 0.4 },
+  to: { vars: { [revealRadius]: '125%' }, opacity: 1 }
+});
+
+export const screenContentReveal = style({
+  maskImage: `radial-gradient(circle at center, #000 calc(${revealRadius} - 20%), transparent calc(${revealRadius} + 20%))`,
+  animation: `${revealScreen} 700ms ease-out both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none', maskImage: 'none', opacity: 1 }
+  }
 });

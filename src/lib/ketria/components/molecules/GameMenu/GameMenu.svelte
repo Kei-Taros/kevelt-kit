@@ -1,7 +1,13 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { MenuButton } from '$lib/ketria/components/atoms';
   import * as styles from './GameMenu.css';
 
+  interface Props {
+    ontitle?: () => void;
+  }
+
+  let { ontitle }: Props = $props();
   let open = $state(false);
   let menuRoot: HTMLDivElement;
 
@@ -29,6 +35,16 @@
 <div class={styles.root} bind:this={menuRoot}>
   <MenuButton {open} onclick={() => (open = !open)} />
   <nav id="game-navigation" class={styles.panel} aria-label="ゲームメニュー" hidden={!open}>
-    <a class={styles.link} href="/">トップに戻る</a>
+    {#if ontitle}
+      <button
+        type="button"
+        class={styles.action}
+        onclick={() => {
+          closeMenu();
+          ontitle?.();
+        }}>ゲームトップに戻る</button
+      >
+    {/if}
+    <a class={styles.link} href={resolve('/')}>トップに戻る</a>
   </nav>
 </div>

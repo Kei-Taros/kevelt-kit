@@ -4,29 +4,29 @@ import type { StageId } from '../types/stage.types';
 export const BATTLE_MESSAGES = {
   '01': [
     {
+      lines: ['我が炎を受けてみよ'],
+      moves: ['fire']
+    },
+    {
+      lines: ['その身を焼き尽くそう'],
+      moves: ['fire']
+    },
+    {
+      lines: ['灰となる覚悟はあるか'],
+      moves: ['fire']
+    },
+    {
       lines: ['...。'],
-      moves: ['fire', 'stone']
+      moves: ['fire'],
+      when: { draw: 3 }
     },
     {
       lines: ['霧を失っても退かぬ'],
       moves: ['stone']
     },
     {
-      lines: ['白き闇は防げぬ'],
-      moves: ['mist']
-    },
-    {
-      lines: ['我が一撃受けてみよ'],
-      moves: ['mist']
-    },
-    {
-      lines: ['何度晴らそうと戻る'],
-      moves: ['mist']
-    },
-    {
       lines: ['...。'],
-      moves: ['mist'],
-      when: { draw: 3 }
+      moves: ['stone', 'mist']
     },
     {
       lines: ['これからだ....。'],
@@ -40,12 +40,21 @@ export const BATTLE_MESSAGES = {
     }
   ],
   '02': [
-    { lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'], moves: ['mist'] }
+    {
+      lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'],
+      moves: ['fire', 'stone', 'mist']
+    }
   ],
   '03': [
-    { lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'], moves: ['mist'] }
+    {
+      lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'],
+      moves: ['fire', 'stone', 'mist']
+    }
   ],
   '04': [
-    { lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'], moves: ['mist'] }
+    {
+      lines: ['相手の属性を見極め一手を選べ！', '三すくみを覚えて勝利をつかめ！'],
+      moves: ['fire', 'stone', 'mist']
+    }
   ]
 } as const satisfies Record<StageId, readonly BattleMessagePattern[]>;

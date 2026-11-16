@@ -6,9 +6,10 @@
     immediate?: boolean;
     fading?: boolean;
     duration?: number;
+    delay?: number;
   }
 
-  let { lines, immediate = false, fading = false, duration = 500 }: Props = $props();
+  let { lines, immediate = false, fading = false, duration = 500, delay = 1900 }: Props = $props();
 
   const maxLength = 15;
 
@@ -26,7 +27,7 @@
       <span
         class={`${styles.line} ${fading ? styles.lineFadeOut : ''}`}
         style:animation-duration={`${duration}ms`}
-        style:animation-delay={immediate ? '0ms' : undefined}>{shorten(line)}</span
+        style:animation-delay={`${immediate || fading ? 0 : delay + index * 550}ms`}>{shorten(line)}</span
       >
     {/each}
   {/key}

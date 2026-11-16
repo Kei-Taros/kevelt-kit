@@ -8,7 +8,7 @@ const chooseRandom: EnemyAi = (available) =>
   available.length === 0 ? null : available[Math.floor(Math.random() * available.length)];
 
 const stageAi: Record<StageId, EnemyAi> = {
-  '01': (available) => (available.includes('mist') ? 'mist' : chooseRandom(available)),
+  '01': (available) => (available.includes('fire') ? 'fire' : chooseRandom(available)),
   '02': chooseRandom,
   '03': chooseRandom,
   '04': chooseRandom

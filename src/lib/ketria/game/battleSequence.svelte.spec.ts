@@ -68,19 +68,19 @@ describe('battleSequence', () => {
     restored.destroy();
   });
 
-  test('ステージ01の場合、敵はMISTを優先し、Lv0になった次のターンは乱数に応じてFIREを選ぶ', () => {
+  test('ステージ01の場合、敵はFIREを優先し、FIREがLv0になった次のターンはSTONEを選ぶ', () => {
     vi.mocked(enemyAi.chooseEnemyMove).mockRestore();
     const battle = createBattleSequence(messagePatterns, '01');
     for (let turn = 0; turn < 3; turn++) {
-      battle.selectElement('fire');
+      battle.selectElement('mist');
       vi.advanceTimersByTime(1300);
-      expect(battle.revealedEnemyMove).toBe('mist');
+      expect(battle.revealedEnemyMove).toBe('fire');
       vi.advanceTimersByTime(5000);
     }
-    expect(battle.enemy.levels.mist).toBe(0);
+    expect(battle.enemy.levels.fire).toBe(0);
     battle.selectElement('stone');
     vi.advanceTimersByTime(1300);
-    expect(battle.revealedEnemyMove).toBe('fire');
+    expect(battle.revealedEnemyMove).toBe('stone');
     battle.destroy();
   });
 

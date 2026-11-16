@@ -2,10 +2,30 @@ import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import Page from './+page.svelte';
+import { loadScreenAssets } from '$lib/ketria/game/loadScreenAssets';
+import { SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
+import { PROGRESS_STORAGE_KEY } from '$lib/ketria/game/stageProgress';
 import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 import * as styles from './aBreak.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
+
+const navigationContext = vi.hoisted(() => ({ type: 'enter', documentType: 'navigate' }));
+
+vi.mock('$lib/ketria/game/loadScreenAssets', () => ({
+  loadScreenAssets: vi.fn().mockResolvedValue(undefined)
+}));
+
+vi.mock('$app/navigation', async () => {
+  const { onMount } = await import('svelte');
+  return {
+    afterNavigate: (callback: (navigation: { type: string }) => void) => {
+      onMount(() => callback({ type: navigationContext.type }));
+    }
+  };
+});
+
+const originalNavigationEntries = Object.getOwnPropertyDescriptor(performance, 'getEntriesByType');
 
 vi.mock('$lib/ketria/game/enemyAi', async () => {
   const { randomEnemyMove } = await import('../../../tests/helpers/randomEnemyMove');
@@ -16,17 +36,46 @@ vi.mock('$lib/ketria/game/enemyAi', async () => {
 });
 
 const fireMessage = BATTLE_MESSAGES['01'][0].lines[0];
+const nextFireMessage = BATTLE_MESSAGES['01'][1].lines[0];
 
 describe('aBreakPage', () => {
   beforeEach(() => {
+    vi.mocked(loadScreenAssets).mockReset().mockResolvedValue(undefined);
+    navigationContext.type = 'enter';
+    navigationContext.documentType = 'navigate';
+    localStorage.clear();
+    sessionStorage.clear();
     vi.spyOn(Math, 'random').mockReturnValue(0);
     vi.useFakeTimers();
+    Object.defineProperty(performance, 'getEntriesByType', {
+      configurable: true,
+      value: () => [{ type: navigationContext.documentType }]
+    });
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    if (originalNavigationEntries) {
+      Object.defineProperty(performance, 'getEntriesByType', originalNavigationEntries);
+    } else {
+      Reflect.deleteProperty(performance, 'getEntriesByType');
+    }
     vi.restoreAllMocks();
   });
+
+  const finishEntrance = async (): Promise<void> => {
+    await vi.advanceTimersByTimeAsync(800);
+    await tick();
+  };
+
+  const renderBattlePage = async () => {
+    const result = render(Page);
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'START' }));
+    await finishEntrance();
+    await tick();
+    return result;
+  };
 
   const beginNextTurn = async (): Promise<void> => {
     vi.advanceTimersByTime(6300);
@@ -43,8 +92,204 @@ describe('aBreakPage', () => {
     await tick();
   };
 
-  test('リロード直後の場合、中央にElementとSparkを表示しない', async () => {
+  test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);
+    await finishEntrance();
+    let finishLoading!: () => void;
+    vi.mocked(loadScreenAssets).mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishLoading = resolve;
+        })
+    );
+    await fireEvent.click(screen.getByRole('button', { name: 'START' }));
+    await vi.advanceTimersByTimeAsync(1500);
+    const blackout = container.querySelector(`.${styles.screenBlackout}`);
+    expect(blackout).toBeInTheDocument();
+    expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+    expect(container.querySelector('section')).toHaveProperty('inert', true);
+    finishLoading();
+    await vi.advanceTimersByTimeAsync(0);
+    await tick();
+    expect(blackout).toHaveClass(styles.screenBlackoutOpening);
+    await vi.advanceTimersByTimeAsync(700);
+    expect(blackout).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+  });
+
+  test('メニューからゲームトップに戻った場合、黒画面を挟んで中央からタイトルを表示する', async () => {
+    const { container } = await renderBattlePage();
+    await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    const blackout = container.querySelector(`.${styles.screenBlackout}`);
+    expect(blackout).toBeInTheDocument();
+    expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+    expect(container.querySelector('section')).toHaveProperty('inert', true);
+    await vi.advanceTimersByTimeAsync(100);
+    await tick();
+    expect(blackout).toHaveClass(styles.screenBlackoutOpening);
+    expect(container.querySelector(`.${styles.screenContent}`)).toHaveClass(
+      styles.screenContentReveal
+    );
+    await vi.advanceTimersByTimeAsync(700);
+    await tick();
+    expect(blackout).not.toBeInTheDocument();
+    expect(container.querySelector('section')).toHaveProperty('inert', false);
+    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+  });
+
+  test('STARTを押した場合、0.1秒は黒画面を表示し中央から0.7秒かけて画面が現れた後に操作できる', async () => {
+    const { container } = render(Page);
+    expect(container.parentElement?.querySelector(`.${styles.screenBlackout}`)).toBeInTheDocument();
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'START' }));
+    const blackout = container.parentElement?.querySelector(`.${styles.screenBlackout}`);
+    expect(blackout).toBeInTheDocument();
+    expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+    expect(container.querySelector('section')).toHaveProperty('inert', true);
+    expect(screen.getByRole('button', { name: 'FIRE', hidden: true })).toBeDisabled();
+    await vi.advanceTimersByTimeAsync(99);
+    await tick();
+    expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+    await vi.advanceTimersByTimeAsync(1);
+    await tick();
+    expect(blackout).toHaveClass(styles.screenBlackoutOpening);
+    expect(container.querySelector(`.${styles.screenContent}`)).toHaveClass(
+      styles.screenContentReveal
+    );
+    await vi.advanceTimersByTimeAsync(699);
+    await tick();
+    expect(container.querySelector('section')).toHaveProperty('inert', true);
+    await vi.advanceTimersByTimeAsync(1);
+    await tick();
+    expect(blackout).not.toBeInTheDocument();
+    expect(container.querySelector('section')).toHaveProperty('inert', false);
+    expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+  });
+
+  test.each([
+    { type: 'link', documentType: 'navigate' },
+    { type: 'link', documentType: 'reload' },
+    { type: 'goto', documentType: 'reload' },
+    { type: 'popstate', documentType: 'reload' },
+    { type: 'enter', documentType: 'navigate' }
+  ])(
+    'リロード以外の$type遷移で開いた場合、保存済みの対戦へ戻らずタイトルを表示する（文書:$documentType）',
+    async ({ type, documentType }) => {
+      const first = await renderBattlePage();
+      await first.unmount();
+      navigationContext.type = type;
+      navigationContext.documentType = documentType;
+      render(Page);
+      await finishEntrance();
+      expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+    }
+  );
+
+  test('対戦を進めてリロードした場合、HP・レベル・ログを引き継ぎタイトルへ戻らない', async () => {
+    const first = await renderBattlePage();
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await beginNextTurn();
+    await finishHealthAnimation();
+    expect(screen.getByText('140 / 150')).toBeInTheDocument();
+    await first.unmount();
+    navigationContext.documentType = 'reload';
+    const restored = render(Page);
+    expect(restored.container.querySelector(`.${styles.screenBlackout}`)).toBeInTheDocument();
+    await finishEntrance();
+    await tick();
+    expect(screen.queryByRole('button', { name: 'START' })).not.toBeInTheDocument();
+    expect(screen.getByText('140 / 150')).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('complementary', { name: 'Battle Log' })).getAllByRole('listitem')
+    ).toHaveLength(1);
+    expect(sessionStorage.getItem(SESSION_STORAGE_KEY)).not.toBeNull();
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await beginNextTurn();
+    await finishHealthAnimation();
+    expect(screen.getByText('120 / 150')).toBeInTheDocument();
+  });
+
+  test('対戦演出中にリロードした場合、最後に確定したターンから選択できる状態で再開する', async () => {
+    const first = await renderBattlePage();
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await startBattle();
+    await first.unmount();
+    navigationContext.documentType = 'reload';
+    render(Page);
+    await finishEntrance();
+    await tick();
+    expect(screen.getByText('150 / 150')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'STONE' })).toBeEnabled();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+
+  test('ページを開いた場合、タイトルを表示し対戦は開始しない', async () => {
+    render(Page);
+    await finishEntrance();
+    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+  });
+
+  test('ステージ選択を表示した場合、02と03は無効でホバーやクリックでも対戦を開始しない', async () => {
+    render(Page);
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await vi.advanceTimersByTimeAsync(800);
+    for (const stage of ['02', '03']) {
+      const button = screen.getByRole('button', { name: `STAGE ${stage}` });
+      expect(button).toBeDisabled();
+      await fireEvent.pointerEnter(button);
+      await fireEvent.click(button);
+    }
+    expect(screen.getByRole('heading', { name: 'STAGE SELECT' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'STAGE 01' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
+    expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+  });
+
+  test('01〜03のクリア状況が保存されている場合、CONTINUEで04の敵と対戦できる', async () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+    render(Page);
+    await finishEntrance();
+    await tick();
+    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await vi.advanceTimersByTimeAsync(800);
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE 04' }));
+    await finishEntrance();
+    expect(screen.getByText('500 / 500')).toBeInTheDocument();
+    expect(screen.getByText('200 / 200')).toBeInTheDocument();
+  });
+
+  test('02と03をクリア済みで01に勝利した場合、結果を保存し04を解放する', async () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['02', '03']));
+    await renderBattlePage();
+    for (const move of ['STONE', 'STONE', 'STONE', 'MIST', 'STONE', 'STONE', 'STONE', 'MIST']) {
+      await fireEvent.click(screen.getByRole('button', { name: move }));
+      await beginNextTurn();
+    }
+    expect(screen.getByText('PLAYER WIN')).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem(PROGRESS_STORAGE_KEY) ?? '[]')).toEqual([
+      '02',
+      '03',
+      '01'
+    ]);
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+    await vi.advanceTimersByTimeAsync(800);
+    expect(screen.getByRole('button', { name: 'STAGE 04' })).toBeInTheDocument();
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE 01' }));
+    await finishEntrance();
+    expect(screen.getByText('150 / 150')).toBeInTheDocument();
+    expect(screen.getByText('200 / 200')).toBeInTheDocument();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+
+  test('対戦開始直後の場合、中央にElementとSparkを表示しない', async () => {
+    const { container } = await renderBattlePage();
     expect(container.querySelectorAll(`.${animationStyles.previewMove}`)).toHaveLength(0);
     expect(container.querySelector(`.${animationStyles.previewSparks}`)).not.toBeInTheDocument();
 
@@ -58,7 +303,7 @@ describe('aBreakPage', () => {
   });
 
   test('属性ボタンを押した場合、0.3秒後にテキストが消え始めて0.5秒の待機後にバトル演出を始める', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
@@ -83,7 +328,7 @@ describe('aBreakPage', () => {
   });
 
   test('バトル演出中の場合、属性ボタンとレベルを無効化しテキスト再表示後に再度有効化する', async () => {
-    render(Page);
+    await renderBattlePage();
     const optionGroup = screen.getByRole('group', { name: 'Element selection' });
     const optionButtons = within(optionGroup).getAllByRole('button');
 
@@ -100,7 +345,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーが勝利した場合、2秒後に手が中央へ移り敵の手が退場する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     expect(container.querySelector(`.${animationStyles.movePreviewWin}`)).not.toBeInTheDocument();
@@ -117,7 +362,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーが勝利した場合、Elementが消えて0.5秒後にテキストを再表示する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     await startBattle();
 
@@ -132,11 +377,11 @@ describe('aBreakPage', () => {
 
     vi.advanceTimersByTime(1);
     await tick();
-    expect(screen.getByText(fireMessage)).toBeInTheDocument();
+    expect(screen.getByText(nextFireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーが勝利した場合、拡大したアイコンを0.6秒表示した後にHPとログを更新する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     const enemyBar = container.querySelectorAll<HTMLElement>(`.${healthBarStyles.value}`)[1];
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
@@ -156,7 +401,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーが負けた場合、2秒後に敵の手が中央へ移りプレイヤーの手が退場する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
     await startBattle();
@@ -175,7 +420,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーがSTONEを選んだ場合、敵のFIREを公開しHPと両者のレベルを更新する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
 
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
@@ -194,11 +439,11 @@ describe('aBreakPage', () => {
     await beginNextTurn();
 
     expect(container.querySelector(`.${animationStyles.movePreviewFadeOut}`)).toBeInTheDocument();
-    expect(screen.getByText(fireMessage)).toBeInTheDocument();
+    expect(screen.getByText(nextFireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーと敵が同じ属性を選んだ場合、両者のHPが10減る', async () => {
-    render(Page);
+    await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
     await finishHealthAnimation();
@@ -209,7 +454,7 @@ describe('aBreakPage', () => {
   });
 
   test('あいこの場合、両方の手が左右へ退場して1秒後にテキストを再表示する', async () => {
-    const { container } = render(Page);
+    const { container } = await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
     await startBattle();
@@ -247,11 +492,11 @@ describe('aBreakPage', () => {
 
     vi.advanceTimersByTime(1);
     await tick();
-    expect(screen.getByText(fireMessage)).toBeInTheDocument();
+    expect(screen.getByText(nextFireMessage)).toBeInTheDocument();
   });
 
   test('プレイヤーがMISTを選んでFIREに負けた場合、プレイヤーのHPが減る', async () => {
-    render(Page);
+    await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
 
@@ -264,7 +509,7 @@ describe('aBreakPage', () => {
     for (const value of [0.4, 0.4, 0.4, 0]) {
       vi.mocked(Math.random).mockReturnValueOnce(value);
     }
-    render(Page);
+    await renderBattlePage();
 
     for (let turn = 0; turn < 3; turn++) {
       await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
@@ -294,7 +539,7 @@ describe('aBreakPage', () => {
     for (const value of [0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0]) {
       vi.mocked(Math.random).mockReturnValueOnce(value);
     }
-    render(Page);
+    await renderBattlePage();
 
     for (const element of [
       'STONE',
@@ -330,7 +575,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーがSTONE Lv3でFIREに勝利した場合、30ダメージを与えてSTONEがLv0になる', async () => {
-    render(Page);
+    await renderBattlePage();
 
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     await beginNextTurn();
@@ -356,7 +601,7 @@ describe('aBreakPage', () => {
   });
 
   test('Lv0の属性が復活する場合、HP減少のタイミングでLv1に戻る', async () => {
-    render(Page);
+    await renderBattlePage();
 
     for (let turn = 0; turn < 3; turn++) {
       await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
@@ -376,7 +621,7 @@ describe('aBreakPage', () => {
   });
 
   test('対戦ターンが確定した場合、勝敗とプレイヤー・敵の手が新しい順にバトルログへ追加される', async () => {
-    render(Page);
+    await renderBattlePage();
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
     expect(within(log).queryByRole('listitem')).not.toBeInTheDocument();
 
@@ -418,7 +663,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーがLv0の属性を選んだ場合、バトルログに記録を追加しない', async () => {
-    render(Page);
+    await renderBattlePage();
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
 
     for (let turn = 0; turn < 3; turn++) {
@@ -437,7 +682,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーが敵のHPを0にした場合、最終ターンを記録して終了後も履歴を保持する', async () => {
-    render(Page);
+    await renderBattlePage();
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
 
     for (const [index, element] of [
