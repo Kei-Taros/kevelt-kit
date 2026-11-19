@@ -17,3 +17,10 @@ export const getAvailableStages = (clearedStages: readonly StageId[]): readonly 
   (['01', '02', '03'] as const).every((stage) => clearedStages.includes(stage))
     ? STAGE_IDS
     : STAGE_IDS.slice(0, 3);
+
+export const getDisabledStages = (clearedStages: readonly StageId[]): StageId[] => {
+  const disabled: StageId[] = [];
+  if (!clearedStages.includes('01')) disabled.push('02');
+  if (!clearedStages.includes('02')) disabled.push('03');
+  return disabled;
+};

@@ -1,7 +1,19 @@
 import { describe, expect, test } from 'vitest';
-import { getAvailableStages, parseClearedStages } from './stageProgress';
+import { getAvailableStages, getDisabledStages, parseClearedStages } from './stageProgress';
 
 describe('stageProgress', () => {
+  test.each([
+    { cleared: [], disabled: ['02', '03'] },
+    { cleared: ['01'], disabled: ['03'] },
+    { cleared: ['01', '02'], disabled: [] },
+    { cleared: ['01', '02', '03'], disabled: [] }
+  ] as const)(
+    'クリア状況が$clearedの場合、未解放の$disabledを無効にする',
+    ({ cleared, disabled }) => {
+      expect(getDisabledStages(cleared)).toEqual(disabled);
+    }
+  );
+
   test.each([null, '', '{', '{}', 'null'])(
     '保存値が%sの場合、クリア済みステージは空になる',
     (value) => {

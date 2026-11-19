@@ -252,24 +252,40 @@ describe('aBreakPage', () => {
     expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
   });
 
-  test('ステージ選択を表示した場合、02と03は無効でホバーやクリックでも対戦を開始しない', async () => {
+  test('未クリアの場合、01だけ選択でき02と03はロックされ04は表示されない', async () => {
     render(Page);
     await finishEntrance();
     await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     await vi.advanceTimersByTimeAsync(800);
+    expect(screen.getByRole('button', { name: 'STAGE 01' })).toBeEnabled();
     for (const stage of ['02', '03']) {
       const button = screen.getByRole('button', { name: `STAGE ${stage}` });
       expect(button).toBeDisabled();
-      await fireEvent.pointerEnter(button);
       await fireEvent.click(button);
     }
+    expect(screen.queryByRole('button', { name: 'STAGE 04' })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'STAGE SELECT' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'STAGE 01' })).toHaveAttribute(
-      'aria-pressed',
-      'true'
-    );
-    expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
   });
+
+  test.each([
+    { stage: '02', hp: 200, cleared: ['01'] },
+    { stage: '03', hp: 300, cleared: ['01', '02'] }
+  ])(
+    'ステージ選択で$stageを押した場合、そのステージの対戦を開始する',
+    async ({ stage, hp, cleared }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
+      render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+      await vi.advanceTimersByTimeAsync(800);
+      const button = screen.getByRole('button', { name: `STAGE ${stage}` });
+      expect(button).toBeEnabled();
+      await fireEvent.click(button);
+      await finishEntrance();
+      expect(screen.getAllByText(`${hp} / ${hp}`).length).toBeGreaterThan(0);
+      expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+    }
+  );
 
   test('01〜03のクリア状況が保存されている場合、CONTINUEで04の敵と対戦できる', async () => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));

@@ -23,6 +23,7 @@
   import type { StageId } from '$lib/ketria/types/stage.types';
   import {
     getAvailableStages,
+    getDisabledStages,
     parseClearedStages,
     PROGRESS_STORAGE_KEY
   } from '$lib/ketria/game/stageProgress';
@@ -31,7 +32,6 @@
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
-  const disabledStages: readonly StageId[] = ['02', '03'];
   let clearedStages = $state<StageId[]>([]);
   let sessionLoaded = $state(false);
   let entrancePhase = $state<'hold' | 'fade' | null>('hold');
@@ -60,6 +60,7 @@
     void revealWhenReady();
   };
   const stages = $derived(getAvailableStages(clearedStages));
+  const disabledStages = $derived(getDisabledStages(clearedStages));
   let battle = $state.raw<ReturnType<typeof createBattleSequence> | null>(null);
 
   const initializeScreen = (type: string | null): void => {
@@ -176,8 +177,8 @@
       {#if currentScreen === 'stages'}
         <StageSelect
           {stages}
-          {selectedStage}
           {disabledStages}
+          {selectedStage}
           onselect={startStage}
           onhighlight={(stage) => (selectedStage = stage)}
           onback={() => (currentScreen = 'title')}
