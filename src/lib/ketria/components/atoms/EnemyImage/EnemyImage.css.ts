@@ -6,12 +6,6 @@ const mistFloat = keyframes({
   to: { transform: 'translateY(0)' }
 });
 
-const mistFade = keyframes({
-  from: { opacity: 0.9 },
-  '50%': { opacity: 0.6 },
-  to: { opacity: 0.9 }
-});
-
 export const picture = style({
   display: 'block',
   width: '100%',
@@ -34,9 +28,3 @@ export const mistShroudedFloat = style({
   }
 });
 
-export const mistShroudedFade = style({
-  animation: `${mistFade} 3s ease-in-out infinite`,
-  '@media': {
-    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0.85 }
-  }
-});
