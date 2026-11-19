@@ -23,10 +23,11 @@ export const attributeCycle = style({
 
 export const enemy = style({
   position: 'absolute',
-  top: '10%',
-  left: '55%',
-  width: '38%',
-  height: '58%'
+  top: '1%',
+  left: '50%',
+  width: '60dvh',
+  height: '52.5%',
+  transform: 'translateX(-50%)'
 });
 
 export const vignette = style({
@@ -58,10 +59,10 @@ export const movePreview = style({
 
 export const battleHint = style({
   position: 'absolute',
-  top: '42%',
+  top: '48%',
   left: '50%',
   zIndex: 1,
-  width: 'min(90cqw, 960px)',
+  width: 'min(86cqw, 1200px)',
   transform: 'translate(-50%, -50%)'
 });
 
