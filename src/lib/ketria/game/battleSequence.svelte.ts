@@ -1,4 +1,5 @@
 import { ENEMY_MAX_HP } from '../constants/stages';
+import { BATTLE_SYSTEM_MESSAGES } from '../constants/battleSystemMessages';
 import { createBattleMessageSelector } from './battleMessages';
 import type { BattleSnapshot } from '../types/battleSession.types';
 import type { BattleMessagePattern } from '../types/battleMessage.types';
@@ -113,7 +114,7 @@ export const createBattleSequence = (
       messageTextDuration = 150;
       messageTextFading = true;
       warningTimer = setTimeout(() => {
-        messageLines = ['Lv0は使用できません'];
+        messageLines = BATTLE_SYSTEM_MESSAGES.LEVEL_ZERO;
         messageTextFading = false;
         warningTimer = setTimeout(() => {
           messageTextDuration = 500;
@@ -131,7 +132,7 @@ export const createBattleSequence = (
     if (player.sealedElement === element) return;
     if (nextEnemyMove === null) {
       revealedEnemyMove = null;
-      messageLines = ['敵が手を選べません'];
+      messageLines = BATTLE_SYSTEM_MESSAGES.ENEMY_NO_MOVE;
       return;
     }
 
@@ -166,9 +167,9 @@ export const createBattleSequence = (
     battleLogs = [logEntry, ...battleLogs];
     turnMessageLines =
       player.hp === 0
-        ? ['GAME OVER']
+        ? BATTLE_SYSTEM_MESSAGES.LOSE
         : enemy.hp === 0
-          ? ['PLAYER WIN']
+          ? BATTLE_SYSTEM_MESSAGES.WIN
           : selectMessage(nextEnemyMove, {
               enemyHp: enemy.hp / enemyMaxHp,
               draw: consecutiveDraws

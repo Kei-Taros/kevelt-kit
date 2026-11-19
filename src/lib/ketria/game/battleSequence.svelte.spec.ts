@@ -121,7 +121,7 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
-  test('あいこのダメージで敵だけがHP0になった場合、次ターンのコメントではなくPLAYER WINを表示する', () => {
+  test('あいこのダメージで敵だけがHP0になった場合、次ターンのコメントではなくWINを表示する', () => {
     vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
     const battle = createBattleSequence(messagePatterns);
     for (let turn = 0; turn < 15; turn++) {
@@ -130,7 +130,7 @@ describe('battleSequence', () => {
     }
     expect(battle.player.hp).toBe(50);
     expect(battle.enemy.hp).toBe(0);
-    expect(battle.messageLines).toEqual(['PLAYER WIN']);
+    expect(battle.messageLines).toEqual(['WIN']);
     expect(battle.controlsDisabled).toBe(true);
     battle.destroy();
   });

@@ -332,7 +332,7 @@ describe('aBreakPage', () => {
       await fireEvent.click(screen.getByRole('button', { name: move }));
       await beginNextTurn();
     }
-    expect(screen.getByText('PLAYER WIN')).toBeInTheDocument();
+    expect(screen.getByText('WIN', { selector: 'p span' })).toBeInTheDocument();
     expect(JSON.parse(localStorage.getItem(PROGRESS_STORAGE_KEY) ?? '[]')).toEqual([
       '02',
       '03',
@@ -760,7 +760,7 @@ describe('aBreakPage', () => {
     }
 
     await beginNextTurn();
-    expect(screen.getByText('PLAYER WIN')).toBeInTheDocument();
+    expect(screen.getByText('WIN', { selector: 'p span' })).toBeInTheDocument();
     const rows = within(log).getAllByRole('listitem');
     expect(rows).toHaveLength(8);
     expect(rows[0]).toHaveTextContent('08');
