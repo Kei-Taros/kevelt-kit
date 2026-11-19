@@ -121,6 +121,28 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
+  test.each([
+    { playerHp: 10, enemyHp: 10, message: 'DRAW' },
+    { playerHp: 10, enemyHp: 20, message: 'LOSE' },
+    { playerHp: 20, enemyHp: 10, message: 'WIN' }
+  ])(
+    'あいこ前のHPが自分$playerHp・敵$enemyHpの場合、終了時に$messageを表示する',
+    ({ playerHp, enemyHp, message }) => {
+      const initial = createBattleSequence(messagePatterns);
+      const snapshot = structuredClone(initial.snapshot);
+      initial.destroy();
+      snapshot.player.hp = playerHp;
+      snapshot.enemy.hp = enemyHp;
+      snapshot.nextEnemyMove = 'fire';
+      const battle = createBattleSequence(messagePatterns, '01', snapshot);
+      battle.selectElement('fire');
+      vi.advanceTimersByTime(4800);
+      expect(battle.messageLines).toEqual([message]);
+      expect(battle.controlsDisabled).toBe(true);
+      battle.destroy();
+    }
+  );
+
   test('あいこのダメージで敵だけがHP0になった場合、次ターンのコメントではなくWINを表示する', () => {
     vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
     const battle = createBattleSequence(messagePatterns);

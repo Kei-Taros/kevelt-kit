@@ -136,6 +136,31 @@ describe('aBreakPage', () => {
     }
   );
 
+  test('両者のHPが同時に0になった場合、DRAWとREMATCHを表示し同じステージを最初から再開する', async () => {
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.player.hp = 10;
+    session.battle.enemy.hp = 10;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+    render(Page);
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+    await vi.advanceTimersByTimeAsync(4800);
+    await tick();
+    expect(screen.getByText('DRAW', { selector: 'p span' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'NEXT STAGE' })).not.toBeInTheDocument();
+    await fireEvent.click(screen.getByRole('button', { name: 'REMATCH' }));
+    await finishEntrance();
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(screen.getByText('200 / 200')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+    expect(localStorage.getItem(PROGRESS_STORAGE_KEY)).toBeNull();
+  });
+
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);
     await finishEntrance();
@@ -338,7 +363,10 @@ describe('aBreakPage', () => {
       '03',
       '01'
     ]);
-    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     await vi.advanceTimersByTimeAsync(800);
     expect(screen.getByRole('button', { name: 'STAGE 04' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE 01' }));

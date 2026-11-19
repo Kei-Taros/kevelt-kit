@@ -165,15 +165,18 @@ export const createBattleSequence = (
     player = result.player;
     enemy = result.enemy;
     battleLogs = [logEntry, ...battleLogs];
-    turnMessageLines =
-      player.hp === 0
-        ? BATTLE_SYSTEM_MESSAGES.LOSE
-        : enemy.hp === 0
-          ? BATTLE_SYSTEM_MESSAGES.WIN
-          : selectMessage(nextEnemyMove, {
-              enemyHp: enemy.hp / enemyMaxHp,
-              draw: consecutiveDraws
-            });
+    if (player.hp === 0 && enemy.hp === 0) {
+      turnMessageLines = BATTLE_SYSTEM_MESSAGES.DRAW;
+    } else if (player.hp === 0) {
+      turnMessageLines = BATTLE_SYSTEM_MESSAGES.LOSE;
+    } else if (enemy.hp === 0) {
+      turnMessageLines = BATTLE_SYSTEM_MESSAGES.WIN;
+    } else {
+      turnMessageLines = selectMessage(nextEnemyMove, {
+        enemyHp: enemy.hp / enemyMaxHp,
+        draw: consecutiveDraws
+      });
+    }
     checkpoint = createSnapshot(turnMessageLines);
   };
 

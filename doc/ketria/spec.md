@@ -173,11 +173,14 @@ STONE  ←  MIST
 どちらかのHPが `0以下` になった時点でゲーム終了。
 
 ```text
-プレイヤーHP <= 0
-→ GAME OVER
+両者のHP <= 0
+→ DRAW
 
-敵HP <= 0
-→ PLAYER WIN
+プレイヤーHP <= 0、敵HP > 0
+→ LOSE
+
+敵HP <= 0、プレイヤーHP > 0
+→ WIN
 ```
 
 ---
