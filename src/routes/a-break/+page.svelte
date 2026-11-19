@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount, tick } from 'svelte';
-  import { afterNavigate } from '$app/navigation';
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
   import {
     BattleBackground,
@@ -97,6 +97,14 @@
   };
 
   afterNavigate(({ type }) => initializeScreen(type));
+  beforeNavigate(({ from, to }) => {
+    if (!to || from?.url.pathname === to.url.pathname) return;
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch {
+      // MEMO: 保存領域が使えなくてもページ遷移を継続
+    }
+  });
   onMount(() => {
     queueMicrotask(() => {
       if (!sessionLoaded) initializeScreen(null);

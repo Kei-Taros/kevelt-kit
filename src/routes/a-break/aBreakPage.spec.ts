@@ -13,7 +13,8 @@ import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthB
 const navigationContext = vi.hoisted(() => ({
   type: 'enter',
   documentType: 'navigate',
-  notify: true
+  notify: true,
+  beforeLeave: undefined as undefined | ((navigation: { to: { url: URL } | null }) => void)
 }));
 
 vi.mock('$lib/ketria/game/loadScreenAssets', () => ({
@@ -23,6 +24,9 @@ vi.mock('$lib/ketria/game/loadScreenAssets', () => ({
 vi.mock('$app/navigation', async () => {
   const { onMount } = await import('svelte');
   return {
+    beforeNavigate: (callback: typeof navigationContext.beforeLeave) => {
+      navigationContext.beforeLeave = callback;
+    },
     afterNavigate: (callback: (navigation: { type: string }) => void) => {
       onMount(() => {
         if (navigationContext.notify) callback({ type: navigationContext.type });
@@ -110,6 +114,27 @@ describe('aBreakPage', () => {
     expect(container.querySelector(`.${styles.screenBlackout}`)).not.toBeInTheDocument();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
   });
+
+  test.each(['02', '03', '04'] as const)(
+    'ステージ%sの対戦からサイトトップへ戻りKETRIAを開いた場合、対戦を復元せずゲームトップを表示する',
+    async (stage) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+      const first = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+      await vi.advanceTimersByTimeAsync(800);
+      await fireEvent.click(screen.getByRole('button', { name: `STAGE ${stage}` }));
+      await finishEntrance();
+      expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+      navigationContext.beforeLeave?.({ to: { url: new URL('http://localhost/') } });
+      first.unmount();
+      navigationContext.notify = false;
+      render(Page);
+      await finishEntrance();
+      expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+    }
+  );
 
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);
