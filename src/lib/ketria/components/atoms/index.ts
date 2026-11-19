@@ -11,3 +11,4 @@ export { default as BattleBackground } from './BattleBackground/BattleBackground
 export { default as EnemyImage } from './EnemyImage/EnemyImage.svelte';
 export { default as StoneEffectBadge } from './StoneEffectBadge/StoneEffectBadge.svelte';
 export { default as MistEffect } from './MistEffect/MistEffect.svelte';
+export { default as BattleActionButton } from './BattleActionButton/BattleActionButton.svelte';
