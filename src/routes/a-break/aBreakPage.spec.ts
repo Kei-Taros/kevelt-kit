@@ -10,7 +10,11 @@ import * as styles from './aBreak.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
 
-const navigationContext = vi.hoisted(() => ({ type: 'enter', documentType: 'navigate' }));
+const navigationContext = vi.hoisted(() => ({
+  type: 'enter',
+  documentType: 'navigate',
+  notify: true
+}));
 
 vi.mock('$lib/ketria/game/loadScreenAssets', () => ({
   loadScreenAssets: vi.fn().mockResolvedValue(undefined)
@@ -20,7 +24,9 @@ vi.mock('$app/navigation', async () => {
   const { onMount } = await import('svelte');
   return {
     afterNavigate: (callback: (navigation: { type: string }) => void) => {
-      onMount(() => callback({ type: navigationContext.type }));
+      onMount(() => {
+        if (navigationContext.notify) callback({ type: navigationContext.type });
+      });
     }
   };
 });
@@ -41,6 +47,7 @@ const nextFireMessage = BATTLE_MESSAGES['01'][1].lines[0];
 describe('aBreakPage', () => {
   beforeEach(() => {
     vi.mocked(loadScreenAssets).mockReset().mockResolvedValue(undefined);
+    navigationContext.notify = true;
     navigationContext.type = 'enter';
     navigationContext.documentType = 'navigate';
     localStorage.clear();
@@ -91,6 +98,18 @@ describe('aBreakPage', () => {
     await vi.advanceTimersByTimeAsync(7300);
     await tick();
   };
+
+  test('自動更新で遷移通知なくページが再作成された場合、保存した対戦を復元して操作できる', async () => {
+    const first = await renderBattlePage();
+    first.unmount();
+    navigationContext.notify = false;
+    const { container } = render(Page);
+    await finishEntrance();
+
+    expect(screen.getByRole('button', { name: 'STONE' })).toBeEnabled();
+    expect(container.querySelector(`.${styles.screenBlackout}`)).not.toBeInTheDocument();
+    expect(screen.getByText('150 / 150')).toBeInTheDocument();
+  });
 
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);

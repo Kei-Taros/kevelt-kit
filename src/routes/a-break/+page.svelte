@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, tick } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import { afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
   import {
@@ -62,7 +62,7 @@
   const stages = $derived(getAvailableStages(clearedStages));
   let battle = $state.raw<ReturnType<typeof createBattleSequence> | null>(null);
 
-  afterNavigate(({ type }) => {
+  const initializeScreen = (type: string | null): void => {
     if (sessionLoaded) return;
     try {
       clearedStages = parseClearedStages(localStorage.getItem(PROGRESS_STORAGE_KEY));
@@ -73,7 +73,7 @@
       const entry = performance.getEntriesByType('navigation')[0] as
         | PerformanceNavigationTiming
         | undefined;
-      const isReload = type === 'enter' && entry?.type === 'reload';
+      const isReload = type === null || (type === 'enter' && entry?.type === 'reload');
       const session = isReload
         ? parseBattleSession(sessionStorage.getItem(SESSION_STORAGE_KEY))
         : null;
@@ -93,6 +93,13 @@
     }
     sessionLoaded = true;
     beginEntrance();
+  };
+
+  afterNavigate(({ type }) => initializeScreen(type));
+  onMount(() => {
+    queueMicrotask(() => {
+      if (!sessionLoaded) initializeScreen(null);
+    });
   });
 
   const startStage = (stage: StageId): void => {
