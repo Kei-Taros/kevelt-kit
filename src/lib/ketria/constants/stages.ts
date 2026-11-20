@@ -1,6 +1,7 @@
 import type { StageId } from '../types/stage.types';
 
 export const STAGE_IDS = ['01', '02', '03', '04'] as const;
+export const STAGE_04_ULTIMATE_HP = 150;
 
 export const ENEMY_MAX_HP: Record<StageId, number> = {
   '01': 150,

@@ -1,4 +1,4 @@
-import { ENEMY_MAX_HP } from '../constants/stages';
+import { ENEMY_MAX_HP, STAGE_04_ULTIMATE_HP } from '../constants/stages';
 import { BATTLE_SYSTEM_MESSAGES } from '../constants/battleSystemMessages';
 import { createBattleMessageSelector } from './battleMessages';
 import type { BattleSnapshot } from '../types/battleSession.types';
@@ -25,6 +25,8 @@ export const createBattleSequence = (
   snapshot?: BattleSnapshot
 ) => {
   const selectMessage = createBattleMessageSelector(messagePatterns, snapshot?.messageSelection);
+  const trinityVersion = (hp: number) =>
+    stage === '04' && hp <= STAGE_04_ULTIMATE_HP ? 'ultimate' : 'original';
   const enemyMaxHp = ENEMY_MAX_HP[stage];
   let consecutiveDraws = snapshot?.consecutiveDraws ?? 0;
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
@@ -34,11 +36,18 @@ export const createBattleSequence = (
     mist: 1
   });
 
-  let player = $state<FighterState>(snapshot?.player ?? { hp: 200, levels: initialLevels() });
-  let enemy = $state<FighterState>(snapshot?.enemy ?? { hp: enemyMaxHp, levels: initialLevels() });
+  const initialPlayer = snapshot?.player ?? { hp: 200, levels: initialLevels() };
+  const initialEnemy = snapshot?.enemy ?? { hp: enemyMaxHp, levels: initialLevels() };
+  let player = $state<FighterState>(initialPlayer);
+  let enemy = $state<FighterState>(initialEnemy);
   let nextEnemyMove = snapshot
     ? snapshot.nextEnemyMove
-    : chooseEnemyMove(stage, { hp: enemyMaxHp, levels: initialLevels() });
+    : chooseEnemyMove(
+        stage,
+        initialEnemy,
+        { player: initialPlayer, playerMoves: [] },
+        trinityVersion(initialEnemy.hp)
+      );
   let revealedEnemyMove = $state<ElementType | null>(null);
   let previewPlayerMove = $state<ElementType | null>(null);
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
@@ -201,6 +210,17 @@ export const createBattleSequence = (
       player: element,
       enemy: enemyMove
     };
+    if (result.player.hp !== 0 && result.enemy.hp !== 0) {
+      nextEnemyMove = chooseEnemyMove(
+        stage,
+        result.enemy,
+        {
+          player: result.player,
+          playerMoves: [logEntry, ...battleLogs.slice(0, 7)].map(({ player }) => player)
+        },
+        trinityVersion(result.enemy.hp)
+      );
+    }
     const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
     const showTurnMessage = (): void => {
@@ -234,8 +254,6 @@ export const createBattleSequence = (
         }, timing.winnerMessage);
         revealTimer = undefined;
       }, timing.winner);
-      if (result.player.hp !== 0 && result.enemy.hp !== 0)
-        nextEnemyMove = chooseEnemyMove(stage, result.enemy);
       return;
     }
 
@@ -243,8 +261,6 @@ export const createBattleSequence = (
     moveWinner = 'draw';
     revealedEnemyMove = enemyMove;
     winPhase = 'clash';
-    if (result.player.hp !== 0 && result.enemy.hp !== 0)
-      nextEnemyMove = chooseEnemyMove(stage, result.enemy);
     winTimer = setTimeout(() => {
       winPhase = 'resolve';
       winTimer = undefined;

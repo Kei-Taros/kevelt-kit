@@ -34,6 +34,56 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
+  test('ステージ04では通常AIから始まり、確定済みの手を次ターンの予測に渡す', () => {
+    const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const battle = createBattleSequence(messagePatterns, '04');
+    expect(chooseMove).toHaveBeenLastCalledWith(
+      '04',
+      expect.anything(),
+      expect.objectContaining({ playerMoves: [] }),
+      'original'
+    );
+    battle.selectElement('stone');
+    expect(chooseMove).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(6300);
+    battle.selectElement('mist');
+    vi.advanceTimersByTime(6300);
+    expect(chooseMove).toHaveBeenLastCalledWith(
+      '04',
+      expect.anything(),
+      expect.objectContaining({
+        playerMoves: ['mist', 'stone'],
+        player: expect.objectContaining({ hp: 180 })
+      }),
+      'original'
+    );
+    battle.destroy();
+  });
+
+  test.each([
+    { hp: 151, version: 'original' },
+    { hp: 150, version: 'ultimate' },
+    { hp: 149, version: 'ultimate' }
+  ])('ステージ04で敵HPが$hpになったら、次の手は$versionで選ぶ', ({ hp, version }) => {
+    const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const first = createBattleSequence(messagePatterns, '04');
+    const snapshot = JSON.parse(JSON.stringify(first.snapshot));
+    first.destroy();
+    snapshot.enemy.hp = hp + 10;
+    const battle = createBattleSequence(messagePatterns, '04', snapshot);
+
+    battle.selectElement('stone');
+    vi.advanceTimersByTime(6300);
+
+    expect(chooseMove).toHaveBeenLastCalledWith(
+      '04',
+      expect.objectContaining({ hp }),
+      expect.objectContaining({ playerMoves: ['stone'] }),
+      version
+    );
+    battle.destroy();
+  });
+
   test('次の手が確定した状態から復元した場合、敵の手を再抽選しない', () => {
     const first = createBattleSequence(messagePatterns);
     const snapshot = JSON.parse(JSON.stringify(first.snapshot));
