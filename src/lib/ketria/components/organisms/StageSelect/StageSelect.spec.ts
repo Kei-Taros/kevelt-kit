@@ -29,13 +29,16 @@ describe('StageSelect', () => {
     );
   });
 
-  test('追加ステージを渡した場合、STAGE 04も表示する', () => {
-    render(StageSelect, { props: { stages: [...stages, '04'], selectedStage: '04' } });
+  test('ステージ04が渡された場合、STAGE LASTと表示し選択時には04を通知する', async () => {
+    const onselect = vi.fn();
+    render(StageSelect, { props: { stages: [...stages, '04'], selectedStage: '04', onselect } });
 
-    expect(screen.getByRole('button', { name: 'STAGE 04' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'STAGE LAST' })).toHaveAttribute(
       'aria-pressed',
       'true'
     );
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE LAST' }));
+    expect(onselect).toHaveBeenCalledWith('04');
   });
 
   test('ステージにホバーやフォーカスした場合は強調のみ通知し、クリックした場合だけ選択を通知する', async () => {

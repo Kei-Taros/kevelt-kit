@@ -39,7 +39,7 @@
       onhighlight={() => (activeMenu = 'start')}
     />
     <MenuOption
-      label="CONTINUE"
+      label="STAGE SELECT"
       active={activeMenu === 'continue'}
       onclick={oncontinue}
       onhighlight={() => (activeMenu = 'continue')}

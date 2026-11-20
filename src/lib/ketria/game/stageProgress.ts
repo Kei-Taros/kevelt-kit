@@ -24,3 +24,12 @@ export const getDisabledStages = (clearedStages: readonly StageId[]): StageId[] 
   if (!clearedStages.includes('02')) disabled.push('03');
   return disabled;
 };
+
+export const getLatestStage = (clearedStages: readonly StageId[]): StageId => {
+  const disabledStages = getDisabledStages(clearedStages);
+  return (
+    getAvailableStages(clearedStages)
+      .filter((stage) => !disabledStages.includes(stage))
+      .at(-1) ?? '01'
+  );
+};

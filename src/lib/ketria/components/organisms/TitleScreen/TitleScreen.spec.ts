@@ -14,25 +14,25 @@ describe('TitleScreen', () => {
     );
     expect(screen.getByRole('navigation', { name: 'Main menu' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'START' })).toHaveClass(menuStyles.active);
-    expect(screen.getByRole('button', { name: 'CONTINUE' })).not.toHaveClass(menuStyles.active);
+    expect(screen.getByRole('button', { name: 'STAGE SELECT' })).not.toHaveClass(menuStyles.active);
   });
 
-  test('CONTINUEにポインターが入った場合、CONTINUEへ強調表示を移す', async () => {
+  test('STAGE SELECTにポインターが入った場合、STAGE SELECTへ強調表示を移す', async () => {
     render(TitleScreen);
 
-    await fireEvent.pointerEnter(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.pointerEnter(screen.getByRole('button', { name: 'STAGE SELECT' }));
 
-    expect(screen.getByRole('button', { name: 'CONTINUE' })).toHaveClass(menuStyles.active);
+    expect(screen.getByRole('button', { name: 'STAGE SELECT' })).toHaveClass(menuStyles.active);
     expect(screen.getByRole('button', { name: 'START' })).not.toHaveClass(menuStyles.active);
   });
 
   test('STARTにフォーカスを移した場合、STARTへ強調表示を戻す', async () => {
     render(TitleScreen);
-    await fireEvent.focus(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.focus(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await fireEvent.focus(screen.getByRole('button', { name: 'START' }));
 
     expect(screen.getByRole('button', { name: 'START' })).toHaveClass(menuStyles.active);
-    expect(screen.getByRole('button', { name: 'CONTINUE' })).not.toHaveClass(menuStyles.active);
+    expect(screen.getByRole('button', { name: 'STAGE SELECT' })).not.toHaveClass(menuStyles.active);
   });
 
   test('メニューを押した場合、対応する操作を通知する', async () => {
@@ -43,7 +43,7 @@ describe('TitleScreen', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'START' }));
     expect(onstart).toHaveBeenCalledOnce();
     expect(oncontinue).not.toHaveBeenCalled();
-    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     expect(oncontinue).toHaveBeenCalledOnce();
   });
 });

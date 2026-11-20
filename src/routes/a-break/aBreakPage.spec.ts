@@ -121,9 +121,11 @@ describe('aBreakPage', () => {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
       const first = render(Page);
       await finishEntrance();
-      await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+      await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
       await vi.advanceTimersByTimeAsync(800);
-      await fireEvent.click(screen.getByRole('button', { name: `STAGE ${stage}` }));
+      await fireEvent.click(
+        screen.getByRole('button', { name: stage === '04' ? 'STAGE LAST' : `STAGE ${stage}` })
+      );
       await finishEntrance();
       expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
       navigationContext.beforeLeave?.({ to: { url: new URL('http://localhost/') } });
@@ -160,6 +162,98 @@ describe('aBreakPage', () => {
     expect(screen.queryAllByRole('listitem')).toHaveLength(0);
     expect(localStorage.getItem(PROGRESS_STORAGE_KEY)).toBeNull();
   });
+
+  test.each(['01', '02', '03', '04'] as const)(
+    'ステージ%sを選択した場合、対応する背景と敵のWebP・PNGが表示される',
+    async (stage) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+      const { container } = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+      await vi.advanceTimersByTimeAsync(800);
+      await fireEvent.click(
+        screen.getByRole('button', { name: stage === '04' ? 'STAGE LAST' : `STAGE ${stage}` })
+      );
+      await finishEntrance();
+      for (const [folder, prefix] of [
+        ['backgrounds', 'background'],
+        ['enemy', 'enemy']
+      ]) {
+        expect(
+          container.querySelector(`img[src="/images/ketria/${folder}/${prefix}-${stage}.png"]`)
+        ).toBeInTheDocument();
+        expect(
+          container.querySelector(
+            `source[srcset="/images/ketria/${folder}/${prefix}-${stage}.webp"]`
+          )
+        ).toBeInTheDocument();
+      }
+    }
+  );
+
+  test.each([
+    { stage: '01', next: '02' },
+    { stage: '02', next: '03' },
+    { stage: '03', next: '04' }
+  ] as const)(
+    'ステージ$stage勝利後にNEXT STAGEを押した場合、$nextの背景と敵で対戦を開始する',
+    async ({ stage, next }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+      const first = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+      await vi.advanceTimersByTimeAsync(800);
+      await fireEvent.click(screen.getByRole('button', { name: `STAGE ${stage}` }));
+      await finishEntrance();
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+      first.unmount();
+      session.battle.enemy.hp = 10;
+      session.battle.player.hp = 200;
+      session.battle.nextEnemyMove = 'fire';
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      navigationContext.documentType = 'reload';
+      const { container } = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+      await beginNextTurn();
+      await fireEvent.click(screen.getByRole('button', { name: 'NEXT STAGE' }));
+      await finishEntrance();
+      expect(
+        container.querySelector(`img[src="/images/ketria/backgrounds/background-${next}.png"]`)
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector(`img[src="/images/ketria/enemy/enemy-${next}.png"]`)
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'STONE' })).toBeEnabled();
+      expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+      expect(JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!).selectedStage).toBe(next);
+    }
+  );
+
+  test.each([
+    { cleared: [], stage: '01' },
+    { cleared: ['01'], stage: '02' },
+    { cleared: ['01', '02'], stage: '03' },
+    { cleared: ['01', '02', '03'], stage: '04' },
+    { cleared: ['01', '02', '03', '04'], stage: '04' }
+  ] as const)(
+    'クリア済みが$clearedの場合、STARTで最新のステージ$stageを開始する',
+    async ({ cleared, stage }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
+      const { container } = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'START' }));
+      await finishEntrance();
+      expect(
+        container.querySelector(`img[src="/images/ketria/backgrounds/background-${stage}.png"]`)
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector(`img[src="/images/ketria/enemy/enemy-${stage}.png"]`)
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+      expect(JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!).selectedStage).toBe(stage);
+    }
+  );
 
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);
@@ -305,7 +399,7 @@ describe('aBreakPage', () => {
   test('未クリアの場合、01だけ選択でき02と03はロックされ04は表示されない', async () => {
     render(Page);
     await finishEntrance();
-    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await vi.advanceTimersByTimeAsync(800);
     expect(screen.getByRole('button', { name: 'STAGE 01' })).toBeEnabled();
     for (const stage of ['02', '03']) {
@@ -313,7 +407,7 @@ describe('aBreakPage', () => {
       expect(button).toBeDisabled();
       await fireEvent.click(button);
     }
-    expect(screen.queryByRole('button', { name: 'STAGE 04' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'STAGE LAST' })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'STAGE SELECT' })).toBeInTheDocument();
   });
 
@@ -326,7 +420,7 @@ describe('aBreakPage', () => {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
       render(Page);
       await finishEntrance();
-      await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+      await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
       await vi.advanceTimersByTimeAsync(800);
       const button = screen.getByRole('button', { name: `STAGE ${stage}` });
       expect(button).toBeEnabled();
@@ -337,14 +431,14 @@ describe('aBreakPage', () => {
     }
   );
 
-  test('01〜03のクリア状況が保存されている場合、CONTINUEで04の敵と対戦できる', async () => {
+  test('01〜03のクリア状況が保存されている場合、STAGE SELECTで04の敵と対戦できる', async () => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
     render(Page);
     await finishEntrance();
     await tick();
-    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await vi.advanceTimersByTimeAsync(800);
-    await fireEvent.click(screen.getByRole('button', { name: 'STAGE 04' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE LAST' }));
     await finishEntrance();
     expect(screen.getByText('500 / 500')).toBeInTheDocument();
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
@@ -352,7 +446,12 @@ describe('aBreakPage', () => {
 
   test('02と03をクリア済みで01に勝利した場合、結果を保存し04を解放する', async () => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['02', '03']));
-    await renderBattlePage();
+    render(Page);
+    await finishEntrance();
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+    await vi.advanceTimersByTimeAsync(800);
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE 01' }));
+    await finishEntrance();
     for (const move of ['STONE', 'STONE', 'STONE', 'MIST', 'STONE', 'STONE', 'STONE', 'MIST']) {
       await fireEvent.click(screen.getByRole('button', { name: move }));
       await beginNextTurn();
@@ -366,9 +465,9 @@ describe('aBreakPage', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
     await finishEntrance();
-    await fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await vi.advanceTimersByTimeAsync(800);
-    expect(screen.getByRole('button', { name: 'STAGE 04' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'STAGE LAST' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE 01' }));
     await finishEntrance();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();

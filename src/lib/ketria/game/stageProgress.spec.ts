@@ -1,7 +1,28 @@
 import { describe, expect, test } from 'vitest';
-import { getAvailableStages, getDisabledStages, parseClearedStages } from './stageProgress';
+import {
+  getAvailableStages,
+  getDisabledStages,
+  getLatestStage,
+  parseClearedStages
+} from './stageProgress';
 
 describe('stageProgress', () => {
+  test('クリア済みステージがない場合、開始するステージは01になる', () => {
+    expect(getLatestStage([])).toBe('01');
+  });
+
+  test.each([
+    { cleared: ['01'], expected: '02' },
+    { cleared: ['01', '02'], expected: '03' },
+    { cleared: ['01', '02', '03'], expected: '04' },
+    { cleared: ['01', '02', '03', '04'], expected: '04' }
+  ] as const)(
+    'クリア済みステージが$clearedの場合、開始するステージは$expectedになる',
+    ({ cleared, expected }) => {
+      expect(getLatestStage(cleared)).toBe(expected);
+    }
+  );
+
   test.each([
     { cleared: [], disabled: ['02', '03'] },
     { cleared: ['01'], disabled: ['03'] },

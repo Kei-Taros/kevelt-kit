@@ -25,6 +25,7 @@
   import {
     getAvailableStages,
     getDisabledStages,
+    getLatestStage,
     parseClearedStages,
     PROGRESS_STORAGE_KEY
   } from '$lib/ketria/game/stageProgress';
@@ -175,7 +176,7 @@
     bind:this={screenContent}
     class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''}`}
   >
-    <BattleBackground background="01" />
+    <BattleBackground background={currentScreen === 'battle' ? selectedStage : '01'} />
     {#if sessionLoaded && currentScreen !== 'battle'}
       <div class={styles.titleShade} aria-hidden="true"></div>
       <div class={styles.titleMist} aria-hidden="true"></div>
@@ -190,12 +191,12 @@
         />
       {:else}
         <TitleScreen
-          onstart={() => startStage('01')}
+          onstart={() => startStage(getLatestStage(clearedStages))}
           oncontinue={() => (currentScreen = 'stages')}
         />
       {/if}
     {:else if sessionLoaded && battle}
-      <div class={styles.enemy}><EnemyImage enemy="01" /></div>
+      <div class={styles.enemy}><EnemyImage enemy={selectedStage} /></div>
       <div class={styles.vignette} aria-hidden="true"></div>
       {#if battle.winPhase && battle.previewPlayerMove && battle.revealedEnemyMove}
         <div

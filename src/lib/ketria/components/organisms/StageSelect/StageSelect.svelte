@@ -33,7 +33,7 @@
   <div class={styles.stageList} role="group" aria-label="Stage selection">
     {#each stages as stage (stage)}
       <MenuOption
-        label={`STAGE ${stage}`}
+        label={stage === '04' ? 'STAGE LAST' : `STAGE ${stage}`}
         variant="stage"
         disabled={disabledStages.includes(stage)}
         active={selectedStage === stage}
