@@ -28,3 +28,6 @@ export const mistShroudedFloat = style({
   }
 });
 
+export const ultimatePosition = style({
+  transform: 'translateY(-20px) scale(1.2)'
+});

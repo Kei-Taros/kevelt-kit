@@ -15,4 +15,19 @@ describe('HealthStatus', () => {
       healthBarStyles.statusVariants.warning
     );
   });
+
+  test.each([
+    { current: 51, status: 'warning' },
+    { current: 50, status: 'danger' },
+    { current: 49, status: 'danger' }
+  ] as const)(
+    '赤になる境界がHP50の場合、HP$currentでは$statusの色になる',
+    ({ current, status }) => {
+      const { container } = render(HealthStatus, { props: { current, max: 300, dangerHp: 50 } });
+
+      expect(container.querySelector(`.${healthBarStyles.value}`)).toHaveClass(
+        healthBarStyles.statusVariants[status]
+      );
+    }
+  );
 });

@@ -5,12 +5,13 @@
   interface Props {
     current: number;
     max: number;
+    dangerHp?: number;
   }
 
-  let { current, max }: Props = $props();
+  let { current, max, dangerHp }: Props = $props();
 </script>
 
 <div class={styles.container}>
   <HealthLabel {current} {max} />
-  <HealthBar {current} {max} />
+  <HealthBar {current} {max} {dangerHp} />
 </div>

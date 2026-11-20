@@ -465,7 +465,7 @@ describe('aBreakPage', () => {
 
   test.each([
     { stage: '02', hp: 200, cleared: ['01'] },
-    { stage: '03', hp: 300, cleared: ['01', '02'] }
+    { stage: '03', hp: 250, cleared: ['01', '02'] }
   ])(
     'ステージ選択で$stageを押した場合、そのステージの対戦を開始する',
     async ({ stage, hp, cleared }) => {
@@ -492,8 +492,33 @@ describe('aBreakPage', () => {
     await vi.advanceTimersByTimeAsync(800);
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE LAST' }));
     await finishEntrance();
-    expect(screen.getByText('500 / 500')).toBeInTheDocument();
+    expect(screen.getByText('300 / 300')).toBeInTheDocument();
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
+  });
+
+  test('STAGE 04で敵HPが150になると、敵画像がTrinity-ultimateに切り替わる', async () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.enemy.hp = 160;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+
+    render(Page);
+    await finishEntrance();
+    expect(screen.getByRole('img', { name: 'Trinity-envoy' })).toBeInTheDocument();
+
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await beginNextTurn();
+
+    await finishHealthAnimation();
+    expect(screen.getByText('150 / 300')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toHaveAttribute(
+      'src',
+      '/images/ketria/enemy/enemy-05.png'
+    );
   });
 
   test('02と03をクリア済みで01に勝利した場合、結果を保存し04を解放する', async () => {

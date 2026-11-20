@@ -1,4 +1,4 @@
-import { ENEMY_MAX_HP, STAGE_04_ULTIMATE_HP } from '../constants/stages';
+import { ENEMY_MAX_HP, STAGE_04_LOW_HP, STAGE_04_ULTIMATE_HP } from '../constants/stages';
 import { BATTLE_SYSTEM_MESSAGES } from '../constants/battleSystemMessages';
 import { createBattleMessageSelector } from './battleMessages';
 import type { BattleSnapshot } from '../types/battleSession.types';
@@ -37,7 +37,13 @@ export const createBattleSequence = (
   });
 
   const initialPlayer = snapshot?.player ?? { hp: 200, levels: initialLevels() };
-  const initialEnemy = snapshot?.enemy ?? { hp: enemyMaxHp, levels: initialLevels() };
+  const applyFinalStageLevels = (fighter: FighterState): FighterState =>
+    stage === '04' && fighter.hp <= STAGE_04_LOW_HP
+      ? { ...fighter, levels: { fire: 3, stone: 3, mist: 3 } }
+      : fighter;
+  const initialEnemy = applyFinalStageLevels(
+    snapshot?.enemy ?? { hp: enemyMaxHp, levels: initialLevels() }
+  );
   let player = $state<FighterState>(initialPlayer);
   let enemy = $state<FighterState>(initialEnemy);
   let nextEnemyMove = snapshot
@@ -199,11 +205,12 @@ export const createBattleSequence = (
       (winner === 'enemy' && enemyMove === 'mist' && enemy.levels.mist === 3)
         ? elements[Math.floor(Math.random() * elements.length)]
         : undefined;
-    const result = resolveTurn({
+    const turn = resolveTurn({
       player: { ...player, move: element },
       enemy: { ...enemy, move: enemyMove },
       sealTarget
     });
+    const result = { ...turn, enemy: applyFinalStageLevels(turn.enemy) };
     const logEntry: BattleLogEntry = {
       turn: String(battleLogs.length + 1).padStart(2, '0'),
       result: result.winner === 'player' ? 'win' : result.winner === 'enemy' ? 'lose' : 'draw',

@@ -24,8 +24,8 @@ describe('battleSequence', () => {
   test.each([
     { stage: '01' as const, max: 150 },
     { stage: '02' as const, max: 200 },
-    { stage: '03' as const, max: 300 },
-    { stage: '04' as const, max: 500 }
+    { stage: '03' as const, max: 250 },
+    { stage: '04' as const, max: 300 }
   ])('ステージ$stageを開始した場合、敵HPを$maxに設定する', ({ stage, max }) => {
     const battle = createBattleSequence(messagePatterns, stage);
     expect(battle.enemyMaxHp).toBe(max);
@@ -81,6 +81,47 @@ describe('battleSequence', () => {
       expect.objectContaining({ playerMoves: ['stone'] }),
       version
     );
+    battle.destroy();
+  });
+
+  test.each([
+    { stage: '04', hp: 51, levels: { fire: 2, stone: 1, mist: 1 } },
+    { stage: '04', hp: 50, levels: { fire: 3, stone: 3, mist: 3 } },
+    { stage: '03', hp: 50, levels: { fire: 2, stone: 1, mist: 1 } }
+  ] as const)(
+    'ステージ$stageで敵HPが$hpになったときの属性レベルを次の手と保存に反映する',
+    ({ stage, hp, levels }) => {
+      const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+      const first = createBattleSequence(messagePatterns, stage);
+      const snapshot = { ...first.snapshot, enemy: { ...first.snapshot.enemy, hp: hp + 10 } };
+      first.destroy();
+      const battle = createBattleSequence(messagePatterns, stage, snapshot);
+
+      battle.selectElement('stone');
+      vi.advanceTimersByTime(6300);
+
+      expect(chooseMove.mock.lastCall?.[1]).toMatchObject({ hp, levels });
+      expect(battle.snapshot.enemy).toMatchObject({ hp, levels });
+      battle.destroy();
+    }
+  );
+
+  test('ステージ04で敵HPが50以下なら、復元直後からLv3の手で繰り返し勝てる', () => {
+    const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const first = createBattleSequence(messagePatterns, '04');
+    const snapshot = { ...first.snapshot, enemy: { ...first.snapshot.enemy, hp: 50 } };
+    first.destroy();
+    const battle = createBattleSequence(messagePatterns, '04', snapshot);
+    const levels = { fire: 3, stone: 3, mist: 3 };
+
+    expect(battle.enemy.levels).toEqual(levels);
+    for (const hp of [150, 100]) {
+      battle.selectElement('mist');
+      vi.advanceTimersByTime(6300);
+      expect(battle.player.hp).toBe(hp);
+      expect(battle.enemy.levels).toEqual(levels);
+      expect(chooseMove.mock.lastCall?.[1].levels).toEqual(levels);
+    }
     battle.destroy();
   });
 

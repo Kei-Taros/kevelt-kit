@@ -31,7 +31,7 @@
   } from '$lib/ketria/game/stageProgress';
   import { parseBattleSession, SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
   import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
-  import { STAGE_IDS } from '$lib/ketria/constants/stages';
+  import { STAGE_04_LOW_HP, STAGE_04_ULTIMATE_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
@@ -202,7 +202,13 @@
         />
       {/if}
     {:else if sessionLoaded && battle}
-      <div class={styles.enemy}><EnemyImage enemy={selectedStage} /></div>
+      <div class={styles.enemy}>
+        <EnemyImage
+          enemy={selectedStage === '04' && battle.enemy.hp <= STAGE_04_ULTIMATE_HP
+            ? '05'
+            : selectedStage}
+        />
+      </div>
       <div class={styles.vignette} aria-hidden="true"></div>
       {#if battle.winPhase && battle.previewPlayerMove && battle.revealedEnemyMove}
         <div
@@ -260,7 +266,11 @@
         {/if}
       </div>
       <div class={`${styles.health} ${styles.enemyHealth}`}>
-        <HealthStatus current={battle.enemy.hp} max={battle.enemyMaxHp} />
+        <HealthStatus
+          current={battle.enemy.hp}
+          max={battle.enemyMaxHp}
+          dangerHp={selectedStage === '04' ? STAGE_04_LOW_HP : undefined}
+        />
         <EnemyLevels
           levels={battle.enemy.levels}
           sealedElement={battle.visibleEnemySealedElement}
