@@ -1,4 +1,5 @@
 import { createVar, keyframes, style } from '@vanilla-extract/css';
+import { backgroundFadeIn } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 
 export const arena = style({
   position: 'relative',
@@ -27,7 +28,11 @@ export const enemy = style({
   left: '50%',
   width: '60dvh',
   height: '52.5%',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  animation: backgroundFadeIn,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
 });
 
 export const vignette = style({
@@ -98,7 +103,7 @@ export const playerHealth = style({
 
 export const playerStoneEffectBadge = style({
   position: 'absolute',
-  top: '50%',
+  top: '60%',
   left: 'calc(100% + 14px)',
   transform: 'translateY(-50%)'
 });

@@ -1,5 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
+const backgroundReveal = { delay: 1000, duration: 900 } as const;
+
 const mistAppear = keyframes({
   from: { opacity: 0, transform: 'scaleX(0.96)', filter: 'blur(6px)' },
   to: { opacity: 1, transform: 'scaleX(1)', filter: 'blur(0)' }
@@ -14,6 +16,8 @@ const mistFadeIn = keyframes({
   from: { opacity: 0 },
   to: { opacity: 1 }
 });
+
+export const backgroundFadeIn = `${mistFadeIn} ${backgroundReveal.duration}ms ease-out ${backgroundReveal.delay}ms both`;
 
 const textAppear = keyframes({
   from: { opacity: 0 },
@@ -55,7 +59,7 @@ export const message = style({
       pointerEvents: 'none',
       background: bannerBackground,
       maskImage: 'linear-gradient(90deg, transparent, #000 19%, #000 81%, transparent)',
-      animation: `${mistAppear} 900ms ease-out 1000ms both`
+      animation: `${mistAppear} ${backgroundReveal.duration}ms ease-out ${backgroundReveal.delay}ms both`
     },
     '&::after': {
       content: "''",
@@ -67,7 +71,7 @@ export const message = style({
         'radial-gradient(ellipse 28% 32% at 30% 65%, #d7efff14, transparent 100%), radial-gradient(ellipse 36% 26% at 65% 30%, #d7efff12, transparent 100%), radial-gradient(ellipse 48% 20% at 50% 85%, #aedfff12, transparent 100%)',
       filter: 'blur(8px)',
       opacity: 0,
-      animation: `${mistFadeIn} 900ms ease-out 1000ms both, ${mistDrift} 8s ease-in-out 1900ms infinite both`
+      animation: `${backgroundFadeIn}, ${mistDrift} 8s ease-in-out 1900ms infinite both`
     }
   },
   '@media': {

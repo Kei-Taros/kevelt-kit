@@ -202,13 +202,15 @@
         />
       {/if}
     {:else if sessionLoaded && battle}
-      <div class={styles.enemy}>
-        <EnemyImage
-          enemy={selectedStage === '04' && battle.enemy.hp <= STAGE_04_ULTIMATE_HP
-            ? '05'
-            : selectedStage}
-        />
-      </div>
+      {#key battle}
+        <div class={styles.enemy}>
+          <EnemyImage
+            enemy={selectedStage === '04' && battle.enemy.hp <= STAGE_04_ULTIMATE_HP
+              ? '05'
+              : selectedStage}
+          />
+        </div>
+      {/key}
       <div class={styles.vignette} aria-hidden="true"></div>
       {#if battle.winPhase && battle.previewPlayerMove && battle.revealedEnemyMove}
         <div
