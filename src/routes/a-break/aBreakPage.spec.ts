@@ -295,7 +295,7 @@ describe('aBreakPage', () => {
     const { container } = await renderBattlePage();
     vi.mocked(Math.random).mockReturnValue(0.999);
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
     await finishEntrance();
     expect(
       container.querySelector('img[src="/images/ketria/backgrounds/background-04.png"]')
@@ -335,7 +335,7 @@ describe('aBreakPage', () => {
   test('メニューからゲームトップに戻った場合、黒画面を挟んで中央からタイトルを表示する', async () => {
     const { container } = await renderBattlePage();
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
     const blackout = container.querySelector(`.${styles.screenBlackout}`);
     expect(blackout).toBeInTheDocument();
     expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
@@ -515,7 +515,7 @@ describe('aBreakPage', () => {
       '01'
     ]);
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
     await finishEntrance();
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await vi.advanceTimersByTimeAsync(800);

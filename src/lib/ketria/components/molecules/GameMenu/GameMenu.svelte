@@ -42,7 +42,7 @@
         onclick={() => {
           closeMenu();
           ontitle?.();
-        }}>ゲームトップに戻る</button
+        }}>タイトルに戻る</button
       >
     {/if}
     <a class={styles.link} href={resolve('/')}>トップに戻る</a>
