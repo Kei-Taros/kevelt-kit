@@ -5,9 +5,10 @@
   interface Props {
     current: number;
     max: number;
+    intro?: boolean;
   }
 
-  let { current, max }: Props = $props();
+  let { current, max, intro = false }: Props = $props();
 
   let displayedCurrent = $state<number | null>(null);
   const visibleCurrent = $derived(displayedCurrent ?? Math.min(current, max));
@@ -22,24 +23,28 @@
     }
     if (start === target) return;
 
-    flashing = true;
+    const filling = intro && start === 0 && target > 0;
+    flashing = !filling;
     let frame: number | undefined;
-    const timer = setTimeout(() => {
-      flashing = false;
-      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-        displayedCurrent = target;
-        return;
-      }
+    const timer = setTimeout(
+      () => {
+        flashing = false;
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+          displayedCurrent = target;
+          return;
+        }
 
-      const startedAt = Date.now();
-      const animate = () => {
-        const progress = Math.min((Date.now() - startedAt) / 700, 1);
-        const eased = 1 - (1 - progress) ** 3;
-        displayedCurrent = Math.round(start + (target - start) * eased);
-        if (progress < 1) frame = requestAnimationFrame(animate);
-      };
-      frame = requestAnimationFrame(animate);
-    }, 1000);
+        const startedAt = Date.now();
+        const animate = () => {
+          const progress = Math.min((Date.now() - startedAt) / (filling ? 2000 : 700), 1);
+          const eased = 1 - (1 - progress) ** 3;
+          displayedCurrent = Math.round(start + (target - start) * eased);
+          if (progress < 1) frame = requestAnimationFrame(animate);
+        };
+        frame = requestAnimationFrame(animate);
+      },
+      filling ? 0 : 1000
+    );
 
     return () => {
       clearTimeout(timer);

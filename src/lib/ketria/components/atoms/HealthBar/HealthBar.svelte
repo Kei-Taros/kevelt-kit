@@ -5,9 +5,10 @@
     current: number;
     max: number;
     dangerHp?: number;
+    intro?: boolean;
   }
 
-  let { current, max, dangerHp }: Props = $props();
+  let { current, max, dangerHp, intro = false }: Props = $props();
 
   const percentage = $derived(max <= 0 ? 0 : Math.min(100, Math.max(0, (current / max) * 100)));
   const isDanger = $derived(dangerHp === undefined ? percentage <= 15 : current <= dangerHp);
@@ -16,7 +17,11 @@
 
 <div class={styles.track} aria-hidden="true">
   <div
-    class={`${styles.value} ${styles.statusVariants[status]}`}
+    class={[
+      styles.value,
+      styles.statusVariants[status],
+      intro && percentage === 100 && styles.introFill
+    ]}
     style:width={`${percentage}%`}
   ></div>
 </div>

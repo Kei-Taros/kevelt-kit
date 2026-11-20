@@ -70,6 +70,9 @@
   const disabledStages = $derived(getDisabledStages(clearedStages));
   const nextStage = $derived(STAGE_IDS[STAGE_IDS.indexOf(selectedStage) + 1] ?? null);
   let battle = $state.raw<ReturnType<typeof createBattleSequence> | null>(null);
+  let startingBattle = $state(false);
+  const fillingHealth = $derived(startingBattle && entrancePhase !== null);
+  const emptyHealth = $derived(fillingHealth && entrancePhase === 'hold');
 
   const initializeScreen = (type: string | null): void => {
     if (sessionLoaded) return;
@@ -125,6 +128,7 @@
     beginEntrance();
     battle?.destroy();
     selectedStage = stage;
+    startingBattle = true;
     battle = createBattleSequence(BATTLE_MESSAGES[stage], stage);
     currentScreen = 'battle';
   };
@@ -134,6 +138,7 @@
     beginEntrance();
     battle?.destroy();
     battle = null;
+    startingBattle = false;
     currentScreen = 'title';
   };
 
@@ -260,7 +265,13 @@
       <GameMenu ontitle={returnToTitle} />
 
       <div class={`${styles.health} ${styles.playerHealth}`}>
-        <HealthStatus current={battle.player.hp} max={200} />
+        {#key battle}
+          <HealthStatus
+            current={emptyHealth ? 0 : battle.player.hp}
+            max={200}
+            intro={startingBattle}
+          />
+        {/key}
         {#if battle.playerStoneEffectActive}
           <div class={styles.playerStoneEffectBadge} out:fade={{ duration: 500 }}>
             <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
@@ -268,11 +279,14 @@
         {/if}
       </div>
       <div class={`${styles.health} ${styles.enemyHealth}`}>
-        <HealthStatus
-          current={battle.enemy.hp}
-          max={battle.enemyMaxHp}
-          dangerHp={selectedStage === '04' ? STAGE_04_LOW_HP : undefined}
-        />
+        {#key battle}
+          <HealthStatus
+            current={emptyHealth ? 0 : battle.enemy.hp}
+            max={battle.enemyMaxHp}
+            dangerHp={selectedStage === '04' ? STAGE_04_LOW_HP : undefined}
+            intro={startingBattle}
+          />
+        {/key}
         <EnemyLevels
           levels={battle.enemy.levels}
           sealedElement={battle.visibleEnemySealedElement}

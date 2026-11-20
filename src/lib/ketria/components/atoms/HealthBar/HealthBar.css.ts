@@ -1,4 +1,4 @@
-import { style, styleVariants } from '@vanilla-extract/css';
+import { createVar, fallbackVar, style, styleVariants } from '@vanilla-extract/css';
 
 export const track = style({
   boxSizing: 'border-box',
@@ -10,13 +10,19 @@ export const track = style({
   background: '#070b0e99'
 });
 
+const widthDuration = createVar();
+
 export const value = style({
   height: '100%',
   borderRadius: 'inherit',
-  transition: 'width 1200ms ease-out, background-color 1200ms ease-out, box-shadow 1200ms ease-out',
+  transition: `width ${fallbackVar(widthDuration, '1200ms')} ease-out, background-color 1200ms ease-out, box-shadow 1200ms ease-out`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { transition: 'none' }
   }
+});
+
+export const introFill = style({
+  vars: { [widthDuration]: '2000ms' }
 });
 
 export const statusVariants = styleVariants({

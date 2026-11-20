@@ -6,12 +6,13 @@
     current: number;
     max: number;
     dangerHp?: number;
+    intro?: boolean;
   }
 
-  let { current, max, dangerHp }: Props = $props();
+  let { current, max, dangerHp, intro }: Props = $props();
 </script>
 
 <div class={styles.container}>
-  <HealthLabel {current} {max} />
-  <HealthBar {current} {max} {dangerHp} />
+  <HealthLabel {current} {max} {intro} />
+  <HealthBar {current} {max} {dangerHp} {intro} />
 </div>

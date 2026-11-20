@@ -319,6 +319,12 @@ describe('aBreakPage', () => {
     );
     await fireEvent.click(screen.getByRole('button', { name: 'START' }));
     await vi.advanceTimersByTimeAsync(1500);
+    expect(screen.getByText('0 / 200')).toBeInTheDocument();
+    expect(screen.getByText('0 / 150')).toBeInTheDocument();
+    expect([...container.querySelectorAll(`.${healthBarStyles.value}`)]).toHaveLength(2);
+    for (const bar of container.querySelectorAll(`.${healthBarStyles.value}`)) {
+      expect(bar).toHaveStyle({ width: '0%' });
+    }
     const blackout = container.querySelector(`.${styles.screenBlackout}`);
     expect(blackout).toBeInTheDocument();
     expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
@@ -330,6 +336,13 @@ describe('aBreakPage', () => {
     await vi.advanceTimersByTimeAsync(700);
     expect(blackout).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
+    expect(screen.queryByText('200 / 200')).not.toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(1330);
+    expect(screen.getByText('200 / 200')).toBeInTheDocument();
+    expect(screen.getByText('150 / 150')).toBeInTheDocument();
+    for (const bar of container.querySelectorAll(`.${healthBarStyles.value}`)) {
+      expect(bar).toHaveStyle({ width: '100%' });
+    }
   });
 
   test('メニューからゲームトップに戻った場合、黒画面を挟んで中央からタイトルを表示する', async () => {
@@ -478,6 +491,7 @@ describe('aBreakPage', () => {
       expect(button).toBeEnabled();
       await fireEvent.click(button);
       await finishEntrance();
+      await vi.advanceTimersByTimeAsync(1330);
       expect(screen.getAllByText(`${hp} / ${hp}`).length).toBeGreaterThan(0);
       expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
     }
@@ -492,6 +506,7 @@ describe('aBreakPage', () => {
     await vi.advanceTimersByTimeAsync(800);
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE LAST' }));
     await finishEntrance();
+    await vi.advanceTimersByTimeAsync(1330);
     expect(screen.getByText('300 / 300')).toBeInTheDocument();
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
   });
@@ -547,6 +562,7 @@ describe('aBreakPage', () => {
     expect(screen.getByRole('button', { name: 'STAGE LAST' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE 01' }));
     await finishEntrance();
+    await vi.advanceTimersByTimeAsync(1330);
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
     expect(screen.queryAllByRole('listitem')).toHaveLength(0);
@@ -686,6 +702,7 @@ describe('aBreakPage', () => {
   test('プレイヤーがSTONEを選んだ場合、敵のFIREを公開しHPと両者のレベルを更新する', async () => {
     const { container } = await renderBattlePage();
 
+    await vi.advanceTimersByTimeAsync(1330);
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
     expect(screen.queryByRole('img', { name: 'Enemy Move: FIRE' })).not.toBeInTheDocument();
