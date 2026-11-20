@@ -8,14 +8,34 @@ const moveVibration = keyframes({
   '75%': { transform: 'translate(2px, 3px)' }
 });
 
+const createWinVibrationFrames = (phase: number): Record<string, { transform: string }> => {
+  const frames: Record<string, { transform: string }> = {};
+  for (let step = 0; step <= 40; step++) {
+    const direction = [0, 1, 0, -1][(step + phase) % 4];
+    const strength = step <= 32 ? 1 : (40 - step) / 8;
+    frames[`${step * 1.5}%`] = {
+      transform: `translate(${direction * strength * 3}px, ${direction * strength * -3}px)`
+    };
+  }
+  return frames;
+};
+
 const moveVibrationThenSettle = keyframes({
-  '0%, 10%, 20%, 30%, 40%, 50%, 60%, 82%, 100%': { transform: 'translate(0, 0)' },
-  '5%, 25%, 45%': { transform: 'translate(3px, -2px)' },
-  '15%, 35%, 55%': { transform: 'translate(-3px, 2px)' },
+  ...createWinVibrationFrames(0),
   '65%': { transform: 'translate(1px, -0.5px)' },
   '70%': { transform: 'translate(-0.7px, 0.35px)' },
   '75%': { transform: 'translate(0.4px, -0.2px)' },
-  '80%': { transform: 'translate(-0.15px, 0.08px)' }
+  '80%': { transform: 'translate(-0.15px, 0.08px)' },
+  '82%, 100%': { transform: 'translate(0, 0)' }
+});
+
+const enemyVibrationThenSettle = keyframes({
+  ...createWinVibrationFrames(1),
+  '65%': { transform: 'translate(-0.5px, 1px)' },
+  '70%': { transform: 'translate(0.35px, -0.7px)' },
+  '75%': { transform: 'translate(-0.2px, 0.4px)' },
+  '80%': { transform: 'translate(0.08px, -0.15px)' },
+  '82%, 100%': { transform: 'translate(0, 0)' }
 });
 
 const moveEnterLeft = keyframes({
@@ -122,6 +142,13 @@ globalStyle(`.${previewMove} .${container}`, {
 
 globalStyle(`.${movePreviewWinSequence} .${previewMove} .${container}`, {
   animation: `${moveVibrationThenSettle} 3300ms linear forwards`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
+});
+
+globalStyle(`.${movePreviewWinSequence} .${previewMove}:last-child .${container}`, {
+  animationName: enemyVibrationThenSettle,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
