@@ -255,6 +255,58 @@ describe('aBreakPage', () => {
     }
   );
 
+  test.each([
+    { random: 0, background: '01' },
+    { random: 0.25, background: '02' },
+    { random: 0.5, background: '03' },
+    { random: 0.999, background: '04' }
+  ])(
+    'タイトル表示時の乱数が$randomの場合、ランダムに背景$backgroundを表示する',
+    async ({ random, background }) => {
+      vi.mocked(Math.random).mockReturnValue(random);
+      const { container } = render(Page);
+      await finishEntrance();
+      expect(
+        container.querySelector(
+          `img[src="/images/ketria/backgrounds/background-${background}.png"]`
+        )
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+    }
+  );
+
+  test('ステージ選択でBACKを押した場合、同じ背景のままゲームトップに戻る', async () => {
+    const { container } = render(Page);
+    await finishEntrance();
+    const background = 'img[src="/images/ketria/backgrounds/background-01.png"]';
+    expect(container.querySelector(background)).toBeInTheDocument();
+
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
+    await vi.advanceTimersByTimeAsync(800);
+    vi.mocked(Math.random).mockReturnValue(0.999);
+    await fireEvent.click(screen.getByRole('button', { name: 'BACK' }));
+    await vi.advanceTimersByTimeAsync(800);
+
+    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+    expect(container.querySelector(background)).toBeInTheDocument();
+  });
+
+  test('対戦中にゲームトップへ戻った場合、背景をランダムに表示する', async () => {
+    const { container } = await renderBattlePage();
+    vi.mocked(Math.random).mockReturnValue(0.999);
+    await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'ゲームトップに戻る' }));
+    await finishEntrance();
+    expect(
+      container.querySelector('img[src="/images/ketria/backgrounds/background-04.png"]')
+    ).toBeInTheDocument();
+    await fireEvent.click(screen.getByRole('button', { name: 'START' }));
+    await finishEntrance();
+    expect(
+      container.querySelector('img[src="/images/ketria/backgrounds/background-01.png"]')
+    ).toBeInTheDocument();
+  });
+
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
     const { container } = render(Page);
     await finishEntrance();
@@ -693,6 +745,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーがMIST Lv3で勝利した場合、20ダメージを与えて敵の属性をランダムに1つ封印する', async () => {
+    vi.mocked(Math.random).mockReturnValueOnce(0);
     for (const value of [0.4, 0.4, 0.4, 0]) {
       vi.mocked(Math.random).mockReturnValueOnce(value);
     }
@@ -723,6 +776,7 @@ describe('aBreakPage', () => {
   });
 
   test('敵がMIST Lv3で勝利した場合、プレイヤーの属性をランダムに1つ封印する', async () => {
+    vi.mocked(Math.random).mockReturnValueOnce(0);
     for (const value of [0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0.4, 0.4, 0.4, 0.75, 0]) {
       vi.mocked(Math.random).mockReturnValueOnce(value);
     }

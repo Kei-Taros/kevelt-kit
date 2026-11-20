@@ -35,6 +35,10 @@
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
+  let titleBackground = $state<StageId>('01');
+  const randomizeTitleBackground = (): void => {
+    titleBackground = STAGE_IDS[Math.floor(Math.random() * STAGE_IDS.length)];
+  };
   let clearedStages = $state<StageId[]>([]);
   let sessionLoaded = $state(false);
   let entrancePhase = $state<'hold' | 'fade' | null>('hold');
@@ -96,6 +100,7 @@
     } catch {
       // MEMO: 復元できなければタイトルを表示
     }
+    if (currentScreen !== 'battle') randomizeTitleBackground();
     sessionLoaded = true;
     beginEntrance();
   };
@@ -125,6 +130,7 @@
   };
 
   const returnToTitle = (): void => {
+    randomizeTitleBackground();
     beginEntrance();
     battle?.destroy();
     battle = null;
@@ -176,7 +182,7 @@
     bind:this={screenContent}
     class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''}`}
   >
-    <BattleBackground background={currentScreen === 'battle' ? selectedStage : '01'} />
+    <BattleBackground background={currentScreen === 'battle' ? selectedStage : titleBackground} />
     {#if sessionLoaded && currentScreen !== 'battle'}
       <div class={styles.titleShade} aria-hidden="true"></div>
       <div class={styles.titleMist} aria-hidden="true"></div>
