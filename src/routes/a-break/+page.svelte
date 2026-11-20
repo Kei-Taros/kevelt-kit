@@ -7,7 +7,8 @@
     BattleMessage,
     ElementCycle,
     EnemyImage,
-    StoneEffectBadge
+    StoneEffectBadge,
+    BattleActionButton
   } from '$lib/ketria/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
   import {
@@ -29,6 +30,7 @@
   } from '$lib/ketria/game/stageProgress';
   import { parseBattleSession, SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
   import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
+  import { STAGE_IDS } from '$lib/ketria/constants/stages';
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
@@ -61,6 +63,7 @@
   };
   const stages = $derived(getAvailableStages(clearedStages));
   const disabledStages = $derived(getDisabledStages(clearedStages));
+  const nextStage = $derived(STAGE_IDS[STAGE_IDS.indexOf(selectedStage) + 1] ?? null);
   let battle = $state.raw<ReturnType<typeof createBattleSequence> | null>(null);
 
   const initializeScreen = (type: string | null): void => {
@@ -118,12 +121,6 @@
     selectedStage = stage;
     battle = createBattleSequence(BATTLE_MESSAGES[stage], stage);
     currentScreen = 'battle';
-  };
-
-  const returnToStages = (): void => {
-    battle?.destroy();
-    battle = null;
-    currentScreen = 'stages';
   };
 
   const returnToTitle = (): void => {
@@ -227,19 +224,20 @@
             fading={battle.messageTextFading}
             duration={battle.messageTextDuration}
             delay={battle.battleLogs.length > 0 ? 1000 : 1900}
-          />
-        </div>
-      {/if}
-      {#if battle.messageReady && (battle.player.hp === 0 || battle.enemy.hp === 0)}
-        <div class={styles.battleResultActions} in:fade={{ duration: 300 }}>
-          <button
-            type="button"
-            class={styles.battleResultButton}
-            onclick={() => startStage(selectedStage)}>RETRY</button
           >
-          <button type="button" class={styles.battleResultButton} onclick={returnToStages}
-            >STAGE SELECT</button
-          >
+            {#if battle.messageReady && battle.enemy.hp === 0 && battle.player.hp > 0 && nextStage}
+              <span class={styles.battleAction}>
+                <BattleActionButton
+                  label="NEXT STAGE"
+                  onclick={() => nextStage && startStage(nextStage)}
+                />
+              </span>
+            {:else if battle.messageReady && battle.player.hp === 0}
+              <span class={styles.battleAction}>
+                <BattleActionButton label="REMATCH" onclick={() => startStage(selectedStage)} />
+              </span>
+            {/if}
+          </BattleMessage>
         </div>
       {/if}
       <div class={styles.attributeCycle}><ElementCycle /></div>

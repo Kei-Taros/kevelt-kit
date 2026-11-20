@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import * as styles from './BattleMessage.css';
 
   interface Props {
@@ -7,9 +8,17 @@
     fading?: boolean;
     duration?: number;
     delay?: number;
+    children?: Snippet;
   }
 
-  let { lines, immediate = false, fading = false, duration = 500, delay = 1900 }: Props = $props();
+  let {
+    lines,
+    immediate = false,
+    fading = false,
+    duration = 500,
+    delay = 1900,
+    children
+  }: Props = $props();
 
   const maxLength = 15;
 
@@ -27,8 +36,18 @@
       <span
         class={`${styles.line} ${fading ? styles.lineFadeOut : ''}`}
         style:animation-duration={`${duration}ms`}
-        style:animation-delay={`${immediate || fading ? 0 : delay + index * 550}ms`}>{shorten(line)}</span
+        style:animation-delay={`${immediate || fading ? 0 : delay + index * 550}ms`}
+        >{shorten(line)}</span
       >
     {/each}
   {/key}
+  {#if children}
+    <span
+      class={`${styles.line} ${fading ? styles.lineFadeOut : ''}`}
+      style:animation-duration={`${duration}ms`}
+      style:animation-delay={`${immediate || fading ? 0 : delay}ms`}
+    >
+      {@render children()}
+    </span>
+  {/if}
 </p>

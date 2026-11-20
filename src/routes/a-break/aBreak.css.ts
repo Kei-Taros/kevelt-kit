@@ -195,32 +195,6 @@ export const titleMist = style({
   }
 });
 
-export const battleResultActions = style({
-  position: 'absolute',
-  top: '56%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  zIndex: 3,
-  display: 'flex',
-  gap: 'clamp(12px, 2vw, 30px)'
-});
-
-export const battleResultButton = style({
-  padding: '12px 18px',
-  border: '1px solid #ffb06170',
-  background: '#060c12cc',
-  color: '#f6f7fa',
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 'clamp(12px, 1.2vw, 20px)',
-  letterSpacing: '0.12em',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer',
-  selectors: {
-    '&:hover': { borderColor: '#ffb061', color: '#ffb061' },
-    '&:focus-visible': { outline: '1px solid #ffb061', outlineOffset: 4 }
-  }
-});
-
 export const screenBlackout = style({
   position: 'fixed',
   inset: 0,
@@ -258,4 +232,9 @@ export const screenContentReveal = style({
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none', maskImage: 'none', opacity: 1 }
   }
+});
+
+export const battleAction = style({
+  display: 'block',
+  lineHeight: 1
 });
