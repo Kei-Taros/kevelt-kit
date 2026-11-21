@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { determineWinner, getAttackDamage, resolveTurn } from './battleRules';
+import type { FighterState } from './battleRules';
 import type { ElementType } from '../types/element.types';
 
 const levels = { fire: 1, stone: 1, mist: 1 } as const;
@@ -229,6 +230,36 @@ describe('resolveTurn', () => {
     expect(result.player.levels.fire).toBe(3);
     expect(result.enemy.levels.fire).toBe(2);
   });
+
+  test.each(['player', 'enemy'] as const)(
+    'STONEの半減効果を持つ$side側は、連勝後も効果を保持し、被ダメージを1回だけ半減する',
+    (side) => {
+      let fighters: Record<'player' | 'enemy', FighterState> = {
+        player: { hp: 200, levels: { fire: 1, stone: 1, mist: 1 }, stoneGuard: side === 'player' },
+        enemy: { hp: 200, levels: { fire: 1, stone: 1, mist: 1 }, stoneGuard: side === 'enemy' }
+      };
+      for (let turn = 0; turn < 2; turn++) {
+        const result = resolveTurn({
+          player: { ...fighters.player, move: side === 'player' ? 'stone' : 'fire' },
+          enemy: { ...fighters.enemy, move: side === 'enemy' ? 'stone' : 'fire' }
+        });
+        expect(result[side].stoneGuard).toBe(true);
+        fighters = result;
+      }
+
+      const firstHit = resolveTurn({
+        player: { ...fighters.player, move: side === 'player' ? 'mist' : 'fire' },
+        enemy: { ...fighters.enemy, move: side === 'enemy' ? 'mist' : 'fire' }
+      });
+      expect(firstHit[side].hp).toBe(175);
+      expect(firstHit[side].stoneGuard).toBeUndefined();
+      const nextHit = resolveTurn({
+        player: { ...firstHit.player, move: side === 'player' ? 'fire' : 'stone' },
+        enemy: { ...firstHit.enemy, move: side === 'enemy' ? 'fire' : 'stone' }
+      });
+      expect(nextHit[side].hp).toBe(165);
+    }
+  );
 
   test('あいこでプレイヤーにSTONEの軽減がある場合、プレイヤーは5ダメージ敵は10ダメージを受ける', () => {
     const result = resolveTurn({

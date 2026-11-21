@@ -194,7 +194,7 @@ describe('battleSequence', () => {
     vi.advanceTimersByTime(6300);
     expect(restored.battleLogs).toHaveLength(4);
     expect(restored.player.levels.stone).toBe(1);
-    expect(restored.playerStoneEffectActive).toBe(false);
+    expect(restored.playerStoneEffectActive).toBe(true);
     restored.destroy();
   });
 
@@ -518,29 +518,47 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
+  test('半減効果がある状態で勝った場合、HP更新時もStoneEffectBadgeを表示し続ける', () => {
+    vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const first = createBattleSequence(messagePatterns, '02');
+    const snapshot = first.snapshot;
+    first.destroy();
+    const battle = createBattleSequence(messagePatterns, '02', {
+      ...snapshot,
+      player: { ...snapshot.player, stoneGuard: true }
+    });
+
+    battle.selectElement('stone');
+    vi.advanceTimersByTime(4600);
+    expect(battle.playerStoneEffectActive).toBe(true);
+    expect(battle.snapshot.player.stoneGuard).toBe(true);
+    vi.advanceTimersByTime(1700);
+    expect(battle.playerStoneEffectActive).toBe(true);
+    battle.destroy();
+  });
+
   test.each([
-    {
-      side: 'プレイヤー',
-      random: 0,
-      element: 'stone' as const,
-      badge: 'playerStoneEffectActive' as const
-    },
-    { side: '敵', random: 0.4, element: 'fire' as const, badge: 'enemyStoneEffectActive' as const }
-  ])(
-    '$sideの半減効果が終了する場合、HP更新まではStoneEffectBadgeを表示し、更新と同時に消す',
-    ({ random, element, badge }) => {
-      vi.mocked(Math.random).mockReturnValue(random);
-      const battle = createBattleSequence(messagePatterns);
-      for (let turn = 0; turn < 3; turn++) {
-        battle.selectElement(element);
-        vi.advanceTimersByTime(6300);
-      }
-      expect(battle[badge]).toBe(true);
-      battle.selectElement('mist');
+    { side: 'player', playerMove: 'mist', enemyMove: 'fire', badge: 'playerStoneEffectActive' },
+    { side: 'enemy', playerMove: 'fire', enemyMove: 'mist', badge: 'enemyStoneEffectActive' }
+  ] as const)(
+    '$side側がダメージを受けた場合、HP更新と同時にStoneEffectBadgeを消す',
+    ({ side, playerMove, enemyMove, badge }) => {
+      vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue(enemyMove);
+      const first = createBattleSequence(messagePatterns);
+      const snapshot = first.snapshot;
+      first.destroy();
+      const battle = createBattleSequence(messagePatterns, '01', {
+        ...snapshot,
+        [side]: { ...snapshot[side], stoneGuard: true }
+      });
+
+      battle.selectElement(playerMove);
       vi.advanceTimersByTime(4599);
       expect(battle[badge]).toBe(true);
       vi.advanceTimersByTime(1);
       expect(battle[badge]).toBe(false);
+      expect(battle.snapshot[side].stoneGuard).toBeUndefined();
+      battle.destroy();
     }
   );
 

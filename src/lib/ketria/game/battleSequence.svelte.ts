@@ -175,8 +175,8 @@ export const createBattleSequence = (
   };
 
   const applyTurnResult = (result: TurnResult, logEntry: BattleLogEntry): void => {
-    playerStoneEffectActive = false;
-    enemyStoneEffectActive = false;
+    playerStoneEffectActive = playerStoneEffectActive && result.player.stoneGuard === true;
+    enemyStoneEffectActive = enemyStoneEffectActive && result.enemy.stoneGuard === true;
     visibleEnemySealedElement = null;
     visiblePlayerSealedElement = null;
     consecutiveDraws = result.winner === 'draw' ? consecutiveDraws + 1 : 0;

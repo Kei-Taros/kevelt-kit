@@ -110,7 +110,8 @@ export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResul
     player: {
       hp: Math.max(0, player.hp - playerDamage),
       levels: nextPlayerLevels,
-      ...(winner === 'player' && player.move === 'stone' && playerLevel === 3
+      ...(winner === 'player' &&
+      (player.stoneGuard || (player.move === 'stone' && playerLevel === 3))
         ? { stoneGuard: true }
         : {}),
       ...(winner === 'enemy' && enemy.move === 'mist' && enemyLevel === 3 && sealTarget
@@ -120,7 +121,7 @@ export const resolveTurn = ({ player, enemy, sealTarget }: TurnInput): TurnResul
     enemy: {
       hp: Math.max(0, enemy.hp - enemyDamage),
       levels: nextEnemyLevels,
-      ...(winner === 'enemy' && enemy.move === 'stone' && enemyLevel === 3
+      ...(winner === 'enemy' && (enemy.stoneGuard || (enemy.move === 'stone' && enemyLevel === 3))
         ? { stoneGuard: true }
         : {}),
       ...(winner === 'player' && player.move === 'mist' && playerLevel === 3 && sealTarget
