@@ -140,13 +140,13 @@
     currentScreen = 'battle';
   };
 
-  const returnToTitle = (): void => {
+  const leaveBattle = (screen: 'title' | 'stages'): void => {
     randomizeTitleBackground();
     beginEntrance();
     battle?.destroy();
     battle = null;
     startingBattle = false;
-    currentScreen = 'title';
+    currentScreen = screen;
   };
 
   $effect(() => {
@@ -266,7 +266,7 @@
       {/if}
       <div class={styles.attributeCycle}><ElementCycle /></div>
       <BattleLog logs={battle.battleLogs} />
-      <GameMenu ontitle={returnToTitle} />
+      <GameMenu ontitle={() => leaveBattle('title')} onstageselect={() => leaveBattle('stages')} />
 
       <div class={`${styles.health} ${styles.playerHealth}`}>
         {#key battle}

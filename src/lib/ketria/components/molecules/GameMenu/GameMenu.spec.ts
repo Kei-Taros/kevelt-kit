@@ -5,11 +5,11 @@ import GameMenu from './GameMenu.svelte';
 describe('GameMenu', () => {
   test('メニューを開いた場合、トップに戻るリンクが表示される', async () => {
     render(GameMenu);
-    expect(screen.queryByRole('link', { name: 'トップに戻る' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'HOME' })).not.toBeInTheDocument();
 
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
 
-    expect(screen.getByRole('link', { name: 'トップに戻る' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'HOME' })).toHaveAttribute('href', '/');
   });
 
   test('Escapeで閉じた場合、開閉ボタンへフォーカスが戻る', async () => {
@@ -19,22 +19,33 @@ describe('GameMenu', () => {
 
     const button = screen.getByRole('button', { name: 'Open menu' });
     expect(button).toHaveFocus();
-    expect(screen.queryByRole('link', { name: 'トップに戻る' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'HOME' })).not.toBeInTheDocument();
   });
 
   test('背景を押した場合、メニューが閉じる', async () => {
     render(GameMenu);
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     await fireEvent.click(screen.getAllByRole('button', { name: 'Close menu' })[0]);
-    expect(screen.queryByRole('link', { name: 'トップに戻る' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'HOME' })).not.toBeInTheDocument();
   });
   test('タイトルに戻るボタンを押した場合、メニューが閉じてタイトルへ戻る処理が呼ばれる', async () => {
     const ontitle = vi.fn();
     render(GameMenu, { props: { ontitle } });
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'TITLE' }));
     expect(ontitle).toHaveBeenCalledOnce();
     expect(screen.getByRole('button', { name: 'Open menu' })).toHaveFocus();
-    expect(screen.queryByRole('button', { name: 'タイトルに戻る' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'TITLE' })).not.toBeInTheDocument();
+  });
+
+  test('STAGESを押した場合、メニューが閉じてステージ選択へ進む処理が呼ばれる', async () => {
+    const onstageselect = vi.fn();
+    render(GameMenu, { props: { onstageselect } });
+    await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGES' }));
+
+    expect(onstageselect).toHaveBeenCalledOnce();
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveFocus();
+    expect(screen.queryByRole('button', { name: 'STAGES' })).not.toBeInTheDocument();
   });
 });

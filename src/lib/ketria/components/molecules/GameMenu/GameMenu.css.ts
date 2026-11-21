@@ -19,15 +19,24 @@ export const panel = style({
   boxShadow: '0 8px 24px #0008'
 });
 
-export const link = style({
+export const option = style({
   display: 'block',
+  boxSizing: 'border-box',
+  width: '100%',
   padding: '14px 16px',
+  border: 0,
+  borderRadius: 4,
+  background: 'transparent',
   color: '#f5f5f2',
-  textDecoration: 'none',
+  fontFamily: 'inherit',
   fontSize: 14,
+  lineHeight: '1.25',
+  textDecoration: 'none',
+  textAlign: 'center',
+  cursor: 'pointer',
   selectors: {
     '&:hover': { background: '#28313a' },
-    '&:focus-visible': { outline: '2px solid #e6f5ff', outlineOffset: 3 }
+    '&:focus-visible': { outline: '2px solid #e6f5ff', outlineOffset: -2 }
   }
 });
 
@@ -39,15 +48,3 @@ export const backdrop = style({
   padding: 0,
   background: 'rgba(0, 0, 0, 0.6)'
 });
-
-export const action = style([
-  link,
-  {
-    width: '100%',
-    border: 0,
-    background: 'transparent',
-    fontFamily: 'inherit',
-    textAlign: 'left',
-    cursor: 'pointer'
-  }
-]);

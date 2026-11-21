@@ -326,7 +326,7 @@ describe('aBreakPage', () => {
     const { container } = await renderBattlePage();
     vi.mocked(Math.random).mockReturnValue(0.999);
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'TITLE' }));
     await finishEntrance();
     expect(
       container.querySelector('img[src="/images/ketria/backgrounds/background-04.png"]')
@@ -336,6 +336,17 @@ describe('aBreakPage', () => {
     expect(
       container.querySelector('img[src="/images/ketria/backgrounds/background-01.png"]')
     ).toBeInTheDocument();
+  });
+
+  test('対戦中のメニューでSTAGESを押した場合、ステージ選択を表示する', async () => {
+    await renderBattlePage();
+    await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'STAGES' }));
+    await finishEntrance();
+
+    expect(screen.getByRole('heading', { name: 'STAGE SELECT' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'STAGE 01' })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
   });
 
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {
@@ -379,7 +390,7 @@ describe('aBreakPage', () => {
   test('メニューからゲームトップに戻った場合、黒画面を挟んで中央からタイトルを表示する', async () => {
     const { container } = await renderBattlePage();
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'TITLE' }));
     const blackout = container.querySelector(`.${styles.screenBlackout}`);
     expect(blackout).toBeInTheDocument();
     expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
@@ -639,7 +650,7 @@ describe('aBreakPage', () => {
       '01'
     ]);
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    await fireEvent.click(screen.getByRole('button', { name: 'タイトルに戻る' }));
+    await fireEvent.click(screen.getByRole('button', { name: 'TITLE' }));
     await finishEntrance();
     await fireEvent.click(screen.getByRole('button', { name: 'STAGE SELECT' }));
     await vi.advanceTimersByTimeAsync(800);

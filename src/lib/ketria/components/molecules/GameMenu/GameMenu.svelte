@@ -5,9 +5,10 @@
 
   interface Props {
     ontitle?: () => void;
+    onstageselect?: () => void;
   }
 
-  let { ontitle }: Props = $props();
+  let { ontitle, onstageselect }: Props = $props();
   let open = $state(false);
   let menuRoot: HTMLDivElement;
 
@@ -33,18 +34,34 @@
   ></button>
 {/if}
 <div class={styles.root} bind:this={menuRoot}>
-  <MenuButton {open} onclick={() => (open = !open)} />
+  <MenuButton
+    {open}
+    onclick={() => {
+      if (open) closeMenu();
+      else open = true;
+    }}
+  />
   <nav id="game-navigation" class={styles.panel} aria-label="ゲームメニュー" hidden={!open}>
     {#if ontitle}
       <button
         type="button"
-        class={styles.action}
+        class={styles.option}
         onclick={() => {
           closeMenu();
           ontitle?.();
-        }}>タイトルに戻る</button
+        }}>TITLE</button
       >
     {/if}
-    <a class={styles.link} href={resolve('/')}>トップに戻る</a>
+    {#if onstageselect}
+      <button
+        type="button"
+        class={styles.option}
+        onclick={() => {
+          closeMenu();
+          onstageselect?.();
+        }}>STAGES</button
+      >
+    {/if}
+    <a class={styles.option} href={resolve('/')}>HOME</a>
   </nav>
 </div>
