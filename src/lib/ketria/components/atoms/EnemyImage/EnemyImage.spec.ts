@@ -19,7 +19,7 @@ describe('EnemyImage', () => {
       const image = container.querySelector('img');
 
       expect(picture).toHaveClass(styles.picture);
-      if (enemy === '01') {
+      if (enemy === '01' || enemy === '02') {
         expect(picture).toHaveClass(styles.mistShroudedFloat);
       } else {
         expect(picture).not.toHaveClass(styles.mistShroudedFloat);

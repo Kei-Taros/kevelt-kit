@@ -17,7 +17,7 @@ export const image = style({
   width: '100%',
   height: '100%',
   objectFit: 'contain',
-  opacity: 0.82,
+  opacity: 0.95,
   maskImage: 'linear-gradient(to bottom, #000 65%, transparent 100%)'
 });
 
