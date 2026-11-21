@@ -141,6 +141,7 @@
 {#if visible}
   <div
     class={`${styles.transitionOverlay} ${fading ? styles.transitionFadeOut : ''}`}
+    data-route-transition
     aria-hidden="true"
   >
     {#if !waitingForPage}

@@ -45,17 +45,15 @@ for (const device of [
             return page.locator(coverSelector).count();
           })
           .toBe(1);
-        const transition = page
-          .locator('video')
-          .filter({ has: page.locator('source[src*="route-transition"]') });
+        const transition = page.locator('[data-route-transition]');
         await expect(transition).toBeAttached();
         const touch = await context.newCDPSession(page);
         const x = Math.round(device.viewport.width / 2);
         let y = device.viewport.height - 100;
         expect(
           await transition.evaluate(
-            (video, point) => {
-              return video.parentElement?.contains(document.elementFromPoint(point.x, point.y));
+            (overlay, point) => {
+              return overlay.contains(document.elementFromPoint(point.x, point.y));
             },
             { x, y }
           )
@@ -73,8 +71,12 @@ for (const device of [
         }
         await expect.poll(() => coverScale(page)).toBeGreaterThan(1.05);
         expect(await page.evaluate(() => window.scrollY)).toBe(0);
-        await page.clock.runFor(300);
-        await expect(transition).toHaveCount(0);
+        await expect
+          .poll(async () => {
+            await page.clock.runFor(100);
+            return transition.count();
+          })
+          .toBe(0);
         for (let i = 0; i < 3; i += 1) {
           y -= 35;
           await touch.send('Input.dispatchTouchEvent', {
@@ -119,8 +121,8 @@ for (const device of [
       let y = device.viewport.height - 100;
       await expect(page.locator(coverSelector)).toBeAttached();
       await expect(page).toHaveURL(/\/$/);
+      await expect(page.locator('[data-route-transition]')).toHaveCount(0);
       if (touch) {
-        await expect(page.locator('video source[src*="route-transition"]')).toHaveCount(0);
         await touch.send('Input.dispatchTouchEvent', {
           type: 'touchStart',
           touchPoints: [{ x, y }]
