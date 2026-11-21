@@ -243,3 +243,39 @@ export const battleAction = style({
   display: 'block',
   lineHeight: 1
 });
+
+const shakeOnVictory = keyframes({
+  '0%, 100%': { transform: 'translate(0, 0)' },
+  '10%': { transform: 'translate(-15px, 8px)' },
+  '22%': { transform: 'translate(14px, -8px)' },
+  '34%': { transform: 'translate(-11px, -6px)' },
+  '46%': { transform: 'translate(10px, 6px)' },
+  '58%': { transform: 'translate(-7px, 4px)' },
+  '70%': { transform: 'translate(6px, -3px)' },
+  '82%': { transform: 'translate(-3px, 2px)' },
+  '92%': { transform: 'translate(2px, -1px)' }
+});
+
+export const victoryShake = style({
+  animation: `${shakeOnVictory} 500ms linear`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
+});
+
+const flashOnMatchResult = keyframes({
+  '0%, 25%': { opacity: 1 },
+  '100%': { opacity: 0 }
+});
+
+export const matchResultFlash = style({
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1000,
+  pointerEvents: 'none',
+  background: '#fff',
+  animation: `${flashOnMatchResult} 200ms ease-out both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { display: 'none' }
+  }
+});

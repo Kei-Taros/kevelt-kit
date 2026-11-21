@@ -138,6 +138,35 @@ describe('aBreakPage', () => {
     }
   );
 
+  test('敵がプレイヤーのHPを0にした場合、画面が0.5秒揺れてからLOSEを表示する', async () => {
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.player.hp = 10;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+    const { container } = render(Page);
+    await finishEntrance();
+
+    await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
+    const content = container.querySelector(`.${styles.screenContent}`);
+    const flash = () => container.querySelector(`.${styles.matchResultFlash}`);
+    await vi.advanceTimersByTimeAsync(4599);
+    expect(flash()).not.toBeInTheDocument();
+    expect(content).not.toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(content).toHaveClass(styles.victoryShake);
+    expect(flash()).toBeInTheDocument();
+    expect(screen.queryByText('LOSE', { selector: 'p span' })).not.toBeInTheDocument();
+
+    await vi.advanceTimersByTimeAsync(500);
+    expect(flash()).not.toBeInTheDocument();
+    expect(content).not.toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1200);
+    expect(screen.getByText('LOSE', { selector: 'p span' })).toBeInTheDocument();
+  });
+
   test('両者のHPが同時に0になった場合、DRAWとREMATCHを表示し同じステージを最初から再開する', async () => {
     const first = await renderBattlePage();
     const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
@@ -965,7 +994,7 @@ describe('aBreakPage', () => {
   });
 
   test('プレイヤーが敵のHPを0にした場合、最終ターンを記録して終了後も履歴を保持する', async () => {
-    await renderBattlePage();
+    const { container } = await renderBattlePage();
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
 
     for (const [index, element] of [
@@ -982,8 +1011,22 @@ describe('aBreakPage', () => {
       if (index < 7) await beginNextTurn();
     }
 
-    await beginNextTurn();
+    const content = container.querySelector(`.${styles.screenContent}`);
+    const flash = () => container.querySelector(`.${styles.matchResultFlash}`);
+    await vi.advanceTimersByTimeAsync(4599);
+    expect(flash()).not.toBeInTheDocument();
+    expect(content).not.toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(content).toHaveClass(styles.victoryShake);
+    expect(flash()).toBeInTheDocument();
+    expect(screen.queryByText('WIN', { selector: 'p span' })).not.toBeInTheDocument();
+
+    await vi.advanceTimersByTimeAsync(500);
+    expect(flash()).not.toBeInTheDocument();
+    expect(content).not.toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1200);
     expect(screen.getByText('WIN', { selector: 'p span' })).toBeInTheDocument();
+    expect(content).not.toHaveClass(styles.victoryShake);
     const rows = within(log).getAllByRole('listitem');
     expect(rows).toHaveLength(8);
     expect(rows[0]).toHaveTextContent('08');

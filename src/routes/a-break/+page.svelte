@@ -185,7 +185,7 @@
 <section class={styles.arena} inert={entrancePhase !== null}>
   <div
     bind:this={screenContent}
-    class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''}`}
+    class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''} ${battle?.screenShakeActive ? styles.victoryShake : ''}`}
   >
     <BattleBackground background={currentScreen === 'battle' ? selectedStage : titleBackground} />
     {#if sessionLoaded && currentScreen !== 'battle'}
@@ -315,4 +315,8 @@
     class={`${styles.screenBlackout} ${entrancePhase === 'fade' ? styles.screenBlackoutOpening : ''}`}
     aria-hidden="true"
   ></div>
+{/if}
+
+{#if battle?.screenShakeActive && (battle.player.hp === 0) !== (battle.enemy.hp === 0)}
+  <div class={styles.matchResultFlash} aria-hidden="true"></div>
 {/if}

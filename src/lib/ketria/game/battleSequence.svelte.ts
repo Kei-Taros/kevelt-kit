@@ -57,6 +57,7 @@ export const createBattleSequence = (
   let revealedEnemyMove = $state<ElementType | null>(null);
   let previewPlayerMove = $state<ElementType | null>(null);
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
+  let screenShakeActive = $state(false);
   let winPhase = $state<'clash' | 'resolve' | 'winner' | null>(null);
   let battleLogs = $state<BattleLogEntry[]>(snapshot?.battleLogs ?? []);
   const initialMessageLines = snapshot?.messageLines ?? selectMessage(nextEnemyMove);
@@ -82,6 +83,7 @@ export const createBattleSequence = (
   let winTimer: ReturnType<typeof setTimeout> | undefined;
   let warningTimer: ReturnType<typeof setTimeout> | undefined;
   let originalMessageLines: readonly string[] | undefined;
+  let screenShakeTimer: ReturnType<typeof setTimeout> | undefined;
   let hpTimer: ReturnType<typeof setTimeout> | undefined;
 
   const createSnapshot = (lines: readonly string[]): BattleSnapshot => ({
@@ -103,6 +105,7 @@ export const createBattleSequence = (
     if (selectionTimer) clearTimeout(selectionTimer);
     if (winTimer) clearTimeout(winTimer);
     if (hpTimer) clearTimeout(hpTimer);
+    if (screenShakeTimer) clearTimeout(screenShakeTimer);
     if (warningTimer) clearTimeout(warningTimer);
   };
 
@@ -177,6 +180,17 @@ export const createBattleSequence = (
     visibleEnemySealedElement = null;
     visiblePlayerSealedElement = null;
     consecutiveDraws = result.winner === 'draw' ? consecutiveDraws + 1 : 0;
+    const specialHit =
+      (result.winner === 'player' && player.levels[logEntry.player] === 3) ||
+      (result.winner === 'enemy' && enemy.levels[logEntry.enemy] === 3);
+    const matchDecided = (result.player.hp === 0) !== (result.enemy.hp === 0);
+    if (specialHit || matchDecided) {
+      screenShakeActive = true;
+      screenShakeTimer = setTimeout(() => {
+        screenShakeActive = false;
+        screenShakeTimer = undefined;
+      }, 500);
+    }
     player = result.player;
     enemy = result.enemy;
     battleLogs = [logEntry, ...battleLogs];
@@ -301,6 +315,9 @@ export const createBattleSequence = (
     },
     get moveWinner() {
       return moveWinner;
+    },
+    get screenShakeActive() {
+      return screenShakeActive;
     },
     get winPhase() {
       return winPhase;

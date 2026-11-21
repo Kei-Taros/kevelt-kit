@@ -125,6 +125,45 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
+  test.each([
+    { side: 'player', move: 'fire', opponent: 'mist' },
+    { side: 'player', move: 'stone', opponent: 'fire' },
+    { side: 'player', move: 'mist', opponent: 'stone' },
+    { side: 'enemy', move: 'fire', opponent: 'mist' },
+    { side: 'enemy', move: 'stone', opponent: 'fire' },
+    { side: 'enemy', move: 'mist', opponent: 'stone' }
+  ] as const)(
+    '$side側の$move Lv3が勝った場合、HP更新時に画面が揺れ、0.5秒で止まる',
+    ({ side, move, opponent }) => {
+      const playerWins = side === 'player';
+      vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue(playerWins ? opponent : move);
+      const first = createBattleSequence(messagePatterns, '02');
+      const snapshot = first.snapshot;
+      first.destroy();
+      const winner = snapshot[side];
+      const battle = createBattleSequence(messagePatterns, '02', {
+        ...snapshot,
+        [side]: { ...winner, levels: { ...winner.levels, [move]: 3 } }
+      });
+
+      battle.selectElement(playerWins ? move : opponent);
+      vi.advanceTimersByTime(4599);
+      expect(battle.screenShakeActive).toBe(false);
+      vi.advanceTimersByTime(1);
+      expect(battle.screenShakeActive).toBe(true);
+      expect(battle.battleLogs[0].result).toBe(playerWins ? 'win' : 'lose');
+
+      vi.advanceTimersByTime(499);
+      expect(battle.screenShakeActive).toBe(true);
+      vi.advanceTimersByTime(1);
+      expect(battle.screenShakeActive).toBe(false);
+      vi.advanceTimersByTime(1200);
+      expect(battle.messageReady).toBe(true);
+      expect(battle.screenShakeActive).toBe(false);
+      battle.destroy();
+    }
+  );
+
   test('次の手が確定した状態から復元した場合、敵の手を再抽選しない', () => {
     const first = createBattleSequence(messagePatterns);
     const snapshot = JSON.parse(JSON.stringify(first.snapshot));
