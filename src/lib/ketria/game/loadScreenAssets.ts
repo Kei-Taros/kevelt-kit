@@ -40,12 +40,18 @@ const preload = async (src: string, fallback?: string): Promise<void> => {
 
 export const loadScreenAssets = async (
   container: HTMLElement,
-  isBattle: boolean
+  isBattle: boolean,
+  preloadUltimate = false
 ): Promise<void> => {
   const pending = Array.from(container.querySelectorAll('img'), decodeImage);
   if (isBattle) {
     pending.push(...battleAssets.map((path) => preload(`${path}.webp`, `${path}.png`)));
     pending.push(preload('/images/ketria/effects/sparks.svg'));
+  }
+  if (preloadUltimate) {
+    pending.push(
+      preload('/images/ketria/enemy/enemy-05.webp', '/images/ketria/enemy/enemy-05.png')
+    );
   }
   await Promise.allSettled(pending);
 };

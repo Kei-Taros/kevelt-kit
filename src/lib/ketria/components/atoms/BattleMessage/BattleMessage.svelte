@@ -5,6 +5,7 @@
   interface Props {
     lines: readonly string[];
     immediate?: boolean;
+    immediateBackground?: boolean;
     fading?: boolean;
     duration?: number;
     delay?: number;
@@ -14,6 +15,7 @@
   let {
     lines,
     immediate = false,
+    immediateBackground = false,
     fading = false,
     duration = 500,
     delay = 1900,
@@ -30,7 +32,7 @@
   };
 </script>
 
-<p class={styles.message}>
+<p class={[styles.message, immediateBackground && styles.immediateBackground]}>
   {#key lines}
     {#each lines.slice(0, 2) as line, index (index)}
       <span

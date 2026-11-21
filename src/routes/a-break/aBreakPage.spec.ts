@@ -1,3 +1,4 @@
+import * as enemyLevelBadgeStyles from '$lib/ketria/components/atoms/EnemyLevelBadge/EnemyLevelBadge.css';
 import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
@@ -7,6 +8,7 @@ import { SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
 import { PROGRESS_STORAGE_KEY } from '$lib/ketria/game/stageProgress';
 import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 import * as styles from './aBreak.css';
+import { immediateBackground } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
 
@@ -540,30 +542,83 @@ describe('aBreakPage', () => {
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
   });
 
-  test('STAGE 04で敵HPが150になると、敵画像がTrinity-ultimateに切り替わる', async () => {
-    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
-    const first = await renderBattlePage();
-    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
-    first.unmount();
-    session.battle.enemy.hp = 160;
-    session.battle.nextEnemyMove = 'fire';
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-    navigationContext.documentType = 'reload';
+  test.each([
+    { move: 'STONE', hpUpdate: 4600, hp: 150, initialImage: 'Trinity-envoy' },
+    { move: 'FIRE', hpUpdate: 3300, hp: 150, initialImage: 'Trinity-envoy' },
+    { move: 'STONE', hpUpdate: 4600, hp: 50, initialImage: 'Trinity-ultimate' },
+    { move: 'FIRE', hpUpdate: 3300, hp: 50, initialImage: 'Trinity-ultimate' }
+  ])(
+    'STAGE 04で$moveを選んでHP$hpになると、白転後に画像05とメッセージを表示する',
+    async ({ move, hpUpdate, hp, initialImage }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+      const first = await renderBattlePage();
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+      first.unmount();
+      session.battle.enemy.hp = hp + 10;
+      session.battle.nextEnemyMove = 'fire';
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      navigationContext.documentType = 'reload';
 
-    render(Page);
-    await finishEntrance();
-    expect(screen.getByRole('img', { name: 'Trinity-envoy' })).toBeInTheDocument();
+      const { container } = render(Page);
+      await finishEntrance();
+      expect(screen.getByRole('img', { name: initialImage })).toBeInTheDocument();
 
-    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
-    await beginNextTurn();
+      const overlay = () => container.querySelector(`.${styles.ultimateTransition}`);
+      const message = () => container.querySelector(`.${styles.battleHint}`);
+      await fireEvent.click(screen.getByRole('button', { name: move }));
+      await vi.advanceTimersByTimeAsync(hpUpdate + 1699);
+      expect(overlay()).not.toBeInTheDocument();
+      expect(screen.getByRole('img', { name: initialImage })).toBeInTheDocument();
+      expect(message()).not.toBeInTheDocument();
 
-    await finishHealthAnimation();
-    expect(screen.getByText('150 / 300')).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toHaveAttribute(
-      'src',
-      '/images/ketria/enemy/enemy-05.png'
-    );
-  });
+      await vi.advanceTimersByTimeAsync(32);
+      expect(screen.getByText(`${hp} / 300`)).toBeInTheDocument();
+      expect(overlay()).toHaveClass(styles.ultimateFadeIn);
+      expect(screen.getByRole('img', { name: initialImage })).toBeInTheDocument();
+      expect(message()).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: move })).toBeDisabled();
+
+      const beforeHold = screen.getByRole('img', { name: initialImage });
+      const enemyLevelThreeCount = () =>
+        container.querySelectorAll(
+          `[aria-label="Enemy Levels"] .${enemyLevelBadgeStyles.levelThree}`
+        ).length;
+      if (hp === 50) expect(enemyLevelThreeCount()).toBe(0);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(overlay()).toHaveClass(styles.ultimateHold);
+      if (hp === 50) {
+        expect(enemyLevelThreeCount()).toBe(3);
+        expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toBe(beforeHold);
+      }
+      expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toHaveAttribute(
+        'src',
+        '/images/ketria/enemy/enemy-05.png'
+      );
+      expect(message()).not.toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(500);
+      const content = container.querySelector(`.${styles.screenContent}`);
+      expect(overlay()).toHaveClass(styles.ultimateFadeOut);
+      expect(content).not.toHaveClass(styles.victoryShake);
+      expect(message()).not.toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(500);
+      expect(overlay()).not.toBeInTheDocument();
+      expect(content).not.toHaveClass(styles.victoryShake);
+      expect(message()?.querySelector('p')).toHaveClass(immediateBackground);
+      expect(message()?.querySelector('span')).toHaveStyle({ animationDelay: '1000ms' });
+      expect(screen.getByRole('button', { name: move })).toBeEnabled();
+
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(content).not.toHaveClass(styles.victoryShake);
+
+      await fireEvent.click(screen.getByRole('button', { name: 'MIST' }));
+      await vi.advanceTimersByTimeAsync(6300);
+      expect(overlay()).not.toBeInTheDocument();
+      expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toBeInTheDocument();
+      expect(message()?.querySelector('p')).not.toHaveClass(immediateBackground);
+    }
+  );
 
   test('02と03をクリア済みで01に勝利した場合、結果を保存し04を解放する', async () => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['02', '03']));

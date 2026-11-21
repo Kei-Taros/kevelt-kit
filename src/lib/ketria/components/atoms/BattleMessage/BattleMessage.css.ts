@@ -1,6 +1,10 @@
-import { keyframes, style } from '@vanilla-extract/css';
+import { createVar, fallbackVar, keyframes, style } from '@vanilla-extract/css';
 
 const backgroundReveal = { delay: 1000, duration: 900 } as const;
+
+const backgroundDelay = createVar();
+
+export const immediateBackground = style({ vars: { [backgroundDelay]: '0ms' } });
 
 const mistAppear = keyframes({
   from: { opacity: 0, transform: 'scaleX(0.96)', filter: 'blur(6px)' },
@@ -59,7 +63,7 @@ export const message = style({
       pointerEvents: 'none',
       background: bannerBackground,
       maskImage: 'linear-gradient(90deg, transparent, #000 19%, #000 81%, transparent)',
-      animation: `${mistAppear} ${backgroundReveal.duration}ms ease-out ${backgroundReveal.delay}ms both`
+      animation: `${mistAppear} ${backgroundReveal.duration}ms ease-out ${fallbackVar(backgroundDelay, `${backgroundReveal.delay}ms`)} both`
     },
     '&::after': {
       content: "''",
@@ -71,7 +75,7 @@ export const message = style({
         'radial-gradient(ellipse 28% 32% at 30% 65%, #d7efff14, transparent 100%), radial-gradient(ellipse 36% 26% at 65% 30%, #d7efff12, transparent 100%), radial-gradient(ellipse 48% 20% at 50% 85%, #aedfff12, transparent 100%)',
       filter: 'blur(8px)',
       opacity: 0,
-      animation: `${backgroundFadeIn}, ${mistDrift} 8s ease-in-out 1900ms infinite both`
+      animation: `${mistFadeIn} ${backgroundReveal.duration}ms ease-out ${fallbackVar(backgroundDelay, `${backgroundReveal.delay}ms`)} both, ${mistDrift} 8s ease-in-out calc(${fallbackVar(backgroundDelay, `${backgroundReveal.delay}ms`)} + ${backgroundReveal.duration}ms) infinite both`
     }
   },
   '@media': {

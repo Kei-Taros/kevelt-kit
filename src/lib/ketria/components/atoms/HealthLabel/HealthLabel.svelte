@@ -6,9 +6,10 @@
     current: number;
     max: number;
     intro?: boolean;
+    onsettled?: () => void;
   }
 
-  let { current, max, intro = false }: Props = $props();
+  let { current, max, intro = false, onsettled }: Props = $props();
 
   let displayedCurrent = $state<number | null>(null);
   const visibleCurrent = $derived(displayedCurrent ?? Math.min(current, max));
@@ -31,6 +32,7 @@
         flashing = false;
         if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
           displayedCurrent = target;
+          onsettled?.();
           return;
         }
 
@@ -40,6 +42,7 @@
           const eased = 1 - (1 - progress) ** 3;
           displayedCurrent = Math.round(start + (target - start) * eased);
           if (progress < 1) frame = requestAnimationFrame(animate);
+          else onsettled?.();
         };
         frame = requestAnimationFrame(animate);
       },

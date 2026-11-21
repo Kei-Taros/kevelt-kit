@@ -31,7 +31,7 @@
   } from '$lib/ketria/game/stageProgress';
   import { parseBattleSession, SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
   import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
-  import { STAGE_04_LOW_HP, STAGE_04_ULTIMATE_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
+  import { STAGE_04_LOW_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
@@ -56,7 +56,14 @@
     const revealWhenReady = async (): Promise<void> => {
       await tick();
       if (request !== entranceRequest) return;
-      await Promise.all([minimumHold, loadScreenAssets(screenContent, currentScreen === 'battle')]);
+      await Promise.all([
+        minimumHold,
+        loadScreenAssets(
+          screenContent,
+          currentScreen === 'battle',
+          currentScreen === 'battle' && selectedStage === '04'
+        )
+      ]);
       if (request !== entranceRequest) return;
       entrancePhase = 'fade';
       entranceTimer = setTimeout(() => {
@@ -209,11 +216,7 @@
     {:else if sessionLoaded && battle}
       {#key battle}
         <div class={styles.enemy}>
-          <EnemyImage
-            enemy={selectedStage === '04' && battle.enemy.hp <= STAGE_04_ULTIMATE_HP
-              ? '05'
-              : selectedStage}
-          />
+          <EnemyImage enemy={battle.ultimateForm ? '05' : selectedStage} />
         </div>
       {/key}
       <div class={styles.vignette} aria-hidden="true"></div>
@@ -241,6 +244,7 @@
           <BattleMessage
             lines={battle.messageLines}
             immediate={battle.messageImmediate}
+            immediateBackground={battle.ultimateMessage}
             fading={battle.messageTextFading}
             duration={battle.messageTextDuration}
             delay={battle.battleLogs.length > 0 ? 1000 : 1900}
@@ -270,6 +274,11 @@
             current={emptyHealth ? 0 : battle.player.hp}
             max={200}
             intro={startingBattle}
+            onsettled={() =>
+              battle?.settleHealth(
+                'player',
+                window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+              )}
           />
         {/key}
         {#if battle.playerStoneEffectActive}
@@ -285,10 +294,15 @@
             max={battle.enemyMaxHp}
             dangerHp={selectedStage === '04' ? STAGE_04_LOW_HP : undefined}
             intro={startingBattle}
+            onsettled={() =>
+              battle?.settleHealth(
+                'enemy',
+                window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+              )}
           />
         {/key}
         <EnemyLevels
-          levels={battle.enemy.levels}
+          levels={battle.visibleEnemyLevels}
           sealedElement={battle.visibleEnemySealedElement}
         />
         {#if battle.enemyStoneEffectActive}
@@ -313,6 +327,18 @@
 {#if entrancePhase !== null}
   <div
     class={`${styles.screenBlackout} ${entrancePhase === 'fade' ? styles.screenBlackoutOpening : ''}`}
+    aria-hidden="true"
+  ></div>
+{/if}
+
+{#if battle?.ultimatePhase}
+  <div
+    class={[
+      styles.ultimateTransition,
+      battle.ultimatePhase === 'fadeIn' && styles.ultimateFadeIn,
+      battle.ultimatePhase === 'hold' && styles.ultimateHold,
+      battle.ultimatePhase === 'fadeOut' && styles.ultimateFadeOut
+    ]}
     aria-hidden="true"
   ></div>
 {/if}

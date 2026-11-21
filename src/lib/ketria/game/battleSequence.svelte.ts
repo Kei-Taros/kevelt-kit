@@ -1,4 +1,9 @@
-import { ENEMY_MAX_HP, STAGE_04_LOW_HP, STAGE_04_ULTIMATE_HP } from '../constants/stages';
+import {
+  ENEMY_MAX_HP,
+  STAGE_04_LOW_HP,
+  STAGE_04_ULTIMATE_HP,
+  ULTIMATE_TRANSITION
+} from '../constants/stages';
 import { BATTLE_SYSTEM_MESSAGES } from '../constants/battleSystemMessages';
 import { createBattleMessageSelector } from './battleMessages';
 import type { BattleSnapshot } from '../types/battleSession.types';
@@ -46,6 +51,12 @@ export const createBattleSequence = (
   );
   let player = $state<FighterState>(initialPlayer);
   let enemy = $state<FighterState>(initialEnemy);
+  let ultimateForm = $state(stage === '04' && initialEnemy.hp <= STAGE_04_ULTIMATE_HP);
+  let ultimateMessage = $state(false);
+  let enemyLevelsBeforeUltimateReveal = $state.raw<FighterState['levels'] | null>(null);
+  let ultimatePhase = $state<'fadeIn' | 'hold' | 'fadeOut' | null>(null);
+  let pendingTransformation: (() => void) | undefined;
+  const pendingHealthUpdates = new Set<'player' | 'enemy'>();
   let nextEnemyMove = snapshot
     ? snapshot.nextEnemyMove
     : chooseEnemyMove(
@@ -84,6 +95,7 @@ export const createBattleSequence = (
   let warningTimer: ReturnType<typeof setTimeout> | undefined;
   let originalMessageLines: readonly string[] | undefined;
   let screenShakeTimer: ReturnType<typeof setTimeout> | undefined;
+  let transformationTimer: ReturnType<typeof setTimeout> | undefined;
   let hpTimer: ReturnType<typeof setTimeout> | undefined;
 
   const createSnapshot = (lines: readonly string[]): BattleSnapshot => ({
@@ -107,6 +119,8 @@ export const createBattleSequence = (
     if (hpTimer) clearTimeout(hpTimer);
     if (screenShakeTimer) clearTimeout(screenShakeTimer);
     if (warningTimer) clearTimeout(warningTimer);
+    if (transformationTimer) clearTimeout(transformationTimer);
+    pendingTransformation = undefined;
   };
 
   const selectElement = (element: ElementType): void => {
@@ -174,6 +188,45 @@ export const createBattleSequence = (
     }, timing.selection);
   };
 
+  const shakeScreen = (): void => {
+    screenShakeActive = true;
+    screenShakeTimer = setTimeout(() => {
+      screenShakeActive = false;
+      screenShakeTimer = undefined;
+    }, 500);
+  };
+
+  const settleHealth = (side: 'player' | 'enemy', reduceMotion: boolean): void => {
+    if (!pendingHealthUpdates.delete(side) || pendingHealthUpdates.size > 0) return;
+    const finish = pendingTransformation;
+    if (!finish) return;
+    pendingTransformation = undefined;
+
+    if (reduceMotion) {
+      ultimateForm = true;
+      enemyLevelsBeforeUltimateReveal = null;
+      ultimateMessage = true;
+      finish();
+      return;
+    }
+
+    ultimatePhase = 'fadeIn';
+    transformationTimer = setTimeout(() => {
+      ultimateForm = true;
+      enemyLevelsBeforeUltimateReveal = null;
+      ultimatePhase = 'hold';
+      transformationTimer = setTimeout(() => {
+        ultimatePhase = 'fadeOut';
+        transformationTimer = setTimeout(() => {
+          ultimatePhase = null;
+          ultimateMessage = true;
+          finish();
+          transformationTimer = undefined;
+        }, ULTIMATE_TRANSITION.fadeOut);
+      }, ULTIMATE_TRANSITION.hold);
+    }, ULTIMATE_TRANSITION.fadeIn);
+  };
+
   const applyTurnResult = (result: TurnResult, logEntry: BattleLogEntry): void => {
     playerStoneEffectActive = playerStoneEffectActive && result.player.stoneGuard === true;
     enemyStoneEffectActive = enemyStoneEffectActive && result.enemy.stoneGuard === true;
@@ -184,13 +237,7 @@ export const createBattleSequence = (
       (result.winner === 'player' && player.levels[logEntry.player] === 3) ||
       (result.winner === 'enemy' && enemy.levels[logEntry.enemy] === 3);
     const matchDecided = (result.player.hp === 0) !== (result.enemy.hp === 0);
-    if (specialHit || matchDecided) {
-      screenShakeActive = true;
-      screenShakeTimer = setTimeout(() => {
-        screenShakeActive = false;
-        screenShakeTimer = undefined;
-      }, 500);
-    }
+    if (specialHit || matchDecided) shakeScreen();
     player = result.player;
     enemy = result.enemy;
     battleLogs = [logEntry, ...battleLogs];
@@ -213,6 +260,7 @@ export const createBattleSequence = (
     const enemyMove = nextEnemyMove;
     if (enemyMove === null) return;
     messageReady = false;
+    ultimateMessage = false;
     const winner = determineWinner(element, enemyMove);
     const sealTarget =
       (winner === 'player' && element === 'mist' && player.levels.mist === 3) ||
@@ -244,7 +292,17 @@ export const createBattleSequence = (
     }
     const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
+    const reachedLowHp = enemy.hp > STAGE_04_LOW_HP && result.enemy.hp <= STAGE_04_LOW_HP;
+    const shouldPlayUltimateTransition =
+      stage === '04' &&
+      result.enemy.hp > 0 &&
+      result.player.hp > 0 &&
+      ((enemy.hp > STAGE_04_ULTIMATE_HP && result.enemy.hp <= STAGE_04_ULTIMATE_HP) ||
+        reachedLowHp);
+    let messageDelayElapsed = false;
+    let transformationFinished = !shouldPlayUltimateTransition;
     const showTurnMessage = (): void => {
+      if (!messageDelayElapsed || !transformationFinished) return;
       messageLines = turnMessageLines;
       messageImmediate = false;
       messageTextDuration = 500;
@@ -253,6 +311,18 @@ export const createBattleSequence = (
       enemyStoneEffectActive = nextEnemyStoneEffectActive;
       visibleEnemySealedElement = enemy.sealedElement ?? null;
       visiblePlayerSealedElement = player.sealedElement ?? null;
+    };
+    const applyResult = (): void => {
+      if (shouldPlayUltimateTransition) {
+        if (reachedLowHp) enemyLevelsBeforeUltimateReveal = turn.enemy.levels;
+        pendingTransformation = () => {
+          transformationFinished = true;
+          showTurnMessage();
+        };
+        pendingHealthUpdates.add('enemy');
+        if (player.hp !== result.player.hp) pendingHealthUpdates.add('player');
+      }
+      applyTurnResult(result, logEntry);
     };
     if (result.winner === 'player' || result.winner === 'enemy') {
       previewPlayerMove = element;
@@ -264,12 +334,13 @@ export const createBattleSequence = (
         winTimer = undefined;
       }, timing.resolve);
       hpTimer = setTimeout(() => {
-        applyTurnResult(result, logEntry);
+        applyResult();
         hpTimer = undefined;
       }, timing.hpUpdate);
       revealTimer = setTimeout(() => {
         winPhase = 'winner';
         messageTimer = setTimeout(() => {
+          messageDelayElapsed = true;
           showTurnMessage();
           messageTimer = undefined;
         }, timing.winnerMessage);
@@ -285,10 +356,11 @@ export const createBattleSequence = (
     winTimer = setTimeout(() => {
       winPhase = 'resolve';
       winTimer = undefined;
-      applyTurnResult(result, logEntry);
+      applyResult();
     }, timing.resolve);
     revealTimer = setTimeout(() => {
       winPhase = 'winner';
+      messageDelayElapsed = true;
       showTurnMessage();
       revealTimer = undefined;
     }, timing.winner);
@@ -298,6 +370,16 @@ export const createBattleSequence = (
     get snapshot() {
       return checkpoint;
     },
+    get ultimateForm() {
+      return ultimateForm;
+    },
+    get ultimatePhase() {
+      return ultimatePhase;
+    },
+    get ultimateMessage() {
+      return ultimateMessage;
+    },
+    settleHealth,
     get enemyMaxHp() {
       return enemyMaxHp;
     },
@@ -306,6 +388,9 @@ export const createBattleSequence = (
     },
     get enemy() {
       return enemy;
+    },
+    get visibleEnemyLevels() {
+      return enemyLevelsBeforeUltimateReveal ?? enemy.levels;
     },
     get revealedEnemyMove() {
       return revealedEnemyMove;

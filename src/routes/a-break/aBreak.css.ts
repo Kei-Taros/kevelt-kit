@@ -1,6 +1,8 @@
 import { createVar, keyframes, style } from '@vanilla-extract/css';
 import { backgroundFadeIn } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 
+import { ULTIMATE_TRANSITION } from '$lib/ketria/constants/stages';
+
 export const arena = style({
   position: 'relative',
   isolation: 'isolate',
@@ -278,4 +280,24 @@ export const matchResultFlash = style({
   '@media': {
     '(prefers-reduced-motion: reduce)': { display: 'none' }
   }
+});
+
+const fadeToWhite = keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
+
+export const ultimateTransition = style({
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1000,
+  pointerEvents: 'none',
+  background: '#fff'
+});
+
+export const ultimateFadeIn = style({
+  animation: `${fadeToWhite} ${ULTIMATE_TRANSITION.fadeIn}ms linear both`
+});
+
+export const ultimateHold = style({ opacity: 1 });
+
+export const ultimateFadeOut = style({
+  animation: `${fadeToWhite} ${ULTIMATE_TRANSITION.fadeOut}ms linear reverse both`
 });

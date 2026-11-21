@@ -7,12 +7,13 @@
     max: number;
     dangerHp?: number;
     intro?: boolean;
+    onsettled?: () => void;
   }
 
-  let { current, max, dangerHp, intro }: Props = $props();
+  let { current, max, dangerHp, intro, onsettled }: Props = $props();
 </script>
 
 <div class={styles.container}>
-  <HealthLabel {current} {max} {intro} />
+  <HealthLabel {current} {max} {intro} {onsettled} />
   <HealthBar {current} {max} {dangerHp} {intro} />
 </div>
