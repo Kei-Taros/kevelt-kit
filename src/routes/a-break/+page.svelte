@@ -8,7 +8,8 @@
     ElementCycle,
     EnemyImage,
     StoneEffectBadge,
-    BattleActionButton
+    BattleActionButton,
+    StageMist
   } from '$lib/ketria/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
   import {
@@ -197,7 +198,7 @@
     <BattleBackground background={currentScreen === 'battle' ? selectedStage : titleBackground} />
     {#if sessionLoaded && currentScreen !== 'battle'}
       <div class={styles.titleShade} aria-hidden="true"></div>
-      <div class={styles.titleMist} aria-hidden="true"></div>
+      <StageMist variant="title" />
       {#if currentScreen === 'stages'}
         <StageSelect
           {stages}
@@ -214,6 +215,9 @@
         />
       {/if}
     {:else if sessionLoaded && battle}
+      {#if selectedStage === '01'}
+        <StageMist />
+      {/if}
       {#key battle}
         <div class={styles.enemy}>
           <EnemyImage enemy={battle.ultimateForm ? '05' : selectedStage} />

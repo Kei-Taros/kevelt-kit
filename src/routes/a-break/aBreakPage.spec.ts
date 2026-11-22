@@ -8,6 +8,7 @@ import { SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
 import { PROGRESS_STORAGE_KEY } from '$lib/ketria/game/stageProgress';
 import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 import * as styles from './aBreak.css';
+import { battleMist } from '$lib/ketria/components/atoms/StageMist/StageMist.css';
 import { immediateBackground } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
@@ -273,6 +274,7 @@ describe('aBreakPage', () => {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
       const { container } = render(Page);
       await finishEntrance();
+      expect(container.querySelector(`.${battleMist}`)).not.toBeInTheDocument();
       await fireEvent.click(screen.getByRole('button', { name: 'START' }));
       await finishEntrance();
       expect(
@@ -281,6 +283,13 @@ describe('aBreakPage', () => {
       expect(
         container.querySelector(`img[src="/images/ketria/enemy/enemy-${stage}.png"]`)
       ).toBeInTheDocument();
+      const mist = container.querySelector(`.${battleMist}`);
+      if (stage === '01') {
+        expect(mist).toHaveAttribute('aria-hidden', 'true');
+        expect(mist?.nextElementSibling).toHaveClass(styles.enemy);
+      } else {
+        expect(mist).not.toBeInTheDocument();
+      }
       expect(screen.getByRole('button', { name: 'FIRE' })).toBeEnabled();
       expect(JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!).selectedStage).toBe(stage);
     }
@@ -339,7 +348,7 @@ describe('aBreakPage', () => {
   });
 
   test('対戦中のメニューでSTAGESを押した場合、ステージ選択を表示する', async () => {
-    await renderBattlePage();
+    const { container } = await renderBattlePage();
     await fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     await fireEvent.click(screen.getByRole('button', { name: 'STAGES' }));
     await finishEntrance();
@@ -347,6 +356,7 @@ describe('aBreakPage', () => {
     expect(screen.getByRole('heading', { name: 'STAGE SELECT' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'STAGE 01' })).toBeEnabled();
     expect(screen.queryByRole('button', { name: 'FIRE' })).not.toBeInTheDocument();
+    expect(container.querySelector(`.${battleMist}`)).not.toBeInTheDocument();
   });
 
   test('START後の画像読み込みに時間がかかる場合、完了まで黒画面で待機して操作を無効にする', async () => {

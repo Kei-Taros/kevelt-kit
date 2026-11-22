@@ -147,61 +147,6 @@ export const titleShade = style({
     'radial-gradient(ellipse at 50% 38%, #02070b1a 0%, #02070b55 55%, #0009 100%), linear-gradient(180deg, #02070b30, transparent 60%)'
 });
 
-const titleMistDrift = keyframes({
-  from: { transform: 'translate3d(-50%, 0, 0)' },
-  to: { transform: 'translate3d(0, 0, 0)' }
-});
-
-// 左右端に同じ雲を配置し、各タイルの濃さと傾きを連続させる。
-const titleMistNear = [
-  'radial-gradient(ellipse 26.4% 50.4% at 0% 62%, #e8f3fa48, #e8f3fa18 45%, #e8f3fa00 100%)',
-  'radial-gradient(ellipse 26.4% 50.4% at 100% 62%, #e8f3fa48, #e8f3fa18 45%, #e8f3fa00 100%)',
-  'radial-gradient(ellipse 31.2% 39.6% at 42% 76%, #e8f3fa55, #e8f3fa18 45%, #e8f3fa00 100%)',
-  'radial-gradient(ellipse 26.4% 33.6% at 72% 38%, #e8f3fa38, #e8f3fa10 45%, #e8f3fa00 100%)'
-].join(', ');
-
-const titleMistFar = [
-  'radial-gradient(ellipse 38.4% 36% at 0% 36%, #edf6ff48, #edf6ff12 45%, #edf6ff00 100%)',
-  'radial-gradient(ellipse 38.4% 36% at 100% 36%, #edf6ff48, #edf6ff12 45%, #edf6ff00 100%)',
-  'radial-gradient(ellipse 40.8% 48% at 51% 60%, #edf6ff48, #edf6ff18 45%, #edf6ff00 100%)'
-].join(', ');
-
-export const titleMist = style({
-  position: 'absolute',
-  inset: '50% 0 0',
-  zIndex: 1,
-  overflow: 'hidden',
-  pointerEvents: 'none',
-  maskImage: 'linear-gradient(to bottom, transparent, #000 30%)',
-  background: 'linear-gradient(to bottom, #e8f3fa08, #e8f3fa18)',
-  selectors: {
-    '&::before, &::after': {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      width: '200%',
-      backgroundSize: '50% 100%',
-      backgroundRepeat: 'repeat-x',
-      animation: `${titleMistDrift} 20s linear infinite`
-    },
-    '&::before': {
-      backgroundImage: titleMistNear,
-      opacity: 0.85
-    },
-    '&::after': {
-      backgroundImage: titleMistFar,
-      opacity: 0.6,
-      animationDuration: '30s',
-      animationDelay: '-9s'
-    }
-  },
-  '@media': {
-    '(prefers-reduced-motion: reduce)': {
-      selectors: { '&::before, &::after': { animation: 'none' } }
-    }
-  }
-});
-
 export const screenBlackout = style({
   position: 'fixed',
   inset: 0,

@@ -23,7 +23,8 @@
 <picture
   class={[
     styles.picture,
-    (enemy === '01' || enemy === '02') && styles.mistShroudedFloat,
+    enemy === '01' && styles.fireWielder,
+    enemy === '02' && styles.mistWarden,
     enemy === '05' && styles.ultimatePosition
   ]}
 >

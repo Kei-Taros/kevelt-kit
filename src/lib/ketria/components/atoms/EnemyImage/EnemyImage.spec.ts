@@ -19,10 +19,10 @@ describe('EnemyImage', () => {
       const image = container.querySelector('img');
 
       expect(picture).toHaveClass(styles.picture);
-      if (enemy === '01' || enemy === '02') {
-        expect(picture).toHaveClass(styles.mistShroudedFloat);
+      if (enemy === '02') {
+        expect(picture).toHaveClass(styles.mistWarden);
       } else {
-        expect(picture).not.toHaveClass(styles.mistShroudedFloat);
+        expect(picture).not.toHaveClass(styles.mistWarden);
       }
       expect(source).toHaveAttribute('type', 'image/webp');
       expect(source).toHaveAttribute('srcset', `/images/ketria/enemy/enemy-${enemy}.webp`);
