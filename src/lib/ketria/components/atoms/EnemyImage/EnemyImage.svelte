@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { EnemyId } from '$lib/ketria/types/enemy.types';
+  import EnemyRingTrace from './EnemyRingTrace.svelte';
   import * as styles from './EnemyImage.css';
 
   interface Props {
@@ -55,7 +56,7 @@
       enemy === '01' && styles.fireWielder,
       enemy === '02' && styles.mistWarden,
       enemy === '03' && styles.stoneLightbringer,
-      enemy === '05' && styles.ultimatePosition
+      enemy === '04' && styles.trinityEnvoy
     ]}
   >
     <source srcset={`${imagePath}.webp`} type="image/webp" />
@@ -72,6 +73,14 @@
       data-lightning-single={singleAngle !== null ? '' : undefined}
       style:--lightning-single-angle={singleAngle !== null ? `${singleAngle}deg` : undefined}
     ></span>
+  </div>
+{:else if enemy === '04' || enemy === '05'}
+  <div class={[styles.picture, styles.trinity, enemy === '05' && styles.ultimatePosition]}>
+    {@render enemyPicture()}
+    <EnemyRingTrace {enemy} />
+    {#if enemy === '04'}
+      <span class={styles.trinityChestStar} aria-hidden="true"></span>
+    {/if}
   </div>
 {:else}
   {@render enemyPicture()}

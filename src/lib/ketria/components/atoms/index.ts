@@ -15,3 +15,4 @@ export { default as BattleActionButton } from './BattleActionButton/BattleAction
 export { default as StageLightOrbs } from './StageLightOrbs/StageLightOrbs.svelte';
 export { default as StageLightning } from './StageLightning/StageLightning.svelte';
 export { default as StageMist } from './StageMist/StageMist.svelte';
+export { default as StageStars } from './StageStars/StageStars.svelte';

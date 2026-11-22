@@ -11,7 +11,8 @@
     BattleActionButton,
     StageLightOrbs,
     StageLightning,
-    StageMist
+    StageMist,
+    StageStars
   } from '$lib/ketria/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
   import {
@@ -223,6 +224,8 @@
         <StageLightOrbs />
       {:else if selectedStage === '03'}
         <StageLightning enemyWidth={styles.enemyWidth} />
+      {:else if selectedStage === '04'}
+        <StageStars />
       {/if}
       {#key battle}
         <div class={styles.enemy}>

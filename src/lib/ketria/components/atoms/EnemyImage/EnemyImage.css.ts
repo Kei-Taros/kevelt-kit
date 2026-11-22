@@ -27,6 +27,11 @@ const chestLightPulse = keyframes({
   '50%': { transform: 'translate(-48%, -55%) scale(1.08)', opacity: 1 }
 });
 
+const orbitRing = keyframes({
+  from: { strokeDashoffset: 'calc(-1 * var(--segment-position))' },
+  to: { strokeDashoffset: 'calc(-100px - var(--segment-position))' }
+});
+
 export const picture = style({
   display: 'block',
   width: '100%',
@@ -148,4 +153,83 @@ export const lightning = style({
 
 export const ultimatePosition = style({
   transform: 'translateY(-20px) scale(1.2)'
+});
+
+export const trinity = style({
+  position: 'relative',
+  containerType: 'size'
+});
+
+export const trinityEnvoy = style({
+  filter: enemyDropShadow
+});
+
+const chestStarHalo = keyframes({
+  '0%': { opacity: 0, transform: 'scale(0.75)' },
+  '18%': { opacity: 0.78 },
+  '65%, 100%': { opacity: 0, transform: 'scale(3.2)' }
+});
+
+export const trinityChestStar = style({
+  vars: { '--trinity-image-width': 'min(100cqw, 107.57cqh)' },
+  position: 'absolute',
+  left: '50%',
+  top: 'calc(50% - var(--trinity-image-width) * 0.168)',
+  width: 'clamp(12px, calc(var(--trinity-image-width) * 0.075), 44px)',
+  aspectRatio: '1 / 1',
+  translate: '-50% -50%',
+  pointerEvents: 'none',
+  filter: 'drop-shadow(0 0 5px #79dfff) drop-shadow(0 0 11px #348cff)',
+  '::before': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    background: 'radial-gradient(circle, #fff 12%, #d7f8ff 37%, #64bdff)',
+    clipPath: 'polygon(50% 0, 59% 41%, 100% 50%, 59% 59%, 50% 100%, 41% 59%, 0 50%, 41% 41%)'
+  },
+  '::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    zIndex: -1,
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, #c2f2ff88, #52aaff55 35%, #348cff00 70%)',
+    opacity: 0,
+    animation: `${chestStarHalo} 3.2s ease-out infinite`
+  },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': {
+      '::after': { animation: 'none' }
+    }
+  }
+});
+
+export const ringTrace = style({
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  overflow: 'visible',
+  pointerEvents: 'none',
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { display: 'none' }
+  }
+});
+
+export const ringTraceNear = style({
+  stroke: '#89dcff',
+  strokeWidth: 8,
+  filter: 'drop-shadow(0 0 4px #51beff) drop-shadow(0 0 8px #237dff)'
+});
+
+export const ringTraceFar = style({
+  stroke: '#a4e4ff',
+  strokeWidth: 5,
+  opacity: 0.72,
+  filter: 'drop-shadow(0 0 3px #51beff)'
+});
+
+export const ringTraceSegment = style({
+  fill: 'none',
+  animation: `${orbitRing} 5.5s linear infinite`
 });
