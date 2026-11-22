@@ -3,6 +3,8 @@ import { backgroundFadeIn } from '$lib/ketria/components/atoms/BattleMessage/Bat
 
 import { ULTIMATE_TRANSITION } from '$lib/ketria/constants/stages';
 
+export const enemyWidth = '60dvh';
+
 export const arena = style({
   position: 'relative',
   isolation: 'isolate',
@@ -28,7 +30,7 @@ export const enemy = style({
   position: 'absolute',
   top: '1%',
   left: '50%',
-  width: '60dvh',
+  width: enemyWidth,
   height: '52.5%',
   transform: 'translateX(-50%)',
   animation: backgroundFadeIn,

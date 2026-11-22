@@ -13,6 +13,20 @@ const torchPulse = keyframes({
   '50%': { opacity: 0.42 }
 });
 
+export const lightningFlashMs = 240;
+
+const chestLightning = keyframes({
+  '0%, 100%': { opacity: 0 },
+  '22%': { opacity: 1 },
+  '50%': { opacity: 0.5 },
+  '68%': { opacity: 0.7 }
+});
+
+const chestLightPulse = keyframes({
+  '0%, 100%': { transform: 'translate(-50%, -50%) scale(0.9)', opacity: 0.82 },
+  '50%': { transform: 'translate(-48%, -55%) scale(1.08)', opacity: 1 }
+});
+
 export const picture = style({
   display: 'block',
   width: '100%',
@@ -59,6 +73,76 @@ export const mistWarden = style({
   animation: `${mistFloat} 4s ease-in-out infinite`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
+});
+
+export const stoneLightbringerFrame = style({
+  position: 'relative',
+  isolation: 'isolate',
+  containerType: 'size',
+  vars: {
+    '--stone-image-width': 'min(100cqw, 107.57cqh)',
+    '--chest-light-top': 'calc(50% - var(--stone-image-width) * 0.24)'
+  },
+  selectors: {
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      zIndex: 1,
+      left: '50%',
+      top: 'var(--chest-light-top)',
+      width: 'clamp(10px, calc(var(--stone-image-width) * 0.1), 36px)',
+      aspectRatio: '1',
+      background:
+        'radial-gradient(circle, #fefefc 0%, #fffdd1e6 25%, #ffeac466 48%, #ffeac400 72%)',
+      filter: 'blur(1.5px)',
+      transform: 'translate(-50%, -50%)',
+      opacity: 0.88,
+      animation: `${chestLightPulse} 2.4s ease-in-out infinite`
+    }
+  },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': {
+      selectors: { '&::before': { animation: 'none' } }
+    }
+  }
+});
+
+export const stoneLightbringer = style({
+  filter: 'drop-shadow(0 3px 3px rgb(0 0 0 / 50%))'
+});
+
+export const lightning = style({
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+  filter: 'drop-shadow(0 1px 1px rgb(63 34 12 / 50%))',
+  selectors: {
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      left: '50%',
+      top: 'var(--chest-light-top)',
+      width: 'calc(var(--stone-image-width) * 0.29)',
+      height: 'calc(var(--stone-image-width) * 0.19)',
+      translate: '0 -50%',
+      transformOrigin: 'left center',
+      clipPath:
+        'polygon(0 50%, 24% 40%, 38% 50%, 63% 34%, 74% 40%, 100% 29%, 74% 43%, 62% 38%, 38% 54%, 24% 44%)',
+      background: 'linear-gradient(90deg, #fefefc, #fffdd1 32%, #ffe4aa 68%, #ffe4aa00)',
+      rotate: 'var(--lightning-single-angle)',
+      opacity: 0
+    },
+    '&[data-lightning-single]::after': {
+      animation: `${chestLightning} ${lightningFlashMs}ms linear`
+    }
+  },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': {
+      selectors: {
+        '&[data-lightning-single]::after': { animation: 'none' }
+      }
+    }
   }
 });
 

@@ -13,4 +13,5 @@ export { default as StoneEffectBadge } from './StoneEffectBadge/StoneEffectBadge
 export { default as MistEffect } from './MistEffect/MistEffect.svelte';
 export { default as BattleActionButton } from './BattleActionButton/BattleActionButton.svelte';
 export { default as StageLightOrbs } from './StageLightOrbs/StageLightOrbs.svelte';
+export { default as StageLightning } from './StageLightning/StageLightning.svelte';
 export { default as StageMist } from './StageMist/StageMist.svelte';
