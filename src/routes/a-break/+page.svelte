@@ -9,6 +9,7 @@
     EnemyImage,
     StoneEffectBadge,
     BattleActionButton,
+    StageLightOrbs,
     StageMist
   } from '$lib/ketria/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
@@ -217,6 +218,8 @@
     {:else if sessionLoaded && battle}
       {#if selectedStage === '01'}
         <StageMist />
+      {:else if selectedStage === '02'}
+        <StageLightOrbs />
       {/if}
       {#key battle}
         <div class={styles.enemy}>

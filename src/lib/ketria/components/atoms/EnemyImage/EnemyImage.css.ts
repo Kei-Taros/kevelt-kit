@@ -1,5 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
+const enemyDropShadow = 'drop-shadow(0 6px 10px rgb(0 0 0 / 65%))';
+
 const mistFloat = keyframes({
   from: { transform: 'translateY(0)' },
   '50%': { transform: 'translateY(-10px)' },
@@ -29,7 +31,7 @@ export const image = style({
 export const fireWielder = style({
   position: 'relative',
   containerType: 'size',
-  filter: 'drop-shadow(0 6px 10px rgb(0 0 0 / 65%))',
+  filter: enemyDropShadow,
   '::after': {
     // MEMO: object-fit: contain 後の画像幅を基準に松明へ重ねる
     vars: { '--torch-image-width': 'min(100cqw, 107.57cqh)' },
@@ -53,6 +55,7 @@ export const fireWielder = style({
 });
 
 export const mistWarden = style({
+  filter: enemyDropShadow,
   animation: `${mistFloat} 4s ease-in-out infinite`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
