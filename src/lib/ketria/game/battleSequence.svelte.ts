@@ -54,6 +54,9 @@ export const createBattleSequence = (
   let ultimateForm = $state(stage === '04' && initialEnemy.hp <= STAGE_04_ULTIMATE_HP);
   let ultimateMessage = $state(false);
   let enemyLevelsBeforeUltimateReveal = $state.raw<FighterState['levels'] | null>(null);
+  const lowHealthForm = $derived(
+    stage === '04' && enemy.hp <= STAGE_04_LOW_HP && enemyLevelsBeforeUltimateReveal === null
+  );
   let ultimatePhase = $state<'fadeIn' | 'hold' | 'fadeOut' | null>(null);
   let pendingTransformation: (() => void) | undefined;
   const pendingHealthUpdates = new Set<'player' | 'enemy'>();
@@ -375,6 +378,12 @@ export const createBattleSequence = (
     },
     get ultimatePhase() {
       return ultimatePhase;
+    },
+    get lowHealthRevealed() {
+      return lowHealthForm && enemy.hp > 0 && ultimatePhase === null;
+    },
+    get lowHealthForm() {
+      return lowHealthForm;
     },
     get ultimateMessage() {
       return ultimateMessage;

@@ -152,7 +152,24 @@ export const lightning = style({
 });
 
 export const ultimatePosition = style({
-  transform: 'translateY(-20px) scale(1.2)'
+  transform: 'translateY(-20px) scale(1.2)',
+  vars: {
+    '--trinity-image-aspect-ratio': '1.777',
+    '--trinity-chest-offset': '0.096',
+    '--trinity-chest-star-scale': '0.8'
+  }
+});
+
+const ultimateHover = keyframes({
+  '0%, 100%': { translate: '0 0' },
+  '50%': { translate: '0 -12px' }
+});
+
+export const ultimateFloat = style({
+  animation: `${ultimateHover} 4s ease-in-out infinite`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
 });
 
 export const trinity = style({
@@ -164,6 +181,10 @@ export const trinityEnvoy = style({
   filter: enemyDropShadow
 });
 
+export const trinityUltimate = style({
+  filter: 'drop-shadow(0 0 8px rgb(255 255 255 / 52%)) drop-shadow(0 0 24px rgb(255 255 255 / 55%))'
+});
+
 const chestStarHalo = keyframes({
   '0%': { opacity: 0, transform: 'scale(0.75)' },
   '18%': { opacity: 0.78 },
@@ -171,11 +192,14 @@ const chestStarHalo = keyframes({
 });
 
 export const trinityChestStar = style({
-  vars: { '--trinity-image-width': 'min(100cqw, 107.57cqh)' },
+  vars: {
+    '--trinity-image-width': 'min(100cqw, 100cqh * var(--trinity-image-aspect-ratio, 1.0757))'
+  },
   position: 'absolute',
   left: '50%',
-  top: 'calc(50% - var(--trinity-image-width) * 0.168)',
-  width: 'clamp(12px, calc(var(--trinity-image-width) * 0.075), 44px)',
+  top: 'calc(50% - var(--trinity-image-width) * var(--trinity-chest-offset, 0.168))',
+  width:
+    'calc(clamp(12px, var(--trinity-image-width) * 0.075, 44px) * var(--trinity-chest-star-scale, 1))',
   aspectRatio: '1 / 1',
   translate: '-50% -50%',
   pointerEvents: 'none',

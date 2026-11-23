@@ -8,6 +8,7 @@ import { SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
 import { PROGRESS_STORAGE_KEY } from '$lib/ketria/game/stageProgress';
 import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
 import * as styles from './aBreak.css';
+import { floorCrack } from '$lib/ketria/components/atoms/StageFloorCrack/StageFloorCrack.css';
 import { battleMist } from '$lib/ketria/components/atoms/StageMist/StageMist.css';
 import { immediateBackground } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 import * as animationStyles from './battleAnimation.css';
@@ -564,6 +565,62 @@ describe('aBreakPage', () => {
   });
 
   test.each([
+    { stage: '03', cleared: ['01', '02'], crackCount: 0 },
+    { stage: '04', cleared: ['01', '02', '03'], crackCount: 3 }
+  ])(
+    'STAGE $stageで残りHP50の対戦を復元した場合、床の亀裂を$crackCount本表示する',
+    async ({ cleared, crackCount }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
+      const initial = await renderBattlePage();
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+      initial.unmount();
+      session.battle.enemy.hp = 50;
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      navigationContext.documentType = 'reload';
+
+      const { container } = render(Page);
+      await finishEntrance();
+      const background = crackCount > 0 ? '05' : '03';
+      expect(
+        container.querySelector(
+          `img[src="/images/ketria/backgrounds/background-${background}.png"]`
+        )
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector(
+          `source[srcset="/images/ketria/backgrounds/background-${background}.webp"]`
+        )
+      ).toBeInTheDocument();
+      expect(container.querySelectorAll(`.${floorCrack}[aria-hidden="true"]`)).toHaveLength(
+        crackCount > 0 ? 1 : 0
+      );
+      expect(container.querySelectorAll(`.${floorCrack} > g`)).toHaveLength(crackCount);
+    }
+  );
+
+  test.each([
+    { stage: '03', cleared: ['01', '02'], auroraCount: 0 },
+    { stage: '04', cleared: ['01', '02', '03'], auroraCount: 1 }
+  ])(
+    'STAGE $stageで残りHP150の対戦を復元した場合、白いオーロラを$auroraCount枚表示する',
+    async ({ cleared, auroraCount }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(cleared));
+      const first = await renderBattlePage();
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+      first.unmount();
+      session.battle.enemy.hp = 150;
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      navigationContext.documentType = 'reload';
+
+      const { container } = render(Page);
+      await finishEntrance();
+      expect(
+        container.querySelectorAll(`.${styles.ultimateAurora}[aria-hidden="true"]`)
+      ).toHaveLength(auroraCount);
+    }
+  );
+
+  test.each([
     { move: 'STONE', hpUpdate: 4600, hp: 150, initialImage: 'Trinity-envoy' },
     { move: 'FIRE', hpUpdate: 3300, hp: 150, initialImage: 'Trinity-envoy' },
     { move: 'STONE', hpUpdate: 4600, hp: 50, initialImage: 'Trinity-ultimate' },
@@ -586,6 +643,7 @@ describe('aBreakPage', () => {
 
       const overlay = () => container.querySelector(`.${styles.ultimateTransition}`);
       const message = () => container.querySelector(`.${styles.battleHint}`);
+      const crack = () => container.querySelector(`.${floorCrack}`);
       await fireEvent.click(screen.getByRole('button', { name: move }));
       await vi.advanceTimersByTimeAsync(hpUpdate + 1699);
       expect(overlay()).not.toBeInTheDocument();
@@ -595,6 +653,10 @@ describe('aBreakPage', () => {
       await vi.advanceTimersByTimeAsync(32);
       expect(screen.getByText(`${hp} / 300`)).toBeInTheDocument();
       expect(overlay()).toHaveClass(styles.ultimateFadeIn);
+      expect(
+        container.querySelector('img[src="/images/ketria/backgrounds/background-04.png"]')
+      ).toBeInTheDocument();
+      expect(crack()).not.toBeInTheDocument();
       expect(screen.getByRole('img', { name: initialImage })).toBeInTheDocument();
       expect(message()).not.toBeInTheDocument();
       expect(screen.getByRole('button', { name: move })).toBeDisabled();
@@ -607,6 +669,12 @@ describe('aBreakPage', () => {
       if (hp === 50) expect(enemyLevelThreeCount()).toBe(0);
       await vi.advanceTimersByTimeAsync(1000);
       expect(overlay()).toHaveClass(styles.ultimateHold);
+      const backgroundAfterWhiteout = hp === 50 ? '05' : '04';
+      expect(
+        container.querySelector(
+          `img[src="/images/ketria/backgrounds/background-${backgroundAfterWhiteout}.png"]`
+        )
+      ).toBeInTheDocument();
       if (hp === 50) {
         expect(enemyLevelThreeCount()).toBe(3);
         expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toBe(beforeHold);
@@ -625,6 +693,11 @@ describe('aBreakPage', () => {
 
       await vi.advanceTimersByTimeAsync(500);
       expect(overlay()).not.toBeInTheDocument();
+      if (hp === 50) {
+        expect(crack()).toBeInTheDocument();
+      } else {
+        expect(crack()).not.toBeInTheDocument();
+      }
       expect(content).not.toHaveClass(styles.victoryShake);
       expect(message()?.querySelector('p')).toHaveClass(immediateBackground);
       expect(message()?.querySelector('span')).toHaveStyle({ animationDelay: '1000ms' });

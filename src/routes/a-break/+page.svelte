@@ -12,7 +12,8 @@
     StageLightOrbs,
     StageLightning,
     StageMist,
-    StageStars
+    StageStars,
+    StageFloorCrack
   } from '$lib/ketria/components/atoms';
   import { EnemyLevels, EnemyMove, GameMenu, HealthStatus } from '$lib/ketria/components/molecules';
   import {
@@ -198,7 +199,13 @@
     bind:this={screenContent}
     class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''} ${battle?.screenShakeActive ? styles.victoryShake : ''}`}
   >
-    <BattleBackground background={currentScreen === 'battle' ? selectedStage : titleBackground} />
+    <BattleBackground
+      background={currentScreen === 'battle'
+        ? battle?.lowHealthForm
+          ? '05'
+          : selectedStage
+        : titleBackground}
+    />
     {#if sessionLoaded && currentScreen !== 'battle'}
       <div class={styles.titleShade} aria-hidden="true"></div>
       <StageMist variant="title" />
@@ -226,10 +233,19 @@
         <StageLightning enemyWidth={styles.enemyWidth} />
       {:else if selectedStage === '04'}
         <StageStars />
+        {#if battle.ultimateForm}
+          <div class={styles.ultimateAurora} aria-hidden="true"></div>
+        {/if}
       {/if}
       {#key battle}
+        {#if battle.lowHealthRevealed && entrancePhase === null}
+          <StageFloorCrack />
+        {/if}
         <div class={styles.enemy}>
-          <EnemyImage enemy={battle.ultimateForm ? '05' : selectedStage} />
+          <EnemyImage
+            enemy={battle.ultimateForm ? '05' : selectedStage}
+            floating={battle.lowHealthRevealed}
+          />
         </div>
       {/key}
       <div class={styles.vignette} aria-hidden="true"></div>

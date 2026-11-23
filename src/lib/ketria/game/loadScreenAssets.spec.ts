@@ -83,6 +83,8 @@ describe('loadScreenAssets', () => {
     await loadScreenAssets(document.createElement('div'), true, true);
     expect(sources).toContain('/images/ketria/enemy/enemy-05.webp');
     expect(sources).toContain('/images/ketria/enemy/enemy-05.png');
+    expect(sources).toContain('/images/ketria/backgrounds/background-05.webp');
+    expect(sources).toContain('/images/ketria/backgrounds/background-05.png');
     expect(sources).toContain('/images/ketria/effects/mist-effect.png');
     expect(sources).toContain('/images/ketria/element-ring/fire-ring.png');
   });

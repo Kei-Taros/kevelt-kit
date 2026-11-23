@@ -2,11 +2,32 @@ import { render } from '@testing-library/svelte';
 import { describe, expect, test } from 'vitest';
 import EnemyImage from './EnemyImage.svelte';
 import * as styles from './EnemyImage.css';
+import * as starStyles from '../StageStars/StageStars.css';
 
 describe('EnemyImage', () => {
+  test('enemy=05で浮遊を指定した場合、Enemyと周囲をまとめて上下に動かす', () => {
+    const { container } = render(EnemyImage, { props: { enemy: '05', floating: true } });
+
+    expect(container.querySelector('picture')?.parentElement).toHaveClass(styles.ultimateFloat);
+  });
+
+  test.each([
+    { enemy: '04', starCount: 0 },
+    { enemy: '05', starCount: 14 }
+  ] as const)(
+    'enemy=$enemyの場合、Enemyの周りに星を$starCount個表示する',
+    ({ enemy, starCount }) => {
+      const { container } = render(EnemyImage, { props: { enemy } });
+
+      expect(container.querySelectorAll(`.${starStyles.layer} .${starStyles.star}`)).toHaveLength(
+        starCount
+      );
+    }
+  );
+
   test.each([
     { enemy: '04', starCount: 1 },
-    { enemy: '05', starCount: 0 }
+    { enemy: '05', starCount: 1 }
   ] as const)('enemy=$enemyの場合、胸元の星を$starCount個表示する', ({ enemy, starCount }) => {
     const { container } = render(EnemyImage, { props: { enemy } });
 

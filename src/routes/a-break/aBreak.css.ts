@@ -149,6 +149,90 @@ export const titleShade = style({
     'radial-gradient(ellipse at 50% 38%, #02070b1a 0%, #02070b55 55%, #0009 100%), linear-gradient(180deg, #02070b30, transparent 60%)'
 });
 
+const auroraDrift = keyframes({
+  from: { transform: 'translate(-2%, -3%) skewX(-4deg) scaleY(0.94)' },
+  to: { transform: 'translate(2%, 4%) skewX(5deg) scaleY(1.04)' }
+});
+
+const auroraRays = `
+  repeating-linear-gradient(
+    88deg, #bbd8ff00 0 2px, #d8f3ff65 4px, #9edaff12 7px, #72b6ff00 12px,
+    #579eff28 16px, #c8ecff4f 20px, #7abfff0a 26px, #7abfff00 37px
+  ),
+  repeating-linear-gradient(
+    93deg, #6baaff00 0%, #a9dcff12 0.9%, #ebf9ff64 1.5%, #bdeaff15 2.3%,
+    #5fa6ff08 3.8%, #7cc7ff43 5.2%, #a7d8ff00 7.4%
+  )
+`;
+
+export const ultimateAurora = style({
+  position: 'absolute',
+  inset: 0,
+  overflow: 'hidden',
+  pointerEvents: 'none',
+  mixBlendMode: 'screen',
+  opacity: 0.55,
+  filter: 'blur(8px) drop-shadow(0 0 5px #a9dfff9c) drop-shadow(0 0 24px #2876ff9c)',
+  selectors: {
+    '&::before, &::after': {
+      content: '""',
+      position: 'absolute',
+      left: '-12%',
+      width: '124%',
+      height: '70%',
+      transformOrigin: '50% 30%',
+      maskComposite: 'intersect',
+      animation: `${auroraDrift} 11s ease-in-out -4s infinite alternate`
+    },
+    '&::before': {
+      top: '-17%',
+      background: `${auroraRays}, linear-gradient(#365bff00 10%, #325efd28 36%, #4c9cff70 56%, #9cdeffd1 79%, #f6fcffff 94%)`,
+      maskImage:
+        'linear-gradient(180deg, #0000 8%, #0003 43%, #000 80%), linear-gradient(90deg, #0002 5%, #000b 23%, #000 37%, #0007 59%, #000b 76%, #0000 98%)',
+      clipPath: [
+        'ellipse(65% 65% at 30% 23%)',
+        `shape(
+          from 0 0, hline to 100%, vline to 38%,
+          curve to 79% 76% with 88% 31% / 87% 74%,
+          curve to 64% 61% with 73% 78% / 67% 67%,
+          curve to 54% 57% with 60% 52% / 57% 53%,
+          curve to 33% 91% with 47% 64% / 45% 93%,
+          curve to 12% 63% with 25% 89% / 21% 61%,
+          curve to 0 80% with 6% 64% / 3% 73%, close
+        )`
+      ]
+    },
+    '&::after': {
+      top: '1%',
+      background: `${auroraRays}, linear-gradient(#355aff00 8%, #426bff2a 36%, #4698ff70 63%, #82d4ffc7 87%, #f0faffee)`,
+      maskImage:
+        'linear-gradient(180deg, #0000 12%, #0002 43%, #000 89%), linear-gradient(90deg, #0000 12%, #0002 38%, #0006 60%, #000 85%, #0006 100%)',
+      clipPath: [
+        'ellipse(63% 59% at 78% 32%)',
+        `shape(
+          from 0 0, hline to 100%, vline to 57%,
+          curve to 86% 96% with 93% 65% / 95% 92%,
+          curve to 69% 64% with 79% 99% / 74% 66%,
+          curve to 45% 75% with 62% 61% / 56% 80%,
+          curve to 23% 60% with 37% 71% / 31% 56%,
+          curve to 0 65% with 15% 62% / 7% 74%, close
+        )`
+      ],
+      animationDuration: '14s',
+      animationDelay: '-7s',
+      animationDirection: 'alternate-reverse'
+    }
+  },
+  '@media': {
+    '(orientation: portrait)': {
+      selectors: { '&::before, &::after': { height: '61%' } }
+    },
+    '(prefers-reduced-motion: reduce)': {
+      selectors: { '&::before, &::after': { animation: 'none' } }
+    }
+  }
+});
+
 export const screenBlackout = style({
   position: 'fixed',
   inset: 0,

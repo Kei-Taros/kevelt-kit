@@ -1,8 +1,22 @@
 import { render } from '@testing-library/svelte';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { StageStars } from '../index';
 
 describe('StageStars', () => {
+  test('敵の周りに星を表示する場合、乱数に応じて点滅の周期と開始位置を設定する', () => {
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0.5);
+
+    try {
+      const { container } = render(StageStars, { props: { aroundEnemy: true } });
+      const star = container.querySelector('span')!;
+
+      expect(Number.parseFloat(star.style.animationDuration)).toBeCloseTo(5.1);
+      expect(Number.parseFloat(star.style.animationDelay)).toBeCloseTo(-2.55);
+    } finally {
+      random.mockRestore();
+    }
+  });
+
   test('星の演出を表示する場合、画面全体に異なるタイミングで光る星を配置する', () => {
     const { container } = render(StageStars);
     const layer = container.firstElementChild;

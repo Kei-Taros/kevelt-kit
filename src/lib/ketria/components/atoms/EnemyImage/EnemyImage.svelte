@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { EnemyId } from '$lib/ketria/types/enemy.types';
   import EnemyRingTrace from './EnemyRingTrace.svelte';
+  import StageStars from '../StageStars/StageStars.svelte';
   import * as styles from './EnemyImage.css';
 
   interface Props {
     enemy: EnemyId;
+    floating?: boolean;
   }
 
-  let { enemy }: Props = $props();
+  let { enemy, floating = false }: Props = $props();
 
   const descriptions: Record<EnemyId, string> = {
     '01': 'Fire-wielder',
@@ -56,7 +58,8 @@
       enemy === '01' && styles.fireWielder,
       enemy === '02' && styles.mistWarden,
       enemy === '03' && styles.stoneLightbringer,
-      enemy === '04' && styles.trinityEnvoy
+      enemy === '04' && styles.trinityEnvoy,
+      enemy === '05' && styles.trinityUltimate
     ]}
   >
     <source srcset={`${imagePath}.webp`} type="image/webp" />
@@ -75,11 +78,19 @@
     ></span>
   </div>
 {:else if enemy === '04' || enemy === '05'}
-  <div class={[styles.picture, styles.trinity, enemy === '05' && styles.ultimatePosition]}>
+  <div
+    class={[
+      styles.picture,
+      styles.trinity,
+      enemy === '05' && styles.ultimatePosition,
+      enemy === '05' && floating && styles.ultimateFloat
+    ]}
+  >
     {@render enemyPicture()}
     <EnemyRingTrace {enemy} />
-    {#if enemy === '04'}
-      <span class={styles.trinityChestStar} aria-hidden="true"></span>
+    <span class={styles.trinityChestStar} aria-hidden="true"></span>
+    {#if enemy === '05'}
+      <StageStars aroundEnemy />
     {/if}
   </div>
 {:else}

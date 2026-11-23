@@ -1,7 +1,9 @@
 <script lang="ts">
   import * as styles from './StageStars.css';
 
-  const positions = [
+  let { aroundEnemy = false }: { aroundEnemy?: boolean } = $props();
+
+  const stagePositions = [
     [6, 12],
     [18, 23],
     [28, 9],
@@ -27,6 +29,33 @@
     [91, 72],
     [96, 94]
   ];
+
+  const enemyPositions = [
+    [19, 26],
+    [29, 20],
+    [39, 17],
+    [59, 16],
+    [72, 23],
+    [85, 31],
+    [8, 43],
+    [16, 59],
+    [28, 70],
+    [43, 79],
+    [56, 78],
+    [68, 72],
+    [83, 61],
+    [93, 47]
+  ];
+
+  const positions = $derived(aroundEnemy ? enemyPositions : stagePositions);
+  const enemyTimings = $derived(
+    aroundEnemy
+      ? enemyPositions.map(() => {
+          const duration = 3.8 + Math.random() * 2.6;
+          return { duration, delay: -Math.random() * duration };
+        })
+      : []
+  );
 </script>
 
 <div class={styles.layer} aria-hidden="true">
@@ -36,8 +65,8 @@
       style:left={`${left}%`}
       style:top={`${top}%`}
       style:width={`${8 + ((index * 5) % 7) * 2}px`}
-      style:animation-delay={`${-index * 0.67}s`}
-      style:animation-duration={`${3.8 + (index % 5) * 0.65}s`}
+      style:animation-delay={`${enemyTimings[index]?.delay ?? -index * 0.67}s`}
+      style:animation-duration={`${enemyTimings[index]?.duration ?? 3.8 + (index % 5) * 0.65}s`}
     ></span>
   {/each}
 </div>

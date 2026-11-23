@@ -50,7 +50,11 @@ export const loadScreenAssets = async (
   }
   if (preloadUltimate) {
     pending.push(
-      preload('/images/ketria/enemy/enemy-05.webp', '/images/ketria/enemy/enemy-05.png')
+      preload('/images/ketria/enemy/enemy-05.webp', '/images/ketria/enemy/enemy-05.png'),
+      preload(
+        '/images/ketria/backgrounds/background-05.webp',
+        '/images/ketria/backgrounds/background-05.png'
+      )
     );
   }
   await Promise.allSettled(pending);

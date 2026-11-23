@@ -16,3 +16,4 @@ export { default as StageLightOrbs } from './StageLightOrbs/StageLightOrbs.svelt
 export { default as StageLightning } from './StageLightning/StageLightning.svelte';
 export { default as StageMist } from './StageMist/StageMist.svelte';
 export { default as StageStars } from './StageStars/StageStars.svelte';
+export { default as StageFloorCrack } from './StageFloorCrack/StageFloorCrack.svelte';
