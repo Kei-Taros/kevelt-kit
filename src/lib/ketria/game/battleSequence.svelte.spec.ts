@@ -118,6 +118,71 @@ describe('battleSequence', () => {
   });
 
   test.each([
+    { initialHp: 50, move: 'mist', hp: 50, level: 1, outcome: '勝利' },
+    { initialHp: 60, move: 'stone', hp: 50, level: 1, outcome: '敗北' },
+    { initialHp: 61, move: 'stone', hp: 51, level: 0, outcome: '敗北' },
+    { initialHp: 60, move: 'fire', hp: 50, level: 3, outcome: 'あいこ' }
+  ] as const)(
+    'ステージ03の敵がLv3を使って$outcomeしターン終了時のHPが$hpの場合、使用属性をLv$levelにする',
+    ({ initialHp, move, hp, level }) => {
+      const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+      const initial = createBattleSequence(messagePatterns, '03');
+      const snapshot = {
+        ...initial.snapshot,
+        nextEnemyMove: 'fire' as const,
+        enemy: {
+          ...initial.snapshot.enemy,
+          hp: initialHp,
+          levels: { fire: 3, stone: 2, mist: 1 } as const
+        }
+      };
+      initial.destroy();
+      const battle = createBattleSequence(messagePatterns, '03', snapshot);
+
+      battle.selectElement(move);
+      vi.advanceTimersByTime(6300);
+
+      const levels = { fire: level, stone: 2, mist: 1 };
+      expect(battle.enemy).toMatchObject({ hp, levels });
+      expect(chooseMove.mock.lastCall?.[1]).toMatchObject({ hp, levels });
+      expect(battle.snapshot.enemy).toMatchObject({ hp, levels });
+      battle.destroy();
+    }
+  );
+
+  test.each([
+    { seal: '封印なし', sealedElement: undefined, mistLevel: 1 },
+    { seal: 'MIST封印中', sealedElement: 'mist', mistLevel: 2 }
+  ] as const)(
+    'ステージ03でSTONE・MISTがLv0かつ$sealで敵HPが50になった場合、STONEをLv1、MISTをLv$mistLevelにする',
+    ({ sealedElement, mistLevel }) => {
+      const chooseMove = vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+      const initial = createBattleSequence(messagePatterns, '03');
+      const snapshot = {
+        ...initial.snapshot,
+        nextEnemyMove: 'fire' as const,
+        enemy: {
+          hp: 60,
+          levels: { fire: 3, stone: 0, mist: 0 } as const,
+          sealedElement
+        }
+      };
+      initial.destroy();
+      const battle = createBattleSequence(messagePatterns, '03', snapshot);
+
+      battle.selectElement('stone');
+      vi.advanceTimersByTime(6300);
+
+      const enemy = { hp: 50, levels: { fire: 1, stone: 1, mist: mistLevel } };
+      expect(battle.enemy).toMatchObject(enemy);
+      expect(battle.enemy.sealedElement).toBeUndefined();
+      expect(chooseMove.mock.lastCall?.[1]).toMatchObject(enemy);
+      expect(battle.snapshot.enemy).toMatchObject(enemy);
+      battle.destroy();
+    }
+  );
+
+  test.each([
     { stage: '04', hp: 51, levels: { fire: 2, stone: 1, mist: 1 } },
     { stage: '04', hp: 50, levels: { fire: 3, stone: 3, mist: 3 } },
     { stage: '03', hp: 50, levels: { fire: 2, stone: 1, mist: 1 } }

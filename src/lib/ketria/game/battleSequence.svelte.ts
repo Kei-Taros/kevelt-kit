@@ -291,7 +291,11 @@ export const createBattleSequence = (
       enemy: { ...enemy, move: enemyMove },
       sealTarget
     });
-    const result = { ...turn, enemy: applyFinalStageLevels(turn.enemy) };
+    let nextEnemy = applyFinalStageLevels(turn.enemy);
+    if (stage === '03' && nextEnemy.hp <= STAGE_03_LOW_HP && nextEnemy.levels[enemyMove] === 0) {
+      nextEnemy = { ...nextEnemy, levels: { ...nextEnemy.levels, [enemyMove]: 1 } };
+    }
+    const result = { ...turn, enemy: nextEnemy };
     const logEntry: BattleLogEntry = {
       turn: String(battleLogs.length + 1).padStart(2, '0'),
       result: result.winner === 'player' ? 'win' : result.winner === 'enemy' ? 'lose' : 'draw',
