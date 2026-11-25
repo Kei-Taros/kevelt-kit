@@ -151,6 +151,12 @@ export const lightning = style({
   }
 });
 
+export const stoneLightburst = style({
+  position: 'relative',
+  containerType: 'size',
+  transform: 'scale(1.55)'
+});
+
 export const ultimatePosition = style({
   transform: 'translateY(-20px) scale(1.2)',
   vars: {

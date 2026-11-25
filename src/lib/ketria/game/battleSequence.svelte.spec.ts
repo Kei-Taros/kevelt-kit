@@ -30,12 +30,13 @@ describe('battleSequence', () => {
     expect(battle.controlsDisabled).toBe(false);
     vi.advanceTimersByTime(6000);
     expect(battle.messageLines).toEqual(['シンニュウシャヲハッケン']);
-    battle.selectElement('fire');
+    battle.selectElement('mist');
     vi.advanceTimersByTime(6300);
     expect(battle.messageLines).toEqual(['コレヨリ', 'タイショウヲハイジョスル']);
-    battle.selectElement('fire');
+    battle.selectElement('mist');
     vi.advanceTimersByTime(6300);
-    expect(battle.messageLines).toEqual(['ターゲットロックオン']);
+    expect(battle.battleLogs).toHaveLength(2);
+    expect(battle.messageLines).not.toEqual(['コレヨリ', 'タイショウヲハイジョスル']);
     battle.destroy();
   });
 

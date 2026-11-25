@@ -66,7 +66,19 @@ describe('loadScreenAssets', () => {
     );
   });
 
-  test('先読みするWebPが使えない場合、PNGを読み込む', async () => {
+  test.each([
+    { stage: '03', phase2Assets: ['/images/ketria/enemy/enemy-03-phase2'] },
+    {
+      stage: '04',
+      phase2Assets: [
+        '/images/ketria/enemy/enemy-04-phase2',
+        '/images/ketria/backgrounds/background-04-phase2'
+      ]
+    }
+  ] as const)('STAGE $stageで先読みするWebPが使えない場合、PNGを読み込む', async ({
+    stage,
+    phase2Assets
+  }) => {
     const sources: string[] = [];
     vi.stubGlobal(
       'Image',
@@ -80,11 +92,11 @@ describe('loadScreenAssets', () => {
         }
       }
     );
-    await loadScreenAssets(document.createElement('div'), true, true);
-    expect(sources).toContain('/images/ketria/enemy/enemy-05.webp');
-    expect(sources).toContain('/images/ketria/enemy/enemy-05.png');
-    expect(sources).toContain('/images/ketria/backgrounds/background-05.webp');
-    expect(sources).toContain('/images/ketria/backgrounds/background-05.png');
+    await loadScreenAssets(document.createElement('div'), true, stage);
+    for (const asset of phase2Assets) {
+      expect(sources).toContain(`${asset}.webp`);
+      expect(sources).toContain(`${asset}.png`);
+    }
     expect(sources).toContain('/images/ketria/effects/mist-effect.png');
     expect(sources).toContain('/images/ketria/element-ring/fire-ring.png');
   });

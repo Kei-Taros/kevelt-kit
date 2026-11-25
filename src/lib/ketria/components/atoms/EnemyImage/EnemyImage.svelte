@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { EnemyId } from '$lib/ketria/types/enemy.types';
   import EnemyRingTrace from './EnemyRingTrace.svelte';
+  import StoneLightburstEffects from './StoneLightburstEffects.svelte';
   import StageStars from '../StageStars/StageStars.svelte';
   import * as styles from './EnemyImage.css';
 
@@ -15,8 +16,9 @@
     '01': 'Fire-wielder',
     '02': 'Mist-warden',
     '03': 'Stone-lightbringer',
+    '03-phase2': 'Stone-lightburst',
     '04': 'Trinity-envoy',
-    '05': 'Trinity-ultimate'
+    '04-phase2': 'Trinity-ultimate'
   };
 
   const imagePath = $derived(`/images/ketria/enemy/enemy-${enemy}`);
@@ -57,9 +59,9 @@
       styles.picture,
       enemy === '01' && styles.fireWielder,
       enemy === '02' && styles.mistWarden,
-      enemy === '03' && styles.stoneLightbringer,
+      (enemy === '03' || enemy === '03-phase2') && styles.stoneLightbringer,
       enemy === '04' && styles.trinityEnvoy,
-      enemy === '05' && styles.trinityUltimate
+      enemy === '04-phase2' && styles.trinityUltimate
     ]}
   >
     <source srcset={`${imagePath}.webp`} type="image/webp" />
@@ -77,19 +79,24 @@
       style:--lightning-single-angle={singleAngle !== null ? `${singleAngle}deg` : undefined}
     ></span>
   </div>
-{:else if enemy === '04' || enemy === '05'}
+{:else if enemy === '03-phase2'}
+  <div class={[styles.picture, styles.stoneLightburst]}>
+    {@render enemyPicture()}
+    <StoneLightburstEffects />
+  </div>
+{:else if enemy === '04' || enemy === '04-phase2'}
   <div
     class={[
       styles.picture,
       styles.trinity,
-      enemy === '05' && styles.ultimatePosition,
-      enemy === '05' && floating && styles.ultimateFloat
+      enemy === '04-phase2' && styles.ultimatePosition,
+      enemy === '04-phase2' && floating && styles.ultimateFloat
     ]}
   >
     {@render enemyPicture()}
     <EnemyRingTrace {enemy} />
     <span class={styles.trinityChestStar} aria-hidden="true"></span>
-    {#if enemy === '05'}
+    {#if enemy === '04-phase2'}
       <StageStars aroundEnemy />
     {/if}
   </div>

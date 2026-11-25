@@ -36,7 +36,7 @@
   } from '$lib/ketria/game/stageProgress';
   import { parseBattleSession, SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
   import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
-  import { STAGE_04_LOW_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
+  import { STAGE_03_LOW_HP, STAGE_04_LOW_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
@@ -66,7 +66,7 @@
         loadScreenAssets(
           screenContent,
           currentScreen === 'battle',
-          currentScreen === 'battle' && selectedStage === '04'
+          currentScreen === 'battle' ? selectedStage : undefined
         )
       ]);
       if (request !== entranceRequest) return;
@@ -202,7 +202,7 @@
     <BattleBackground
       background={currentScreen === 'battle'
         ? battle?.lowHealthForm
-          ? '05'
+          ? '04-phase2'
           : selectedStage
         : titleBackground}
     />
@@ -243,7 +243,11 @@
         {/if}
         <div class={styles.enemy}>
           <EnemyImage
-            enemy={battle.ultimateForm ? '05' : selectedStage}
+            enemy={battle.ultimateForm
+              ? '04-phase2'
+              : battle.stage03Phase2
+                ? '03-phase2'
+                : selectedStage}
             floating={battle.lowHealthRevealed}
           />
         </div>
@@ -323,7 +327,7 @@
             max={battle.enemyMaxHp}
             warningHp={selectedStage === '03' ? 150 : undefined}
             dangerHp={selectedStage === '03'
-              ? 50
+              ? STAGE_03_LOW_HP
               : selectedStage === '04'
                 ? STAGE_04_LOW_HP
                 : undefined}

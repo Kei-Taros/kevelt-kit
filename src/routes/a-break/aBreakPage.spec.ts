@@ -605,7 +605,7 @@ describe('aBreakPage', () => {
 
       const { container } = render(Page);
       await finishEntrance();
-      const background = crackCount > 0 ? '05' : '03';
+      const background = crackCount > 0 ? '04-phase2' : '03';
       expect(
         container.querySelector(
           `img[src="/images/ketria/backgrounds/background-${background}.png"]`
@@ -644,6 +644,40 @@ describe('aBreakPage', () => {
       ).toHaveLength(auroraCount);
     }
   );
+
+  test('STAGE 03で敵の残りHPが50になった場合、白転中に第2形態の画像へ切り替える', async () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02']));
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.enemy.hp = 60;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+
+    const { container } = render(Page);
+    await finishEntrance();
+    const enemy = () => screen.getByRole('img', { name: 'Stone-lightbringer' });
+    const overlay = () => container.querySelector(`.${styles.ultimateTransition}`);
+    await fireEvent.click(screen.getByRole('button', { name: 'FIRE' }));
+    await vi.advanceTimersByTimeAsync(3300 + 1731);
+    expect(overlay()).toHaveClass(styles.ultimateFadeIn);
+    expect(enemy()).toHaveAttribute('src', '/images/ketria/enemy/enemy-03.png');
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(overlay()).toHaveClass(styles.ultimateHold);
+    const phase2 = screen.getByRole('img', { name: 'Stone-lightburst' });
+    expect(phase2).toHaveAttribute('src', '/images/ketria/enemy/enemy-03-phase2.png');
+    expect(phase2.previousElementSibling).toHaveAttribute(
+      'srcset',
+      '/images/ketria/enemy/enemy-03-phase2.webp'
+    );
+    await vi.advanceTimersByTimeAsync(500);
+    expect(overlay()).toHaveClass(styles.ultimateFadeOut);
+    expect(container.querySelector(`.${styles.battleHint}`)).not.toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(500);
+    expect(overlay()).not.toBeInTheDocument();
+    expect(container.querySelector(`.${styles.battleHint} p`)).toHaveClass(immediateBackground);
+  });
 
   test.each([
     { move: 'STONE', hpUpdate: 4600, hp: 150, initialImage: 'Trinity-envoy' },
@@ -694,7 +728,7 @@ describe('aBreakPage', () => {
       if (hp === 50) expect(enemyLevelThreeCount()).toBe(0);
       await vi.advanceTimersByTimeAsync(1000);
       expect(overlay()).toHaveClass(styles.ultimateHold);
-      const backgroundAfterWhiteout = hp === 50 ? '05' : '04';
+      const backgroundAfterWhiteout = hp === 50 ? '04-phase2' : '04';
       expect(
         container.querySelector(
           `img[src="/images/ketria/backgrounds/background-${backgroundAfterWhiteout}.png"]`
@@ -706,7 +740,7 @@ describe('aBreakPage', () => {
       }
       expect(screen.getByRole('img', { name: 'Trinity-ultimate' })).toHaveAttribute(
         'src',
-        '/images/ketria/enemy/enemy-05.png'
+        '/images/ketria/enemy/enemy-04-phase2.png'
       );
       expect(message()).not.toBeInTheDocument();
 

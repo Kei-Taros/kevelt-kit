@@ -1,3 +1,5 @@
+import type { StageId } from '../types/stage.types';
+
 const elements = ['fire', 'stone', 'mist'] as const;
 const battleAssets = [
   ...elements.map((element) => `/images/ketria/element-ring/${element}-ring`),
@@ -41,19 +43,24 @@ const preload = async (src: string, fallback?: string): Promise<void> => {
 export const loadScreenAssets = async (
   container: HTMLElement,
   isBattle: boolean,
-  preloadUltimate = false
+  stage?: StageId
 ): Promise<void> => {
   const pending = Array.from(container.querySelectorAll('img'), decodeImage);
   if (isBattle) {
     pending.push(...battleAssets.map((path) => preload(`${path}.webp`, `${path}.png`)));
     pending.push(preload('/images/ketria/effects/sparks.svg'));
   }
-  if (preloadUltimate) {
+  if (stage === '03') {
     pending.push(
-      preload('/images/ketria/enemy/enemy-05.webp', '/images/ketria/enemy/enemy-05.png'),
+      preload('/images/ketria/enemy/enemy-03-phase2.webp', '/images/ketria/enemy/enemy-03-phase2.png')
+    );
+  }
+  if (stage === '04') {
+    pending.push(
+      preload('/images/ketria/enemy/enemy-04-phase2.webp', '/images/ketria/enemy/enemy-04-phase2.png'),
       preload(
-        '/images/ketria/backgrounds/background-05.webp',
-        '/images/ketria/backgrounds/background-05.png'
+        '/images/ketria/backgrounds/background-04-phase2.webp',
+        '/images/ketria/backgrounds/background-04-phase2.png'
       )
     );
   }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as styles from './EnemyImage.css';
 
-  let { enemy }: { enemy: '04' | '05' } = $props();
+  let { enemy }: { enemy: '04' | '04-phase2' } = $props();
   const id = $props.id();
 
   interface Ring {
@@ -11,7 +11,7 @@
     frontAbove?: boolean;
   }
 
-  const forms: Record<'04' | '05', { width: number; rings: Ring[] }> = {
+  const forms: Record<'04' | '04-phase2', { width: number; rings: Ring[] }> = {
     '04': {
       width: 1080,
       rings: [
@@ -34,7 +34,7 @@
         }
       ]
     },
-    '05': {
+    '04-phase2': {
       width: 1784,
       rings: [
         {

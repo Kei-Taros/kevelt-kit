@@ -1,5 +1,6 @@
 import {
   ENEMY_MAX_HP,
+  STAGE_03_LOW_HP,
   STAGE_04_LOW_HP,
   STAGE_04_ULTIMATE_HP,
   ULTIMATE_TRANSITION
@@ -52,6 +53,7 @@ export const createBattleSequence = (
   let player = $state<FighterState>(initialPlayer);
   let enemy = $state<FighterState>(initialEnemy);
   let ultimateForm = $state(stage === '04' && initialEnemy.hp <= STAGE_04_ULTIMATE_HP);
+  let stage03Phase2 = $state(stage === '03' && initialEnemy.hp <= STAGE_03_LOW_HP);
   let ultimateMessage = $state(false);
   let enemyLevelsBeforeUltimateReveal = $state.raw<FighterState['levels'] | null>(null);
   const lowHealthForm = $derived(
@@ -213,9 +215,14 @@ export const createBattleSequence = (
     if (!finish) return;
     pendingTransformation = undefined;
 
-    if (reduceMotion) {
-      ultimateForm = true;
+    const revealForm = (): void => {
+      if (stage === '03') stage03Phase2 = true;
+      if (stage === '04') ultimateForm = true;
       enemyLevelsBeforeUltimateReveal = null;
+    };
+
+    if (reduceMotion) {
+      revealForm();
       ultimateMessage = true;
       finish();
       return;
@@ -223,8 +230,7 @@ export const createBattleSequence = (
 
     ultimatePhase = 'fadeIn';
     transformationTimer = setTimeout(() => {
-      ultimateForm = true;
-      enemyLevelsBeforeUltimateReveal = null;
+      revealForm();
       ultimatePhase = 'hold';
       transformationTimer = setTimeout(() => {
         ultimatePhase = 'fadeOut';
@@ -306,14 +312,15 @@ export const createBattleSequence = (
     const nextPlayerStoneEffectActive = result.player.stoneGuard === true;
     const nextEnemyStoneEffectActive = result.enemy.stoneGuard === true;
     const reachedLowHp = enemy.hp > STAGE_04_LOW_HP && result.enemy.hp <= STAGE_04_LOW_HP;
-    const shouldPlayUltimateTransition =
-      stage === '04' &&
+    const shouldPlayTransformation =
       result.enemy.hp > 0 &&
       result.player.hp > 0 &&
-      ((enemy.hp > STAGE_04_ULTIMATE_HP && result.enemy.hp <= STAGE_04_ULTIMATE_HP) ||
-        reachedLowHp);
+      ((stage === '04' &&
+        ((enemy.hp > STAGE_04_ULTIMATE_HP && result.enemy.hp <= STAGE_04_ULTIMATE_HP) ||
+          reachedLowHp)) ||
+        (stage === '03' && enemy.hp > STAGE_03_LOW_HP && result.enemy.hp <= STAGE_03_LOW_HP));
     let messageDelayElapsed = false;
-    let transformationFinished = !shouldPlayUltimateTransition;
+    let transformationFinished = !shouldPlayTransformation;
     const showTurnMessage = (): void => {
       if (!messageDelayElapsed || !transformationFinished) return;
       messageLines = turnMessageLines;
@@ -326,8 +333,8 @@ export const createBattleSequence = (
       visiblePlayerSealedElement = player.sealedElement ?? null;
     };
     const applyResult = (): void => {
-      if (shouldPlayUltimateTransition) {
-        if (reachedLowHp) enemyLevelsBeforeUltimateReveal = turn.enemy.levels;
+      if (shouldPlayTransformation) {
+        if (stage === '04' && reachedLowHp) enemyLevelsBeforeUltimateReveal = turn.enemy.levels;
         pendingTransformation = () => {
           transformationFinished = true;
           showTurnMessage();
@@ -385,6 +392,9 @@ export const createBattleSequence = (
     },
     get ultimateForm() {
       return ultimateForm;
+    },
+    get stage03Phase2() {
+      return stage03Phase2;
     },
     get ultimatePhase() {
       return ultimatePhase;

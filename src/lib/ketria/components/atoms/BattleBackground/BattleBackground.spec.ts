@@ -4,7 +4,7 @@ import BattleBackground from './BattleBackground.svelte';
 import * as styles from './BattleBackground.css';
 
 describe('BattleBackground', () => {
-  test.each(['01', '02', '03', '04', '05'] as const)(
+  test.each(['01', '02', '03', '04', '04-phase2'] as const)(
     'background=%sの場合、対応するWebPとPNGの画像パスが設定される',
     (background) => {
       const { container } = render(BattleBackground, { props: { background } });
