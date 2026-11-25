@@ -64,6 +64,7 @@ export const parseBattleSession = (value: string | null): BattleSession | null =
     const selection = battle.messageSelection;
     if (
       !isRecord(selection) ||
+      (selection.lastMessageKey !== undefined && typeof selection.lastMessageKey !== 'string') ||
       !Array.isArray(selection.usedHpMessages) ||
       !selection.usedHpMessages.every(isCount) ||
       !Array.isArray(selection.nextIndex) ||

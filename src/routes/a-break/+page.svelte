@@ -321,7 +321,12 @@
           <HealthStatus
             current={emptyHealth ? 0 : battle.enemy.hp}
             max={battle.enemyMaxHp}
-            dangerHp={selectedStage === '04' ? STAGE_04_LOW_HP : undefined}
+            warningHp={selectedStage === '03' ? 150 : undefined}
+            dangerHp={selectedStage === '03'
+              ? 50
+              : selectedStage === '04'
+                ? STAGE_04_LOW_HP
+                : undefined}
             intro={startingBattle}
             onsettled={() =>
               battle?.settleHealth(

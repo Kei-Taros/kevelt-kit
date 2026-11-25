@@ -4,6 +4,7 @@ import type { ElementType } from './element.types';
 import type { StageId } from './stage.types';
 
 export interface MessageSelectionSnapshot {
+  lastMessageKey?: string;
   usedHpMessages: number[];
   nextIndex: [string, number][];
 }

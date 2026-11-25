@@ -6,14 +6,15 @@
     current: number;
     max: number;
     dangerHp?: number;
+    warningHp?: number;
     intro?: boolean;
     onsettled?: () => void;
   }
 
-  let { current, max, dangerHp, intro, onsettled }: Props = $props();
+  let { current, max, warningHp, dangerHp, intro, onsettled }: Props = $props();
 </script>
 
 <div class={styles.container}>
   <HealthLabel {current} {max} {intro} {onsettled} />
-  <HealthBar {current} {max} {dangerHp} {intro} />
+  <HealthBar {current} {max} {warningHp} {dangerHp} {intro} />
 </div>

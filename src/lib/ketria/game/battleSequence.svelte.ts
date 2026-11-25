@@ -74,7 +74,15 @@ export const createBattleSequence = (
   let screenShakeActive = $state(false);
   let winPhase = $state<'clash' | 'resolve' | 'winner' | null>(null);
   let battleLogs = $state<BattleLogEntry[]>(snapshot?.battleLogs ?? []);
-  const initialMessageLines = snapshot?.messageLines ?? selectMessage(nextEnemyMove);
+  const initialMessageLines =
+    snapshot?.messageLines ??
+    selectMessage(nextEnemyMove, {
+      enemyHp: enemy.hp,
+      enemyMaxHp,
+      draw: 0,
+      opening: snapshot === undefined,
+      turn: battleLogs.length + 1
+    });
   let messageLines = $state<readonly string[]>(initialMessageLines);
   let messageReady = $state(snapshot !== undefined);
   let playerStoneEffectActive = $state(snapshot?.player.stoneGuard === true);
@@ -252,8 +260,10 @@ export const createBattleSequence = (
       turnMessageLines = BATTLE_SYSTEM_MESSAGES.WIN;
     } else {
       turnMessageLines = selectMessage(nextEnemyMove, {
-        enemyHp: enemy.hp / enemyMaxHp,
-        draw: consecutiveDraws
+        enemyHp: enemy.hp,
+        enemyMaxHp,
+        draw: consecutiveDraws,
+        turn: battleLogs.length + 1
       });
     }
     checkpoint = createSnapshot(turnMessageLines);

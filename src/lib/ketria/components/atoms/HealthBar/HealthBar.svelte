@@ -4,15 +4,17 @@
   interface Props {
     current: number;
     max: number;
+    warningHp?: number;
     dangerHp?: number;
     intro?: boolean;
   }
 
-  let { current, max, dangerHp, intro = false }: Props = $props();
+  let { current, max, warningHp, dangerHp, intro = false }: Props = $props();
 
   const percentage = $derived(max <= 0 ? 0 : Math.min(100, Math.max(0, (current / max) * 100)));
   const isDanger = $derived(dangerHp === undefined ? percentage <= 15 : current <= dangerHp);
-  const status = $derived(isDanger ? 'danger' : percentage > 50 ? 'safe' : 'warning');
+  const isWarning = $derived(warningHp === undefined ? percentage <= 50 : current <= warningHp);
+  const status = $derived(isDanger ? 'danger' : isWarning ? 'warning' : 'safe');
 </script>
 
 <div class={styles.track} aria-hidden="true">

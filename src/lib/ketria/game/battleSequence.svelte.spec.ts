@@ -1,3 +1,4 @@
+import { BATTLE_MESSAGES } from '../constants/battleMessages';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import * as enemyAi from './enemyAi';
 import { randomEnemyMove } from '../../../../tests/helpers/randomEnemyMove';
@@ -19,6 +20,37 @@ describe('battleSequence', () => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+  });
+
+  test('ステージ03でターンが進んだ場合、開始と2ターン目の専用セリフを順に表示する', () => {
+    vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const battle = createBattleSequence(BATTLE_MESSAGES['03'], '03');
+
+    expect(battle.messageLines).toEqual(['シンニュウシャヲハッケン']);
+    expect(battle.controlsDisabled).toBe(false);
+    vi.advanceTimersByTime(6000);
+    expect(battle.messageLines).toEqual(['シンニュウシャヲハッケン']);
+    battle.selectElement('fire');
+    vi.advanceTimersByTime(6300);
+    expect(battle.messageLines).toEqual(['コレヨリ', 'タイショウヲハイジョスル']);
+    battle.selectElement('fire');
+    vi.advanceTimersByTime(6300);
+    expect(battle.messageLines).toEqual(['ターゲットロックオン']);
+    battle.destroy();
+  });
+
+  test('初手がFIREの対戦を開始した場合、開始時のコメントを表示し次のターンは通常コメントに切り替える', () => {
+    vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
+    const battle = createBattleSequence([
+      { lines: ['通常'], moves: ['fire'] },
+      { lines: ['開始'], moves: ['fire'], when: { opening: true } }
+    ]);
+
+    expect(battle.snapshot.messageLines).toEqual(['開始']);
+    battle.selectElement('fire');
+    vi.advanceTimersByTime(6300);
+    expect(battle.snapshot.messageLines).toEqual(['通常']);
+    battle.destroy();
   });
 
   test.each([
@@ -232,7 +264,7 @@ describe('battleSequence', () => {
     battle.destroy();
   });
 
-  test('敵の手が変わる場合、次のターンの手に対応したテキストを表示する', () => {
+  test('敵の手が変わって同じ共用セリフが候補になる場合、別の対応セリフを表示する', () => {
     vi.mocked(enemyAi.chooseEnemyMove)
       .mockReturnValueOnce('stone')
       .mockReturnValueOnce('fire')
@@ -247,7 +279,7 @@ describe('battleSequence', () => {
     expect(battle.messageLines).toEqual(['共通']);
     battle.selectElement('mist');
     vi.advanceTimersByTime(6300);
-    expect(battle.messageLines).toEqual(['共通']);
+    expect(battle.messageLines).toEqual(['石専用']);
     battle.destroy();
   });
 
@@ -312,11 +344,11 @@ describe('battleSequence', () => {
     }
   );
 
-  test('敵HPが50％以下になった場合、次のコメント再表示でHP条件を優先する', () => {
+  test('敵HPが75以下になった場合、次のコメント再表示でHP条件を優先する', () => {
     vi.mocked(enemyAi.chooseEnemyMove).mockReturnValue('fire');
     const battle = createBattleSequence([
       { lines: ['通常'], moves: ['fire'] },
-      { lines: ['弱っている'], moves: ['fire'], when: { enemyHp: 0.5 } }
+      { lines: ['弱っている'], moves: ['fire'], when: { enemyHp: 75 } }
     ]);
     for (let turn = 0; turn < 7; turn++) {
       battle.selectElement('fire');
@@ -338,9 +370,9 @@ describe('battleSequence', () => {
     const battle = createBattleSequence([
       { lines: ['通常'], moves: ['fire'] },
       { lines: ['あいこ'], moves: ['fire'], when: { draw: 3 } },
-      { lines: ['HP'], moves: ['fire'], when: { enemyHp: 0.5 } },
-      { lines: ['両条件'], moves: ['fire'], when: { enemyHp: 0.5, draw: 3 } },
-      { lines: ['別属性'], moves: ['mist'], when: { enemyHp: 0.5, draw: 3 } }
+      { lines: ['HP'], moves: ['fire'], when: { enemyHp: 75 } },
+      { lines: ['両条件'], moves: ['fire'], when: { enemyHp: 75, draw: 3 } },
+      { lines: ['別属性'], moves: ['mist'], when: { enemyHp: 75, draw: 3 } }
     ]);
     for (let turn = 0; turn < 7; turn++) {
       battle.selectElement('fire');

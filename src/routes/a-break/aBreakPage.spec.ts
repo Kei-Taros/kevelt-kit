@@ -565,6 +565,31 @@ describe('aBreakPage', () => {
   });
 
   test.each([
+    { hp: 151, status: 'safe' },
+    { hp: 150, status: 'warning' },
+    { hp: 51, status: 'warning' },
+    { hp: 50, status: 'danger' }
+  ] as const)(
+    'STAGE 03で敵の残りHPが$hpの場合、HPバーを$statusの色で表示する',
+    async ({ hp, status }) => {
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02']));
+      const initial = await renderBattlePage();
+      const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+      initial.unmount();
+      session.battle.enemy.hp = hp;
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      navigationContext.documentType = 'reload';
+
+      const { container } = render(Page);
+      await finishEntrance();
+
+      expect(container.querySelector(`.${styles.enemyHealth} .${healthBarStyles.value}`)).toHaveClass(
+        healthBarStyles.statusVariants[status]
+      );
+    }
+  );
+
+  test.each([
     { stage: '03', cleared: ['01', '02'], crackCount: 0 },
     { stage: '04', cleared: ['01', '02', '03'], crackCount: 3 }
   ])(
