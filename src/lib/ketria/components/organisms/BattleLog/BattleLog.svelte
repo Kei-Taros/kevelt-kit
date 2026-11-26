@@ -5,6 +5,8 @@
   import * as styles from './BattleLog.css';
 
   let { logs }: { logs: readonly BattleLogEntry[] } = $props();
+  const id = $props.id();
+  const traceClipId = `log-trace-clip-${id}`;
   let logWidth = $state(0);
   let logHeight = $state(0);
   const traceRadius = 15;
@@ -29,21 +31,28 @@
     <svg
       class={styles.borderTrace}
       viewBox={`0 0 ${logWidth} ${logHeight}`}
-      style={`--log-perimeter: ${logPerimeter}px`}
+      style={`--log-perimeter: ${logPerimeter}px; --log-trace-clip: url(#${traceClipId})`}
       aria-hidden="true"
     >
-      {#each traceOpacities as opacity, index}
-        <rect
-          class={styles.borderTraceLine}
-          x="1"
-          y="1"
-          width={logWidth - 2}
-          height={logHeight - 2}
-          rx={traceRadius}
-          stroke-dasharray={`${traceSegmentLength} ${logPerimeter - traceSegmentLength}`}
-          style={`--segment-position: ${index * traceSegmentLength}px; opacity: ${opacity}`}
-        ></rect>
-      {/each}
+      <defs>
+        <clipPath id={traceClipId}>
+          <rect width={logWidth} height={logHeight} rx={styles.mobileTraceClipRadius}></rect>
+        </clipPath>
+      </defs>
+      <g class={styles.borderTraceGroup}>
+        {#each traceOpacities as opacity, index}
+          <rect
+            class={styles.borderTraceLine}
+            x="1"
+            y="1"
+            width={logWidth - 2}
+            height={logHeight - 2}
+            rx={traceRadius}
+            stroke-dasharray={`${traceSegmentLength} ${logPerimeter - traceSegmentLength}`}
+            style={`--segment-position: ${index * traceSegmentLength}px; opacity: ${opacity}`}
+          ></rect>
+        {/each}
+      </g>
     </svg>
   {/if}
   <ol class={styles.list}>

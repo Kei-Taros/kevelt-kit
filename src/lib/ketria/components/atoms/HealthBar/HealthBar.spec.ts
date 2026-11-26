@@ -7,25 +7,25 @@ describe('HealthBar', () => {
   test('current=50かつmax=200の場合、ゲージ幅が25%になる', () => {
     const { container } = render(HealthBar, { props: { current: 50, max: 200 } });
 
-    expect(container.querySelector(`.${styles.value}`)).toHaveStyle({ width: '25%' });
+    expect(container.querySelector(`.${styles.value}`)).toHaveStyle('--health-fill-ratio: 0.25');
   });
 
   test('currentがmaxを超える場合、ゲージ幅が100%になる', () => {
     const { container } = render(HealthBar, { props: { current: 250, max: 200 } });
 
-    expect(container.querySelector(`.${styles.value}`)).toHaveStyle({ width: '100%' });
+    expect(container.querySelector(`.${styles.value}`)).toHaveStyle('--health-fill-ratio: 1');
   });
 
   test('currentが0未満の場合、ゲージ幅が0%になる', () => {
     const { container } = render(HealthBar, { props: { current: -10, max: 200 } });
 
-    expect(container.querySelector(`.${styles.value}`)).toHaveStyle({ width: '0%' });
+    expect(container.querySelector(`.${styles.value}`)).toHaveStyle('--health-fill-ratio: 0');
   });
 
   test('maxが0以下の場合、ゲージ幅が0%になる', () => {
     const { container } = render(HealthBar, { props: { current: 50, max: 0 } });
 
-    expect(container.querySelector(`.${styles.value}`)).toHaveStyle({ width: '0%' });
+    expect(container.querySelector(`.${styles.value}`)).toHaveStyle('--health-fill-ratio: 0');
   });
 
   test.each([

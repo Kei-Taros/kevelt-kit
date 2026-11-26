@@ -1,4 +1,5 @@
-import { menuBack } from '$lib/ketria/styles/menuBack.css';
+import { touchPressFeedback } from '$lib/ketria/components/molecules/MenuOption/MenuOption.css';
+import { menuBack, menuBackTouchFeedback } from '$lib/ketria/styles/menuBack.css';
 import { style } from '@vanilla-extract/css';
 
 export const stageSelect = style({
@@ -29,11 +30,14 @@ export const stageHeading = style({
   textShadow: '0 2px 12px #000'
 });
 
-export const stageList = style({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'clamp(10px, 1.8dvh, 20px)',
-  width: 'min(82vw, 64dvh)'
-});
+export const stageList = style([
+  touchPressFeedback,
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'clamp(10px, 1.8dvh, 20px)',
+    width: 'min(82vw, 64dvh)'
+  }
+]);
 
-export const stageBack = style([menuBack, { marginTop: '5dvh' }]);
+export const stageBack = style([menuBack, menuBackTouchFeedback, { marginTop: '5dvh' }]);

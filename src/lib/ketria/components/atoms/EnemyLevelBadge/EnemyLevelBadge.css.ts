@@ -1,4 +1,6 @@
 import { createVar, style, styleVariants } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 import { elementColors } from '$lib/ketria/styles/elementColors';
 
 const color = createVar();
@@ -39,6 +41,14 @@ export const badge = style({
       zIndex: -1,
       background: '#070b0ef5',
       boxShadow: `inset 0 0 7px color-mix(in srgb, ${color} 30%, transparent)`
+    }
+  },
+  '@media': {
+    [media.sp]: {
+      width: mobileBattleLayout.enemyLevel.width,
+      marginTop: mobileBattleLayout.enemyLevel.badgeOffset,
+      padding: mobileBattleLayout.enemyLevel.padding,
+      fontSize: mobileBattleLayout.enemyLevel.fontSize
     }
   }
 });

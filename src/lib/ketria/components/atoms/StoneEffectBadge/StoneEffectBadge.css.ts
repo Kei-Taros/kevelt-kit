@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 import { elementColors } from '$lib/ketria/styles/elementColors';
 
 const outline = 'polygon(16% 0, 84% 0, 100% 25%, 100% 75%, 84% 100%, 16% 100%, 0 75%, 0 25%)';
@@ -39,6 +41,16 @@ export const badge = style({
       clipPath: outline,
       background: '#140b20ee'
     }
+  },
+  '@media': {
+    [media.sp]: {
+      width: mobileBattleLayout.stoneBadge.width,
+      height: mobileBattleLayout.stoneBadge.height,
+      scale: String(mobileBattleLayout.stoneBadge.scale),
+      gap: 0,
+      padding: mobileBattleLayout.stoneBadge.padding,
+      fontSize: mobileBattleLayout.stoneBadge.fontSize
+    }
   }
 });
 
@@ -46,7 +58,13 @@ export const picture = style({
   display: 'block',
   flexShrink: 0,
   width: 65,
-  height: 65
+  height: 65,
+  '@media': {
+    [media.sp]: {
+      width: mobileBattleLayout.stoneBadge.iconSize,
+      height: mobileBattleLayout.stoneBadge.iconSize
+    }
+  }
 });
 
 export const icon = style({
@@ -57,5 +75,8 @@ export const icon = style({
 });
 
 export const value = style({
-  transform: 'translateY(-10px)'
+  transform: 'translateY(-10px)',
+  '@media': {
+    [media.sp]: { transform: `translateY(${mobileBattleLayout.stoneBadge.textOffset}px)` }
+  }
 });

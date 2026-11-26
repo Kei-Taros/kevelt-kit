@@ -1,9 +1,18 @@
-import { createVar, keyframes, style } from '@vanilla-extract/css';
+import { createVar, globalStyle, keyframes, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
 import { backgroundFadeIn } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
+import { mobileButtonWidth } from '$lib/ketria/components/molecules/ElementOption/ElementOption.css';
+import {
+  mobileLogHeight,
+  mobileLogTop
+} from '$lib/ketria/components/organisms/BattleLog/BattleLog.css';
 
 import { ULTIMATE_TRANSITION } from '$lib/ketria/constants/stages';
+import { media } from '$lib/styles/breakpoints';
 
-export const enemyWidth = '60dvh';
+export const enemyWidth = 'var(--battle-enemy-width, 60dvh)';
+
+const mobileLandscape = `${media.sp} and (orientation: landscape)`;
 
 export const arena = style({
   position: 'relative',
@@ -14,8 +23,34 @@ export const arena = style({
   background: '#000',
   color: '#f5f5f2',
   containerType: 'inline-size',
+  '@media': {
+    [media.sp]: {
+      vars: {
+        '--battle-enemy-width': mobileBattleLayout.enemy.width,
+        '--battle-hp-scale': mobileBattleLayout.hp.scale,
+        '--sp-controls-bottom': `calc(${mobileBattleLayout.buttons.bottom}px + env(safe-area-inset-bottom))`,
+        '--sp-side-inset': `max(${mobileBattleLayout.arena.sideInset}px, env(safe-area-inset-left), env(safe-area-inset-right))`
+      }
+    },
+    [mobileLandscape]: {
+      vars: {
+        '--battle-enemy-width': mobileBattleLayout.enemy.landscapeWidth,
+        '--battle-landscape-button-width': mobileBattleLayout.buttons.landscapeWidth,
+        '--battle-landscape-level-badge-width': mobileBattleLayout.playerLevel.landscapeWidth
+      }
+    }
+  },
   '@supports': {
     '(height: 100dvh)': { height: '100dvh' }
+  }
+});
+
+globalStyle(`html:has(${arena}), body:has(${arena})`, {
+  '@media': {
+    [media.sp]: {
+      overflowY: 'hidden',
+      overscrollBehaviorY: 'none'
+    }
   }
 });
 
@@ -23,7 +58,10 @@ export const attributeCycle = style({
   position: 'absolute',
   top: 'max(16px, env(safe-area-inset-top))',
   left: 'max(3.5%, env(safe-area-inset-left))',
-  width: 'min(11.7cqw, 18dvh)'
+  width: 'min(11.7cqw, 18dvh)',
+  '@media': {
+    [media.sp]: { display: 'none' }
+  }
 });
 
 export const enemy = style({
@@ -35,6 +73,16 @@ export const enemy = style({
   transform: 'translateX(-50%)',
   animation: backgroundFadeIn,
   '@media': {
+    [media.sp]: {
+      top: `max(${mobileBattleLayout.enemy.minTop}, calc(${mobileLogTop} + ${mobileLogHeight} + ${mobileBattleLayout.enemy.logGap}px))`,
+      left: mobileBattleLayout.enemy.left,
+      height: mobileBattleLayout.enemy.height
+    },
+    [mobileLandscape]: {
+      left: mobileBattleLayout.enemy.landscapeLeft,
+      top: `calc(${mobileLogTop} + ${mobileLogHeight} + (${mobileBattleLayout.enemy.landscapeLogGap}px))`,
+      height: mobileBattleLayout.enemy.landscapeHeight
+    },
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
 });
@@ -53,7 +101,18 @@ export const enemyMove = style({
   zIndex: 1,
   width: 'min(38cqw, 58dvh)',
   aspectRatio: '1',
-  transform: 'translate(-50%, -50%)'
+  transform: 'translate(-50%, -50%)',
+  '@media': {
+    [media.sp]: {
+      top: mobileBattleLayout.movePreview.top,
+      left: mobileBattleLayout.movePreview.left,
+      width: mobileBattleLayout.movePreview.width
+    },
+    [mobileLandscape]: {
+      left: mobileBattleLayout.movePreview.landscapeLeft,
+      top: mobileBattleLayout.movePreview.landscapeTop
+    }
+  }
 });
 
 export const movePreview = style({
@@ -63,7 +122,17 @@ export const movePreview = style({
   zIndex: 1,
   display: 'flex',
   alignItems: 'center',
-  transform: 'translate(-50%, -50%)'
+  transform: 'translate(-50%, -50%)',
+  '@media': {
+    [media.sp]: {
+      top: mobileBattleLayout.movePreview.top,
+      left: mobileBattleLayout.movePreview.left
+    },
+    [mobileLandscape]: {
+      left: mobileBattleLayout.movePreview.landscapeLeft,
+      top: mobileBattleLayout.movePreview.landscapeTop
+    }
+  }
 });
 
 export const battleHint = style({
@@ -72,7 +141,20 @@ export const battleHint = style({
   left: '50%',
   zIndex: 1,
   width: 'min(86cqw, 1200px)',
-  transform: 'translate(-50%, -50%)'
+  transform: 'translate(-50%, -50%)',
+  '@media': {
+    [media.sp]: {
+      top: mobileBattleLayout.message.top,
+      width: 'calc(100% - 2 * var(--sp-side-inset))'
+    },
+    [mobileLandscape]: {
+      top: 'auto',
+      bottom: `calc(var(--sp-controls-bottom) + ${mobileLogHeight})`,
+      left: mobileBattleLayout.enemy.landscapeLeft,
+      width: mobileBattleLayout.message.landscapeWidth,
+      transform: 'translateX(-50%)'
+    }
+  }
 });
 
 const battleHintFade = keyframes({
@@ -94,28 +176,57 @@ export const health = style({
   top: 'max(80px, calc(env(safe-area-inset-top) + 64px), 10%)',
   width: '22%',
   fontFamily: "Georgia, 'Times New Roman', serif",
-  fontSize: 'clamp(12px, 1.3cqw, 24px)',
+  fontSize: 'calc(clamp(12px, 1.3cqw, 24px) * var(--battle-hp-scale, 1))',
   letterSpacing: '0.16em',
-  textShadow: '0 2px 6px #000'
+  textShadow: '0 2px 6px #000',
+  '@media': {
+    [media.sp]: { width: mobileBattleLayout.hp.width },
+    [mobileLandscape]: { width: mobileBattleLayout.hp.landscapeWidth }
+  }
 });
 
 export const playerHealth = style({
   left: 400,
   top: 'auto',
-  bottom: 'max(350px, env(safe-area-inset-bottom))'
+  bottom: 'max(350px, env(safe-area-inset-bottom))',
+  '@media': {
+    [media.sp]: {
+      left: mobileBattleLayout.hp.playerLeft,
+      bottom: `calc(var(--sp-controls-bottom) + ${mobileButtonWidth} + ${mobileBattleLayout.hp.playerGap}px)`,
+      transform: 'translateX(-50%)'
+    },
+    [mobileLandscape]: { left: mobileBattleLayout.buttons.landscapeLeft }
+  }
 });
 
 export const playerStoneEffectBadge = style({
   position: 'absolute',
   top: '60%',
   left: 'calc(100% + 14px)',
-  transform: 'translateY(-50%)'
+  transform: 'translateY(-50%)',
+  '@media': {
+    [media.sp]: { left: `calc(100% + ${mobileBattleLayout.stoneBadge.playerGap}px)` },
+    [mobileLandscape]: {
+      left: 'auto',
+      right: 0,
+      top: `calc(100% + ${mobileBattleLayout.stoneBadge.landscapePlayerGap}px)`,
+      transform: 'none'
+    }
+  }
 });
 
 export const enemyStoneEffectBadge = style({
   position: 'absolute',
   right: 'calc(60% + 12px)',
-  bottom: 0
+  bottom: 0,
+  '@media': {
+    [media.sp]: {
+      right: `calc(50% + min(${mobileBattleLayout.enemyLevel.iconWidth}, 100%) / 2 + ${mobileBattleLayout.stoneBadge.enemyGap}px)`,
+      bottom: mobileBattleLayout.stoneBadge.enemyBottom,
+      scale: String(1 / mobileBattleLayout.enemyLevel.scale),
+      transformOrigin: 'right bottom'
+    }
+  }
 });
 
 const stoneEffectBadgeFadeIn = keyframes({
@@ -131,14 +242,28 @@ export const stoneEffectBadgeAppear = style({
 });
 
 export const enemyHealth = style({
-  right: '3.5%'
+  right: '3.5%',
+  '@media': {
+    [media.sp]: {
+      top: `calc(${mobileLogTop} + ${mobileLogHeight} + ${mobileBattleLayout.hp.enemyLogGap}px)`,
+      right: `calc(max(${mobileBattleLayout.hp.enemyRight}, env(safe-area-inset-right)) + ${mobileBattleLayout.hp.enemyRightOffset}px)`
+    }
+  }
 });
 
 export const attributes = style({
   position: 'absolute',
   top: 'min(68%, calc(100% - min(15.6cqw, 27dvh) - 64px - env(safe-area-inset-bottom)))',
   left: '50%',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  '@media': {
+    [media.sp]: {
+      top: 'auto',
+      left: mobileBattleLayout.buttons.left,
+      bottom: 'var(--sp-controls-bottom)'
+    },
+    [mobileLandscape]: { left: mobileBattleLayout.buttons.landscapeLeft }
+  }
 });
 
 export const titleShade = style({
@@ -240,8 +365,46 @@ export const screenBlackout = style({
   background: '#000'
 });
 
+export const screenDarkeningDuration = 1000;
+const darkenScreen = keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 }
+});
+
+export const screenBlackoutDarkening = style({
+  animation: `${darkenScreen} ${screenDarkeningDuration}ms linear both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { animation: 'none' }
+  }
+});
+
+const revealCurtain = keyframes({
+  from: { transform: 'translate(-50%, -50%) scale(1)' },
+  to: { transform: 'translate(-50%, -50%) scale(6)' }
+});
+
 export const screenBlackoutOpening = style({
-  background: 'transparent'
+  background: 'transparent',
+  '@media': {
+    [media.sp]: {
+      overflow: 'hidden',
+      selectors: {
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: '100vmax',
+          height: '100vmax',
+          background: 'radial-gradient(circle closest-side, transparent 25%, #000 39%)',
+          animation: `${revealCurtain} 700ms ease-out both`
+        }
+      }
+    },
+    '(prefers-reduced-motion: reduce)': {
+      selectors: { '&::before': { display: 'none' } }
+    }
+  }
 });
 
 export const screenContent = style({
@@ -264,10 +427,20 @@ const revealScreen = keyframes({
   to: { vars: { [revealRadius]: '125%' }, opacity: 1 }
 });
 
+const revealScreenBrightness = keyframes({
+  '0%': { opacity: 0 },
+  '5%': { opacity: 0.4 },
+  '100%': { opacity: 1 }
+});
+
 export const screenContentReveal = style({
   maskImage: `radial-gradient(circle at center, #000 calc(${revealRadius} - 20%), transparent calc(${revealRadius} + 20%))`,
   animation: `${revealScreen} 700ms ease-out both`,
   '@media': {
+    [media.sp]: {
+      maskImage: 'none',
+      animation: `${revealScreenBrightness} 700ms ease-out both`
+    },
     '(prefers-reduced-motion: reduce)': { animation: 'none', maskImage: 'none', opacity: 1 }
   }
 });
@@ -277,20 +450,25 @@ export const battleAction = style({
   lineHeight: 1
 });
 
+const shakeScale = createVar();
+const shakeTransform = (x: number, y: number) =>
+  `translate(calc(${x}px * ${shakeScale}), calc(${y}px * ${shakeScale}))`;
+
 const shakeOnVictory = keyframes({
   '0%, 100%': { transform: 'translate(0, 0)' },
-  '10%': { transform: 'translate(-15px, 8px)' },
-  '22%': { transform: 'translate(14px, -8px)' },
-  '34%': { transform: 'translate(-11px, -6px)' },
-  '46%': { transform: 'translate(10px, 6px)' },
-  '58%': { transform: 'translate(-7px, 4px)' },
-  '70%': { transform: 'translate(6px, -3px)' },
-  '82%': { transform: 'translate(-3px, 2px)' },
-  '92%': { transform: 'translate(2px, -1px)' }
+  '10%': { transform: shakeTransform(-15, 8) },
+  '22%': { transform: shakeTransform(14, -8) },
+  '34%': { transform: shakeTransform(-11, -6) },
+  '46%': { transform: shakeTransform(10, 6) },
+  '58%': { transform: shakeTransform(-7, 4) },
+  '70%': { transform: shakeTransform(6, -3) },
+  '82%': { transform: shakeTransform(-3, 2) },
+  '92%': { transform: shakeTransform(2, -1) }
 });
 
 export const victoryShake = style({
-  animation: `${shakeOnVictory} 500ms linear`,
+  vars: { [shakeScale]: String(mobileBattleLayout.screenShakeScale) },
+  animation: `${shakeOnVictory} ${mobileBattleLayout.screenShakeDuration}ms linear`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
@@ -298,6 +476,11 @@ export const victoryShake = style({
 
 const flashOnMatchResult = keyframes({
   '0%, 25%': { opacity: 1 },
+  '100%': { opacity: 0 }
+});
+
+const mobileMatchResultFlash = keyframes({
+  '0%, 40%': { opacity: 1 },
   '100%': { opacity: 0 }
 });
 
@@ -309,6 +492,7 @@ export const matchResultFlash = style({
   background: '#fff',
   animation: `${flashOnMatchResult} 200ms ease-out both`,
   '@media': {
+    [media.sp]: { animation: `${mobileMatchResultFlash} 650ms ease-out both` },
     '(prefers-reduced-motion: reduce)': { display: 'none' }
   }
 });

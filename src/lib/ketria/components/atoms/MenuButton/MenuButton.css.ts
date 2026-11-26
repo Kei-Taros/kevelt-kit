@@ -1,4 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 export const button = style({
   display: 'flex',
@@ -15,9 +16,9 @@ export const button = style({
   color: '#f5f5f2',
   cursor: 'pointer',
   selectors: {
-    '&:hover': { background: '#28313a' },
     '&:focus-visible': { outline: '2px solid #e6f5ff', outlineOffset: 3 }
-  }
+  },
+  '@media': { [media.nonSpHover]: { selectors: { '&:hover': { background: '#28313a' } } } }
 });
 
 export const bar = style({

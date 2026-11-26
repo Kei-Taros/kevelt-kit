@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import { ElementIcon, EnemyLevelBadge, MistEffect } from '$lib/ketria/components/atoms';
   import type { ElementLevel, ElementType } from '$lib/ketria/types/element.types';
   import * as styles from './EnemyLevels.css';
@@ -6,9 +7,10 @@
   interface Props {
     levels: Record<ElementType, ElementLevel>;
     sealedElement?: ElementType | null;
+    stoneBadge?: Snippet;
   }
 
-  let { levels, sealedElement = null }: Props = $props();
+  let { levels, sealedElement = null, stoneBadge }: Props = $props();
   const elements: ElementType[] = ['fire', 'stone', 'mist'];
 </script>
 
@@ -22,6 +24,9 @@
         {/if}
       </span>
       <EnemyLevelBadge {element} level={levels[element]} />
+      {#if element === 'fire'}
+        {@render stoneBadge?.()}
+      {/if}
     </div>
   {/each}
 </div>

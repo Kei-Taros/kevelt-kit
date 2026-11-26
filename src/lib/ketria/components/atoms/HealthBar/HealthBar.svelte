@@ -24,6 +24,6 @@
       styles.statusVariants[status],
       intro && percentage === 100 && styles.introFill
     ]}
-    style:width={`${percentage}%`}
+    style:--health-fill-ratio={percentage / 100}
   ></div>
 </div>

@@ -1,7 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
 const twinkle = keyframes({
-  '0%, 19%, 55%, 100%': { opacity: 0.12, scale: 0.65 },
+  '0%, 19%, 55%, 100%': { opacity: 0, scale: 0.65 },
   '33%': { opacity: 0.95, scale: 1.25 }
 });
 

@@ -1,4 +1,6 @@
 import { createVar, keyframes, style, styleVariants } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 
 const logAccent = createVar();
 const enterFromLeft = keyframes({
@@ -37,6 +39,13 @@ export const row = style({
     },
     '&::before': { inset: 0, zIndex: -2, background: logAccent },
     '&::after': { inset: 1, zIndex: -1, background: '#02080def' }
+  },
+  '@media': {
+    [media.sp]: {
+      gridTemplateColumns: `${mobileBattleLayout.logRow.turnWidth}px 1px minmax(0, 1fr) 1px ${mobileBattleLayout.logRow.resultWidth}px`,
+      padding: mobileBattleLayout.logRow.padding,
+      filter: 'none'
+    }
   }
 });
 
@@ -67,7 +76,8 @@ export const turn = style({
   alignItems: 'center',
   justifyContent: 'center',
   gap: 3,
-  fontFamily: "Georgia, 'Times New Roman', serif"
+  fontFamily: "Georgia, 'Times New Roman', serif",
+  '@media': { [media.sp]: { flexDirection: 'row', gap: mobileBattleLayout.logRow.turnGap } }
 });
 
 export const turnLabel = style({
@@ -79,7 +89,8 @@ export const turnLabel = style({
 export const turnNumber = style({
   fontSize: 29,
   fontWeight: 600,
-  lineHeight: 1
+  lineHeight: 1,
+  '@media': { [media.sp]: { fontSize: mobileBattleLayout.logRow.turnFontSize } }
 });
 
 export const separator = style({
@@ -102,7 +113,14 @@ export const icon = style({
   flex: '0 0 52px',
   width: 52,
   height: 52,
-  filter: 'drop-shadow(0 0 6px #ffffff40)'
+  filter: 'drop-shadow(0 0 6px #ffffff40)',
+  '@media': {
+    [media.sp]: {
+      flexBasis: mobileBattleLayout.logRow.iconSize,
+      width: mobileBattleLayout.logRow.iconSize,
+      height: mobileBattleLayout.logRow.iconSize
+    }
+  }
 });
 
 export const vs = style({
@@ -141,5 +159,11 @@ export const result = style({
     },
     '&::before': { inset: 0, zIndex: -2, background: logAccent, boxShadow: `0 0 8px ${logAccent}` },
     '&::after': { inset: 2, zIndex: -1, background: '#091016' }
+  },
+  '@media': {
+    [media.sp]: {
+      height: mobileBattleLayout.logRow.damageHeight,
+      fontSize: mobileBattleLayout.logRow.damageFontSize
+    }
   }
 });

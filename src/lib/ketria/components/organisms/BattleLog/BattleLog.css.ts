@@ -1,4 +1,11 @@
 import { keyframes, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
+
+export const mobileLogHeight = mobileBattleLayout.log.height;
+export const mobileLogTop = `calc(max(16px, env(safe-area-inset-top)) + ${mobileBattleLayout.log.topOffset}px)`;
+const panelRadius = 18;
+export const mobileTraceClipRadius = Math.max(0, panelRadius - mobileBattleLayout.log.borderWidth);
 
 const orbitBorder = keyframes({
   from: { strokeDashoffset: 'calc(-1 * var(--segment-position))' },
@@ -18,7 +25,7 @@ export const panel = style({
   padding: '22px 10px 22px',
   overflow: 'hidden',
   border: '2px solid #79dfff',
-  borderRadius: 18,
+  borderRadius: panelRadius,
   background: 'linear-gradient(180deg, #06141dcc 0%, #02070ccc 100%)',
   boxShadow: '0 0 0 1px #79dfff26 inset, 0 0 12px #35cfff88, 0 0 34px #1ebae94d, 0 12px 36px #000b',
   selectors: {
@@ -29,6 +36,20 @@ export const panel = style({
       border: '1px solid #7bdfff30',
       borderRadius: 11,
       pointerEvents: 'none'
+    }
+  },
+  '@media': {
+    [media.sp]: {
+      left: `max(${mobileBattleLayout.log.leftInset}px, env(safe-area-inset-left))`,
+      right: `max(${mobileBattleLayout.log.rightInset}px, env(safe-area-inset-right))`,
+      top: mobileLogTop,
+      bottom: 'auto',
+      width: 'auto',
+      height: mobileLogHeight,
+      borderWidth: mobileBattleLayout.log.borderWidth,
+      boxShadow: '0 12px 36px #000b',
+      padding: mobileBattleLayout.log.padding,
+      selectors: { '&::before': { display: 'none' } }
     }
   }
 });
@@ -42,7 +63,16 @@ export const borderTrace = style({
   height: '100%',
   overflow: 'visible',
   pointerEvents: 'none',
-  filter: 'drop-shadow(0 0 4px #aaf5ff) drop-shadow(0 0 2px #63e4ff)'
+  filter: 'drop-shadow(0 0 4px #aaf5ff) drop-shadow(0 0 2px #63e4ff)',
+  '@media': {
+    [media.sp]: { filter: 'none' }
+  }
+});
+
+export const borderTraceGroup = style({
+  '@media': {
+    [media.sp]: { clipPath: 'var(--log-trace-clip)' }
+  }
 });
 
 export const borderTraceLine = style({
@@ -70,7 +100,16 @@ export const list = style({
   scrollbarGutter: 'stable',
   listStyle: 'none',
   scrollbarColor: '#65dafa66 transparent',
-  scrollbarWidth: 'thin'
+  scrollbarWidth: 'thin',
+  '@media': {
+    [media.sp]: {
+      gridAutoRows: mobileBattleLayout.log.rowHeight,
+      gap: mobileBattleLayout.log.rowGap,
+      padding: mobileBattleLayout.log.listPadding,
+      scrollbarWidth: 'none',
+      overscrollBehaviorY: 'contain'
+    }
+  }
 });
 
 export const listItem = style({

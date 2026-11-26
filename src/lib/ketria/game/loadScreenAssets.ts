@@ -48,7 +48,9 @@ export const loadScreenAssets = async (
   const pending = Array.from(container.querySelectorAll('img'), decodeImage);
   if (isBattle) {
     pending.push(...battleAssets.map((path) => preload(`${path}.webp`, `${path}.png`)));
-    pending.push(preload('/images/ketria/effects/sparks.svg'));
+    pending.push(
+      preload('/images/ketria/effects/sparks.webp', '/images/ketria/effects/sparks.svg')
+    );
   }
   if (stage === '03') {
     pending.push(

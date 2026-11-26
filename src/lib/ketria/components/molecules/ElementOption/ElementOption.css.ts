@@ -1,4 +1,8 @@
 import { createVar, globalStyle, keyframes, style, styleVariants } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
+
+export const mobileButtonWidth = `var(--battle-landscape-button-width, ${mobileBattleLayout.buttons.width})`;
 
 const sealAppear = keyframes({
   from: { opacity: 0, filter: 'blur(8px)' },
@@ -41,17 +45,25 @@ export const button = style({
   boxShadow: '0 0 12px #bce3ff80, inset 0 0 12px #bce3ff40',
   selectors: {
     '&:disabled:not([data-level-zero])': { opacity: 1 },
-    '&:hover:not(:disabled):not([data-level-zero]):not([data-sealed]), &:focus-visible:not(:disabled):not([data-level-zero]):not([data-sealed])':
-      {
-        boxShadow: softGlow,
-        animation: `${breatheGlow} 1.5s ease-in-out infinite`
-      },
+    '&:focus-visible:not(:disabled):not([data-level-zero]):not([data-sealed])': {
+      boxShadow: softGlow,
+      animation: `${breatheGlow} 1.5s ease-in-out infinite`
+    },
     '&:focus-visible': {
       outline: '3px solid white',
       outlineOffset: 7
     }
   },
   '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        '&:hover:not(:disabled):not([data-level-zero]):not([data-sealed])': {
+          boxShadow: softGlow,
+          animation: `${breatheGlow} 1.5s ease-in-out infinite`
+        }
+      }
+    },
+    [media.sp]: { width: mobileButtonWidth },
     '(prefers-reduced-motion: reduce)': {
       selectors: {
         '&:hover:not(:disabled):not([data-level-zero]):not([data-sealed]), &:focus-visible:not(:disabled):not([data-level-zero]):not([data-sealed])':
@@ -76,7 +88,7 @@ export const elementVariants = styleVariants({
   },
   mist: {
     vars: { [glowColor]: '#65cfff' },
-    borderColor: '#b5eeff',
+    borderColor: '#51d6ff',
     boxShadow: '0 0 5px #b5eeffb3, 0 0 20px #65cfff99, inset 0 0 16px #65cfff4d'
   }
 });
@@ -100,7 +112,10 @@ export const ripple = style({
   boxShadow: `0 0 14px ${rippleColor}, inset 0 0 10px ${rippleColor}`,
   pointerEvents: 'none',
   animation: `${rippleExpand} 700ms ease-out forwards`,
-  '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0 } }
+  '@media': {
+    [media.sp]: { width: mobileButtonWidth },
+    '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 0 }
+  }
 });
 
 export const rippleVariants = styleVariants({
@@ -123,11 +138,6 @@ export const icon = style({
   transform: 'scale(1)',
   transition: 'opacity 350ms ease-out, transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
-      opacity: 0.25,
-      transform: 'scale(1.1)',
-      transitionDelay: '0.8s, 0s'
-    },
     [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         opacity: 0.25,
@@ -137,6 +147,16 @@ export const icon = style({
     [`${option}[data-level-zero] &`]: { opacity: 0.55, filter: 'grayscale(1)' }
   },
   '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+          {
+            opacity: 0.25,
+            transform: 'scale(1.1)',
+            transitionDelay: '0.8s, 0s'
+          }
+      }
+    },
     '(prefers-reduced-motion: reduce)': { transition: 'none' }
   }
 });
@@ -155,10 +175,6 @@ export const cycle = style({
   transition: 'opacity 350ms ease-out',
   pointerEvents: 'none',
   selectors: {
-    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
-      opacity: 1,
-      transitionDelay: '0.8s'
-    },
     [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         opacity: 1
@@ -166,6 +182,18 @@ export const cycle = style({
     [`${option}[data-preview-pinned] &`]: { opacity: 1 }
   },
   '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+          {
+            opacity: 1,
+            transitionDelay: '0.8s'
+          }
+      }
+    },
+    [media.sp]: {
+      translate: `${mobileBattleLayout.playerLevel.previewOffsetX}px ${mobileBattleLayout.playerLevel.previewOffsetY}px`
+    },
     '(prefers-reduced-motion: reduce)': { transition: 'none' }
   }
 });
@@ -181,10 +209,6 @@ export const cycleImage = style({
   willChange: 'transform',
   transition: 'transform 350ms ease-out',
   selectors: {
-    [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]: {
-      transform: 'translateZ(0) scale(1)',
-      transitionDelay: '0.8s'
-    },
     [`${button}:focus-visible:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
       {
         transform: 'translateZ(0) scale(1)'
@@ -192,6 +216,15 @@ export const cycleImage = style({
     [`${option}[data-preview-pinned] &`]: { transform: 'translateZ(0) scale(1)' }
   },
   '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        [`${button}:hover:not(:disabled):not([data-suppress-hover]):not([data-level-zero]):not([data-sealed]) &`]:
+          {
+            transform: 'translateZ(0) scale(1)',
+            transitionDelay: '0.8s'
+          }
+      }
+    },
     '(prefers-reduced-motion: reduce)': { transition: 'none' }
   }
 });
@@ -208,6 +241,12 @@ export const level = style({
   cursor: 'default',
   selectors: {
     '&:focus-visible': { outline: '2px solid white', outlineOffset: 4 }
+  },
+  '@media': {
+    [media.sp]: {
+      right: mobileBattleLayout.playerLevel.rightOffset,
+      bottom: mobileBattleLayout.playerLevel.bottomOffset
+    }
   }
 });
 

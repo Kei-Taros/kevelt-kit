@@ -1,4 +1,6 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 
 const mistEffectAppear = keyframes({
   from: { opacity: 0, filter: 'blur(8px)' },
@@ -23,14 +25,27 @@ export const levels = style({
   color: '#f5f5f2',
   fontSize: 'clamp(10px, 0.85cqw, 14px)',
   letterSpacing: '0.03em',
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
+  '@media': {
+    [media.sp]: {
+      width: mobileBattleLayout.enemyLevel.rowWidth,
+      gap: mobileBattleLayout.enemyLevel.gap,
+      marginTop: mobileBattleLayout.enemyLevel.marginTop,
+      // 右端の列の中心を保つため、幅の差の半列分を右に空ける。
+      marginRight: `calc((100% - ${mobileBattleLayout.enemyLevel.rowWidth}) / 6)`,
+      transform: `translateX(${mobileBattleLayout.enemyLevel.offsetX}px) scale(${mobileBattleLayout.enemyLevel.scale})`,
+      transformOrigin: 'right top',
+      paddingInline: 0
+    }
+  }
 });
 
 export const level = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  minWidth: 0
+  minWidth: 0,
+  '@media': { [media.sp]: { position: 'relative' } }
 });
 
 export const icon = style({
@@ -41,7 +56,8 @@ export const icon = style({
   maxWidth: '100%',
   aspectRatio: '1',
   transform: 'translateY(-3px)',
-  filter: 'drop-shadow(0 1px 5px #000)'
+  filter: 'drop-shadow(0 1px 5px #000)',
+  '@media': { [media.sp]: { width: mobileBattleLayout.enemyLevel.iconWidth, transform: 'none' } }
 });
 
 export const mistEffect = style({
@@ -53,6 +69,12 @@ export const mistEffect = style({
   transform: 'translate(-50%, -50%)',
   animation: `${mistEffectAppear} 800ms ease-out backwards`,
   '@media': {
+    [media.sp]: {
+      top: mobileBattleLayout.enemyLevel.mistTop,
+      left: mobileBattleLayout.enemyLevel.mistLeft,
+      width: mobileBattleLayout.enemyLevel.mistSize,
+      height: mobileBattleLayout.enemyLevel.mistSize
+    },
     '(prefers-reduced-motion: reduce)': { animation: 'none', opacity: 1 }
   }
 });

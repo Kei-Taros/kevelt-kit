@@ -28,7 +28,8 @@ const timing = {
 export const createBattleSequence = (
   messagePatterns: readonly BattleMessagePattern[],
   stage: StageId = '01',
-  snapshot?: BattleSnapshot
+  snapshot?: BattleSnapshot,
+  getScreenShakeDuration = () => 500
 ) => {
   const selectMessage = createBattleMessageSelector(messagePatterns, snapshot?.messageSelection);
   const trinityVersion = (hp: number) =>
@@ -206,7 +207,7 @@ export const createBattleSequence = (
     screenShakeTimer = setTimeout(() => {
       screenShakeActive = false;
       screenShakeTimer = undefined;
-    }, 500);
+    }, getScreenShakeDuration());
   };
 
   const settleHealth = (side: 'player' | 'enemy', reduceMotion: boolean): void => {

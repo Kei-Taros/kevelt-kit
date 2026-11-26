@@ -13,6 +13,7 @@ import { battleMist } from '$lib/ketria/components/atoms/StageMist/StageMist.css
 import { immediateBackground } from '$lib/ketria/components/atoms/BattleMessage/BattleMessage.css';
 import * as animationStyles from './battleAnimation.css';
 import * as healthBarStyles from '$lib/ketria/components/atoms/HealthBar/HealthBar.css';
+import { media } from '$lib/styles/breakpoints';
 
 const navigationContext = vi.hoisted(() => ({
   type: 'enter',
@@ -142,7 +143,7 @@ describe('aBreakPage', () => {
     }
   );
 
-  test('敵がプレイヤーのHPを0にした場合、画面が0.5秒揺れてからLOSEを表示する', async () => {
+  test('敵がプレイヤーのHPを0にした場合、画面が1秒揺れてからLOSEを表示する', async () => {
     const first = await renderBattlePage();
     const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
     first.unmount();
@@ -164,11 +165,43 @@ describe('aBreakPage', () => {
     expect(flash()).toBeInTheDocument();
     expect(screen.queryByText('LOSE', { selector: 'p span' })).not.toBeInTheDocument();
 
-    await vi.advanceTimersByTimeAsync(500);
+    await vi.advanceTimersByTimeAsync(999);
+    expect(content).toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1);
     expect(flash()).not.toBeInTheDocument();
     expect(content).not.toHaveClass(styles.victoryShake);
-    await vi.advanceTimersByTimeAsync(1200);
+    await vi.advanceTimersByTimeAsync(700);
     expect(screen.getByText('LOSE', { selector: 'p span' })).toBeInTheDocument();
+  });
+
+  test('SPで敵のHPを0にした場合、白フラッシュを表示し画面を1秒揺らす', async () => {
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.enemy.hp = 10;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+    const readMedia = window.matchMedia.bind(window);
+    const matchMedia = vi
+      .spyOn(window, 'matchMedia')
+      .mockImplementation((query) =>
+        query === media.sp ? { ...readMedia(query), matches: true } : readMedia(query)
+      );
+    try {
+      const { container } = render(Page);
+      await finishEntrance();
+      await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+      const content = container.querySelector(`.${styles.screenContent}`);
+      await vi.advanceTimersByTimeAsync(4600);
+      expect(container.querySelector(`.${styles.matchResultFlash}`)).toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(999);
+      expect(content).toHaveClass(styles.victoryShake);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(content).not.toHaveClass(styles.victoryShake);
+    } finally {
+      matchMedia.mockRestore();
+    }
   });
 
   test('両者のHPが同時に0になった場合、DRAWとREMATCHを表示し同じステージを最初から再開する', async () => {
@@ -229,7 +262,7 @@ describe('aBreakPage', () => {
     { stage: '02', next: '03' },
     { stage: '03', next: '04' }
   ] as const)(
-    'ステージ$stage勝利後にNEXT STAGEを押した場合、$nextの背景と敵で対戦を開始する',
+    'ステージ$stage勝利後にNEXT STAGEを押した場合、1秒の暗転と1秒の黒画面を挟んでステージ$nextを開始する',
     async ({ stage, next }) => {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
       const first = render(Page);
@@ -250,7 +283,19 @@ describe('aBreakPage', () => {
       await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
       await beginNextTurn();
       await fireEvent.click(screen.getByRole('button', { name: 'NEXT STAGE' }));
-      await finishEntrance();
+      const blackout = container.querySelector(`.${styles.screenBlackout}`);
+      expect(blackout).toHaveClass(styles.screenBlackoutDarkening);
+      await vi.advanceTimersByTimeAsync(999);
+      expect(JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!).selectedStage).toBe(stage);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!).selectedStage).toBe(next);
+      expect(blackout).not.toHaveClass(styles.screenBlackoutDarkening);
+      await vi.advanceTimersByTimeAsync(999);
+      expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(blackout).toHaveClass(styles.screenBlackoutOpening);
+      await vi.advanceTimersByTimeAsync(700);
+      expect(blackout).not.toBeInTheDocument();
       expect(
         container.querySelector(`img[src="/images/ketria/backgrounds/background-${next}.png"]`)
       ).toBeInTheDocument();
@@ -376,7 +421,7 @@ describe('aBreakPage', () => {
     expect(screen.getByText('0 / 150')).toBeInTheDocument();
     expect([...container.querySelectorAll(`.${healthBarStyles.value}`)]).toHaveLength(2);
     for (const bar of container.querySelectorAll(`.${healthBarStyles.value}`)) {
-      expect(bar).toHaveStyle({ width: '0%' });
+      expect(bar).toHaveStyle('--health-fill-ratio: 0');
     }
     const blackout = container.querySelector(`.${styles.screenBlackout}`);
     expect(blackout).toBeInTheDocument();
@@ -394,7 +439,7 @@ describe('aBreakPage', () => {
     expect(screen.getByText('200 / 200')).toBeInTheDocument();
     expect(screen.getByText('150 / 150')).toBeInTheDocument();
     for (const bar of container.querySelectorAll(`.${healthBarStyles.value}`)) {
-      expect(bar).toHaveStyle({ width: '100%' });
+      expect(bar).toHaveStyle('--health-fill-ratio: 1');
     }
   });
 
@@ -844,6 +889,21 @@ describe('aBreakPage', () => {
     expect(screen.getByRole('complementary', { name: 'Battle Log' })).not.toHaveTextContent('WIN');
   });
 
+  test('衝突時に火花のWebPの読み込みに失敗した場合、SVGへ切り替える', async () => {
+    const { container } = await renderBattlePage();
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await vi.advanceTimersByTimeAsync(1300);
+
+    const sparks = container.querySelector<HTMLImageElement>(`.${animationStyles.previewSparks}`)!;
+    expect(sparks.previousElementSibling).toHaveAttribute(
+      'srcset',
+      '/images/ketria/effects/sparks.webp'
+    );
+    await fireEvent.error(sparks);
+    expect(sparks.previousElementSibling).toBeNull();
+    expect(sparks).toHaveAttribute('src', '/images/ketria/effects/sparks.svg');
+  });
+
   test('バトル演出中の場合、属性ボタンとレベルを無効化しテキスト再表示後に再度有効化する', async () => {
     await renderBattlePage();
     const optionGroup = screen.getByRole('group', { name: 'Element selection' });
@@ -902,17 +962,17 @@ describe('aBreakPage', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
     const enemyBar = container.querySelectorAll<HTMLElement>(`.${healthBarStyles.value}`)[1];
     const log = screen.getByRole('complementary', { name: 'Battle Log' });
-    expect(enemyBar.style.width).toBe('100%');
+    expect(enemyBar.style.getPropertyValue('--health-fill-ratio')).toBe('1');
     expect(within(log).queryByRole('listitem')).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(4599);
     await tick();
-    expect(enemyBar.style.width).toBe('100%');
+    expect(enemyBar.style.getPropertyValue('--health-fill-ratio')).toBe('1');
     expect(within(log).queryByRole('listitem')).not.toBeInTheDocument();
 
     vi.advanceTimersByTime(1);
     await tick();
-    expect(enemyBar.style.width).not.toBe('100%');
+    expect(enemyBar.style.getPropertyValue('--health-fill-ratio')).not.toBe('1');
     expect(within(log).getAllByRole('listitem')).toHaveLength(1);
     expect(screen.queryByText(fireMessage)).not.toBeInTheDocument();
   });
@@ -1229,10 +1289,12 @@ describe('aBreakPage', () => {
     expect(flash()).toBeInTheDocument();
     expect(screen.queryByText('WIN', { selector: 'p span' })).not.toBeInTheDocument();
 
-    await vi.advanceTimersByTimeAsync(500);
+    await vi.advanceTimersByTimeAsync(999);
+    expect(content).toHaveClass(styles.victoryShake);
+    await vi.advanceTimersByTimeAsync(1);
     expect(flash()).not.toBeInTheDocument();
     expect(content).not.toHaveClass(styles.victoryShake);
-    await vi.advanceTimersByTimeAsync(1200);
+    await vi.advanceTimersByTimeAsync(700);
     expect(screen.getByText('WIN', { selector: 'p span' })).toBeInTheDocument();
     expect(content).not.toHaveClass(styles.victoryShake);
     const rows = within(log).getAllByRole('listitem');

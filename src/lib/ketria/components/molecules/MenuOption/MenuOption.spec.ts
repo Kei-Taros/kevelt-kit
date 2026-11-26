@@ -40,4 +40,24 @@ describe('MenuOption', () => {
 
     expect(onhighlight).toHaveBeenCalledTimes(2);
   });
+
+  test('SPでボタンにポインターを乗せた場合、ホバー表示を無効化してクリックを受け付ける', async () => {
+    const matchMedia = vi
+      .spyOn(window, 'matchMedia')
+      .mockReturnValue({ ...window.matchMedia('(max-width: 767px)'), matches: true });
+    try {
+      const onhighlight = vi.fn();
+      const onclick = vi.fn();
+      render(MenuOption, { props: { label: 'STAGE 01', onhighlight, onclick } });
+      const button = screen.getByRole('button', { name: 'STAGE 01' });
+
+      await fireEvent.pointerEnter(button);
+      await fireEvent.click(button);
+
+      expect(onhighlight).not.toHaveBeenCalled();
+      expect(onclick).toHaveBeenCalledOnce();
+    } finally {
+      matchMedia.mockRestore();
+    }
+  });
 });

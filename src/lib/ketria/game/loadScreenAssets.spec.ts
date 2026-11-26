@@ -61,9 +61,30 @@ describe('loadScreenAssets', () => {
         '/images/ketria/element-ring/mist-ring.webp',
         '/images/ketria/effects/mist-effect.webp',
         '/images/ketria/effects/stone-effect.webp',
-        '/images/ketria/effects/sparks.svg'
+        '/images/ketria/effects/sparks.webp'
       ])
     );
+    expect(sources).not.toContain('/images/ketria/effects/sparks.svg');
+  });
+
+  test('火花のWebPの先読みに失敗した場合、SVGを読み込む', async () => {
+    const sources: string[] = [];
+    vi.stubGlobal(
+      'Image',
+      class {
+        src = '';
+        async decode() {
+          if (!this.src.includes('/sparks.')) return;
+          sources.push(this.src);
+          if (this.src.endsWith('.webp')) throw new Error('Failed');
+        }
+      }
+    );
+    await loadScreenAssets(document.createElement('div'), true);
+    expect(sources).toEqual([
+      '/images/ketria/effects/sparks.webp',
+      '/images/ketria/effects/sparks.svg'
+    ]);
   });
 
   test.each([

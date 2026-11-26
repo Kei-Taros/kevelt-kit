@@ -11,6 +11,7 @@
 
   let { onstart, oncontinue }: Props = $props();
   let activeMenu = $state<'start' | 'continue'>('start');
+  let endTouchPressed = $state(false);
 </script>
 
 <div
@@ -44,6 +45,17 @@
       onclick={oncontinue}
       onhighlight={() => (activeMenu = 'continue')}
     />
-    <a class={styles.titleEnd} href={resolve('/')}>END</a>
+    <a
+      class={styles.titleEnd}
+      href={resolve('/')}
+      data-touch-pressed={endTouchPressed ? '' : undefined}
+      onpointerdown={(event) => {
+        if (event.pointerType === 'touch') endTouchPressed = true;
+      }}
+      onpointerup={() => (endTouchPressed = false)}
+      onpointercancel={() => (endTouchPressed = false)}
+      onlostpointercapture={() => (endTouchPressed = false)}
+      >END</a
+    >
   </nav>
 </div>

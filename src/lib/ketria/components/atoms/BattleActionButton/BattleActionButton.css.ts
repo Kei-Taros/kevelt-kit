@@ -1,4 +1,6 @@
 import { createVar, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 
 const borderColor = createVar();
 const symbolColor = createVar();
@@ -37,16 +39,30 @@ export const button = style({
       boxShadow: `0 0 8px rgba(${glowColor}, 0.7)`,
       transition: 'background 400ms ease, box-shadow 400ms ease'
     },
-    '&:hover::after': {
-      background: 'linear-gradient(90deg, transparent, #ffe0ad, transparent)',
-      boxShadow: '0 0 10px #ffb061'
-    },
-    '&:hover': {
-      color: '#fff4de',
-      borderColor: '#ffb061',
-      boxShadow: '0 0 0 1px #061622aa, 0 0 22px #ffb06155, inset 0 0 16px #ffb06112'
-    },
+
     '&:focus-visible': { outline: '2px solid #c5f3ff', outlineOffset: 5 }
+  },
+  '@media': {
+    [media.sp]: {
+      minWidth: mobileBattleLayout.battleAction.minWidth,
+      height: mobileBattleLayout.battleAction.height,
+      fontSize: mobileBattleLayout.battleAction.fontSize,
+      gap: mobileBattleLayout.battleAction.gap,
+      paddingInline: mobileBattleLayout.battleAction.paddingInline
+    },
+    [media.nonSpHover]: {
+      selectors: {
+        '&:hover::after': {
+          background: 'linear-gradient(90deg, transparent, #ffe0ad, transparent)',
+          boxShadow: '0 0 10px #ffb061'
+        },
+        '&:hover': {
+          color: '#fff4de',
+          borderColor: '#ffb061',
+          boxShadow: '0 0 0 1px #061622aa, 0 0 22px #ffb06155, inset 0 0 16px #ffb06112'
+        }
+      }
+    }
   }
 });
 
@@ -57,10 +73,14 @@ export const diamond = style({
   transform: 'rotate(45deg)',
   boxShadow: `0 0 0 1px #06162299, 0 0 8px rgba(${glowColor}, 0.67)`,
   transition: 'border-color 400ms ease, box-shadow 400ms ease',
-  selectors: {
-    [`${button}:hover &`]: {
-      borderColor: '#ffcf91',
-      boxShadow: '0 0 8px #ffb061aa'
+  '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        [`${button}:hover &`]: {
+          borderColor: '#ffcf91',
+          boxShadow: '0 0 8px #ffb061aa'
+        }
+      }
     }
   }
 });
@@ -71,10 +91,14 @@ export const arrow = style({
   color: symbolColor,
   textShadow: `0 1px 2px #00121f, 0 0 6px rgba(${glowColor}, 0.67)`,
   transition: 'color 400ms ease, text-shadow 400ms ease',
-  selectors: {
-    [`${button}:hover &`]: {
-      color: '#ffcf91',
-      textShadow: '0 1px 2px #241100, 0 0 6px #ffb061aa'
+  '@media': {
+    [media.nonSpHover]: {
+      selectors: {
+        [`${button}:hover &`]: {
+          color: '#ffcf91',
+          textShadow: '0 1px 2px #241100, 0 0 6px #ffb061aa'
+        }
+      }
     }
   }
 });

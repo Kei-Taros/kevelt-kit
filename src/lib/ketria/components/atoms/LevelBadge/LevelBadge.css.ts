@@ -1,4 +1,6 @@
 import { createVar, keyframes, style, styleVariants } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 import { elementColors } from '$lib/ketria/styles/elementColors';
 
 const color = createVar();
@@ -29,7 +31,15 @@ export const badge = style({
   fontVariantNumeric: 'tabular-nums',
   whiteSpace: 'nowrap',
   boxShadow: badgeGlow,
-  textShadow: '0 1px 3px #000, 0 0 6px #fff6'
+  textShadow: '0 1px 3px #000, 0 0 6px #fff6',
+  '@media': {
+    [media.sp]: {
+      width: `var(--battle-landscape-level-badge-width, ${mobileBattleLayout.playerLevel.width})`,
+      borderWidth: mobileBattleLayout.playerLevel.borderWidth,
+      paddingBlockStart: mobileBattleLayout.playerLevel.textOffset,
+      fontSize: mobileBattleLayout.playerLevel.fontSize
+    }
+  }
 });
 
 export const elementVariants = styleVariants({

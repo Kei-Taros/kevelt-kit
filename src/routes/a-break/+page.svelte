@@ -36,7 +36,10 @@
   } from '$lib/ketria/game/stageProgress';
   import { parseBattleSession, SESSION_STORAGE_KEY } from '$lib/ketria/game/battleSession';
   import { BATTLE_MESSAGES } from '$lib/ketria/constants/battleMessages';
+  import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
   import { STAGE_03_LOW_HP, STAGE_04_LOW_HP, STAGE_IDS } from '$lib/ketria/constants/stages';
+
+  const screenShakeDuration = () => mobileBattleLayout.screenShakeDuration;
 
   let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
   let selectedStage = $state<StageId>('01');
@@ -46,17 +49,17 @@
   };
   let clearedStages = $state<StageId[]>([]);
   let sessionLoaded = $state(false);
-  let entrancePhase = $state<'hold' | 'fade' | null>('hold');
+  let entrancePhase = $state<'darken' | 'hold' | 'fade' | null>('hold');
   let entranceTimer: ReturnType<typeof setTimeout> | undefined;
   let entranceRequest = 0;
   let screenContent: HTMLDivElement;
 
-  const beginEntrance = (): void => {
+  const beginEntrance = (minimumHoldMs = 100): void => {
     if (entranceTimer) clearTimeout(entranceTimer);
     const request = ++entranceRequest;
     entrancePhase = 'hold';
     const minimumHold = new Promise<void>((resolve) => {
-      entranceTimer = setTimeout(resolve, 100);
+      entranceTimer = setTimeout(resolve, minimumHoldMs);
     });
     const revealWhenReady = async (): Promise<void> => {
       await tick();
@@ -107,7 +110,8 @@
           battle = createBattleSequence(
             BATTLE_MESSAGES[selectedStage],
             selectedStage,
-            session.battle
+            session.battle,
+            screenShakeDuration
           );
         }
         currentScreen = session.screen;
@@ -135,14 +139,23 @@
     });
   });
 
-  const startStage = (stage: StageId): void => {
+  const startStage = (stage: StageId, minimumHoldMs?: number): void => {
     if (entrancePhase !== null || !stages.includes(stage) || disabledStages.includes(stage)) return;
-    beginEntrance();
+    beginEntrance(minimumHoldMs);
     battle?.destroy();
     selectedStage = stage;
     startingBattle = true;
-    battle = createBattleSequence(BATTLE_MESSAGES[stage], stage);
+    battle = createBattleSequence(BATTLE_MESSAGES[stage], stage, undefined, screenShakeDuration);
     currentScreen = 'battle';
+  };
+
+  const startNextStage = (stage: StageId): void => {
+    if (entrancePhase !== null) return;
+    entrancePhase = 'darken';
+    entranceTimer = setTimeout(() => {
+      entrancePhase = null;
+      startStage(stage, 1000);
+    }, styles.screenDarkeningDuration);
   };
 
   const leaveBattle = (screen: 'title' | 'stages'): void => {
@@ -260,11 +273,15 @@
           <div class={animationStyles.previewMove}>
             <EnemyMove element={battle.previewPlayerMove} />
           </div>
-          <img
-            class={animationStyles.previewSparks}
-            src="/images/ketria/effects/sparks.svg"
-            alt=""
-          />
+          <picture>
+            <source srcset="/images/ketria/effects/sparks.webp" type="image/webp" />
+            <img
+              class={animationStyles.previewSparks}
+              src="/images/ketria/effects/sparks.svg"
+              alt=""
+              onerror={(event) => event.currentTarget.previousElementSibling?.remove()}
+            />
+          </picture>
           <div class={animationStyles.previewMove}>
             <EnemyMove element={battle.revealedEnemyMove} />
           </div>
@@ -286,7 +303,7 @@
               <span class={styles.battleAction}>
                 <BattleActionButton
                   label="NEXT STAGE"
-                  onclick={() => nextStage && startStage(nextStage)}
+                  onclick={() => nextStage && startNextStage(nextStage)}
                 />
               </span>
             {:else if battle.messageReady && battle.player.hp === 0}
@@ -342,12 +359,15 @@
         <EnemyLevels
           levels={battle.visibleEnemyLevels}
           sealedElement={battle.visibleEnemySealedElement}
-        />
-        {#if battle.enemyStoneEffectActive}
-          <div class={styles.enemyStoneEffectBadge} out:fade={{ duration: 500 }}>
-            <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
-          </div>
-        {/if}
+        >
+          {#snippet stoneBadge()}
+            {#if battle?.enemyStoneEffectActive}
+              <div class={styles.enemyStoneEffectBadge} out:fade={{ duration: 500 }}>
+                <div class={styles.stoneEffectBadgeAppear}><StoneEffectBadge /></div>
+              </div>
+            {/if}
+          {/snippet}
+        </EnemyLevels>
       </div>
 
       <div class={styles.attributes}>
@@ -364,7 +384,11 @@
 
 {#if entrancePhase !== null}
   <div
-    class={`${styles.screenBlackout} ${entrancePhase === 'fade' ? styles.screenBlackoutOpening : ''}`}
+    class={[
+      styles.screenBlackout,
+      entrancePhase === 'darken' && styles.screenBlackoutDarkening,
+      entrancePhase === 'fade' && styles.screenBlackoutOpening
+    ]}
     aria-hidden="true"
   ></div>
 {/if}

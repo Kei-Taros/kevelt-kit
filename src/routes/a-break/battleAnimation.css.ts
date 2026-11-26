@@ -1,5 +1,10 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
 import { container, ring } from '$lib/ketria/components/molecules/EnemyMove/EnemyMove.css';
+import { media } from '$lib/styles/breakpoints';
+
+const previewWidth = 'var(--battle-preview-width, min(36cqw, 42dvh))';
+const previewOverlap = 'var(--battle-preview-overlap, 70px)';
 
 const moveVibration = keyframes({
   '0%, 100%': { transform: 'translate(0, 0)' },
@@ -49,17 +54,23 @@ const moveEnterRight = keyframes({
 });
 
 export const previewMove = style({
-  width: 'min(36cqw, 42dvh)',
+  width: previewWidth,
   aspectRatio: '1',
   flexShrink: 0,
   animation: `${moveEnterLeft} 800ms ease-out both`,
   selectors: {
     '&:last-child': {
-      marginLeft: '-70px',
+      marginLeft: `calc(-1 * ${previewOverlap})`,
       animation: `${moveEnterRight} 800ms ease-out both`
     }
   },
   '@media': {
+    [media.sp]: {
+      vars: {
+        '--battle-preview-width': mobileBattleLayout.movePreview.buttonWidth,
+        '--battle-preview-overlap': mobileBattleLayout.movePreview.overlap
+      }
+    },
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
 });
@@ -78,7 +89,7 @@ export const movePreviewFadeOut = style({
 });
 
 const playerWinMove = keyframes({
-  to: { transform: 'translateX(calc((min(36cqw, 42dvh) - 70px) / 2)) scale(1.3)' }
+  to: { transform: `translateX(calc((${previewWidth} - ${previewOverlap}) / 2)) scale(1.3)` }
 });
 
 const enemyLoseMove = keyframes({
@@ -86,7 +97,7 @@ const enemyLoseMove = keyframes({
 });
 
 const enemyWinMove = keyframes({
-  to: { transform: 'translateX(calc((70px - min(36cqw, 42dvh)) / 2)) scale(1.3)' }
+  to: { transform: `translateX(calc((${previewOverlap} - ${previewWidth}) / 2)) scale(1.3)` }
 });
 
 const playerLoseMove = keyframes({
@@ -180,6 +191,7 @@ export const previewSparks = style({
   pointerEvents: 'none',
   animation: `${sparksAppear} 200ms ease-out 300ms both`,
   '@media': {
+    [media.sp]: { width: mobileBattleLayout.movePreview.sparksWidth },
     '(prefers-reduced-motion: reduce)': { animation: 'none' }
   }
 });

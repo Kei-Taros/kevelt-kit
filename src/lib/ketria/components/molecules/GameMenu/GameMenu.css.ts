@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { media } from '$lib/styles/breakpoints';
 
 export const root = style({
   position: 'absolute',
@@ -35,9 +36,9 @@ export const option = style({
   textAlign: 'center',
   cursor: 'pointer',
   selectors: {
-    '&:hover': { background: '#28313a' },
     '&:focus-visible': { outline: '2px solid #e6f5ff', outlineOffset: -2 }
-  }
+  },
+  '@media': { [media.nonSpHover]: { selectors: { '&:hover': { background: '#28313a' } } } }
 });
 
 export const backdrop = style({

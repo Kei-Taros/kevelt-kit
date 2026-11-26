@@ -21,6 +21,7 @@
     onhighlight,
     onback
   }: Props = $props();
+  let backTouchPressed = $state(false);
 </script>
 
 <div
@@ -43,5 +44,18 @@
       />
     {/each}
   </div>
-  <button type="button" class={styles.stageBack} onclick={onback}>BACK</button>
+  <button
+    type="button"
+    class={styles.stageBack}
+    onclick={onback}
+    data-touch-pressed={backTouchPressed ? '' : undefined}
+    onpointerdown={(event) => {
+      if (event.pointerType === 'touch') backTouchPressed = true;
+    }}
+    onpointerup={() => (backTouchPressed = false)}
+    onpointercancel={() => (backTouchPressed = false)}
+    onlostpointercapture={() => (backTouchPressed = false)}
+  >
+    BACK
+  </button>
 </div>

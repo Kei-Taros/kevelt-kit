@@ -1,4 +1,6 @@
 import { createVar, fallbackVar, keyframes, style } from '@vanilla-extract/css';
+import { mobileBattleLayout } from '$lib/ketria/styles/spBattleLayout';
+import { media } from '$lib/styles/breakpoints';
 
 const backgroundReveal = { delay: 1000, duration: 900 } as const;
 
@@ -79,6 +81,11 @@ export const message = style({
     }
   },
   '@media': {
+    [media.sp]: {
+      height: mobileBattleLayout.message.height,
+      fontSize: mobileBattleLayout.message.fontSize,
+      letterSpacing: mobileBattleLayout.message.letterSpacing
+    },
     '(prefers-reduced-motion: reduce)': {
       selectors: {
         '&::before': { animation: 'none' },

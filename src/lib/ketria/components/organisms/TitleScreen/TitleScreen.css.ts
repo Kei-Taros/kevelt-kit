@@ -1,5 +1,11 @@
-import { menuBack } from '$lib/ketria/styles/menuBack.css';
-import { style } from '@vanilla-extract/css';
+import {
+  button as menuOption,
+  primary,
+  touchPressFeedback
+} from '$lib/ketria/components/molecules/MenuOption/MenuOption.css';
+import { menuBack, menuBackTouchFeedback } from '$lib/ketria/styles/menuBack.css';
+import { media } from '$lib/styles/breakpoints';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 export const titleBrand = style({
   position: 'absolute',
@@ -41,7 +47,7 @@ export const titleWordmark = style({
   opacity: 0.97
 });
 
-export const titleMenu = style({
+const titleMenuLayout = style({
   position: 'absolute',
   zIndex: 2,
   top: '65%',
@@ -54,6 +60,20 @@ export const titleMenu = style({
   gap: 'clamp(8px, 1.1dvh, 14px)'
 });
 
+export const titleMenu = style([titleMenuLayout, touchPressFeedback]);
+
+globalStyle(`.${titleMenuLayout} .${menuOption}:not(.${primary})`, {
+  '@media': {
+    [media.sp]: {
+      whiteSpace: 'nowrap',
+      gap: '12px',
+      fontSize: 'clamp(15px, 2.8dvh, 20px)',
+      letterSpacing: '0.25em',
+      paddingLeft: '0.25em'
+    }
+  }
+});
+
 export const titleScreen = style({
   position: 'absolute',
   inset: 0,
@@ -62,5 +82,10 @@ export const titleScreen = style({
 
 export const titleEnd = style([
   menuBack,
-  { marginTop: '2dvh', display: 'block', textDecoration: 'none' }
+  menuBackTouchFeedback,
+  {
+    marginTop: '2dvh',
+    display: 'block',
+    textDecoration: 'none'
+  }
 ]);
