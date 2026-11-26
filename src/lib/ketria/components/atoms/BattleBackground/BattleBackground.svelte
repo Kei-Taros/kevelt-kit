@@ -3,7 +3,7 @@
   import * as styles from './BattleBackground.css';
 
   interface Props {
-    background: StageId | '04-phase2';
+    background: StageId | '04-phase2' | 'end';
   }
 
   let { background }: Props = $props();

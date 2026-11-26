@@ -308,6 +308,45 @@ describe('aBreakPage', () => {
     }
   );
 
+  test('ステージ04の勝利後にENDを押した場合、エンディング背景を表示しTITLEでタイトルへ戻れる', async () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
+    const first = await renderBattlePage();
+    const session = JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)!);
+    first.unmount();
+    session.battle.enemy.hp = 10;
+    session.battle.nextEnemyMove = 'fire';
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    navigationContext.documentType = 'reload';
+    const { container } = render(Page);
+    await finishEntrance();
+    expect(screen.queryByRole('button', { name: 'END' })).not.toBeInTheDocument();
+
+    await fireEvent.click(screen.getByRole('button', { name: 'STONE' }));
+    await beginNextTurn();
+
+    const win = screen.getByText('WIN', { selector: 'p span' });
+    await fireEvent.click(within(win.closest('p')!).getByRole('button', { name: 'END' }));
+    const blackout = container.querySelector(`.${styles.screenBlackout}`);
+    expect(blackout).toBeInTheDocument();
+    expect(blackout).not.toHaveClass(styles.screenBlackoutOpening);
+    await finishEntrance();
+    expect(blackout).not.toBeInTheDocument();
+    expect(
+      container.querySelector('source[srcset="/images/ketria/backgrounds/background-end.webp"]')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('img[src="/images/ketria/backgrounds/background-end.png"]')
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'END' })).not.toBeInTheDocument();
+    expect(screen.queryByText('Thank you for playing!')).not.toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(3500);
+    expect(screen.getByRole('heading', { name: 'KETRIA' })).toBeInTheDocument();
+    expect(screen.getByText('Thank you for playing!')).toBeInTheDocument();
+    await fireEvent.click(screen.getByRole('button', { name: 'TITLE' }));
+    await finishEntrance();
+    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument();
+  });
+
   test.each([
     { cleared: [], stage: '01' },
     { cleared: ['01'], stage: '02' },

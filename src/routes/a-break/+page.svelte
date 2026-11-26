@@ -19,6 +19,7 @@
   import {
     BattleLog,
     ElementSelector,
+    EndingScreen,
     TitleScreen,
     StageSelect
   } from '$lib/ketria/components/organisms';
@@ -41,7 +42,7 @@
 
   const screenShakeDuration = () => mobileBattleLayout.screenShakeDuration;
 
-  let currentScreen = $state<'title' | 'stages' | 'battle'>('title');
+  let currentScreen = $state<'title' | 'stages' | 'battle' | 'ending'>('title');
   let selectedStage = $state<StageId>('01');
   let titleBackground = $state<StageId>('01');
   const randomizeTitleBackground = (): void => {
@@ -158,8 +159,8 @@
     }, styles.screenDarkeningDuration);
   };
 
-  const leaveBattle = (screen: 'title' | 'stages'): void => {
-    randomizeTitleBackground();
+  const leaveBattle = (screen: 'title' | 'stages' | 'ending'): void => {
+    if (screen !== 'ending') randomizeTitleBackground();
     beginEntrance();
     battle?.destroy();
     battle = null;
@@ -183,7 +184,7 @@
     if (!sessionLoaded) return;
     const session = {
       version: 1,
-      screen: currentScreen,
+      screen: currentScreen === 'ending' ? 'title' : currentScreen,
       selectedStage,
       battle: currentScreen === 'battle' ? battle?.snapshot : undefined
     };
@@ -212,14 +213,18 @@
     bind:this={screenContent}
     class={`${styles.screenContent} ${entrancePhase === 'hold' ? styles.screenContentHidden : entrancePhase === 'fade' ? styles.screenContentReveal : ''} ${battle?.screenShakeActive ? styles.victoryShake : ''}`}
   >
-    <BattleBackground
-      background={currentScreen === 'battle'
-        ? battle?.lowHealthForm
-          ? '04-phase2'
-          : selectedStage
-        : titleBackground}
-    />
-    {#if sessionLoaded && currentScreen !== 'battle'}
+    {#if currentScreen === 'ending'}
+      <EndingScreen ready={entrancePhase === null} ontitle={() => leaveBattle('title')} />
+    {:else}
+      <BattleBackground
+        background={currentScreen === 'battle'
+          ? battle?.lowHealthForm
+            ? '04-phase2'
+            : selectedStage
+          : titleBackground}
+      />
+    {/if}
+    {#if sessionLoaded && (currentScreen === 'title' || currentScreen === 'stages')}
       <div class={styles.titleShade} aria-hidden="true"></div>
       <StageMist variant="title" />
       {#if currentScreen === 'stages'}
@@ -299,12 +304,16 @@
             duration={battle.messageTextDuration}
             delay={battle.battleLogs.length > 0 ? 1000 : 1900}
           >
-            {#if battle.messageReady && battle.enemy.hp === 0 && battle.player.hp > 0 && nextStage}
+            {#if battle.messageReady && battle.enemy.hp === 0 && battle.player.hp > 0}
               <span class={styles.battleAction}>
-                <BattleActionButton
-                  label="NEXT STAGE"
-                  onclick={() => nextStage && startNextStage(nextStage)}
-                />
+                {#if nextStage}
+                  <BattleActionButton
+                    label="NEXT STAGE"
+                    onclick={() => nextStage && startNextStage(nextStage)}
+                  />
+                {:else}
+                  <BattleActionButton label="END" onclick={() => leaveBattle('ending')} />
+                {/if}
               </span>
             {:else if battle.messageReady && battle.player.hp === 0}
               <span class={styles.battleAction}>
