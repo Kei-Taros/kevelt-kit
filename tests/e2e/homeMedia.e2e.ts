@@ -9,28 +9,36 @@ const observePlayback = async (page: Page, hold = false, holdCover = false) => {
   await page.addInitScript(
     ({ hold, holdCover }) => {
       const play = HTMLMediaElement.prototype.play;
-      HTMLMediaElement.prototype.play = function () {
-        if (!this.querySelector('source[src*="hero-video"]')) return play.call(this);
-        this.setAttribute('data-test-play-start', String(this.currentTime));
-        if (!hold) return play.call(this);
-        return new Promise<void>((resolve, reject) => {
-          this.addEventListener('test-release-play', () => play.call(this).then(resolve, reject), {
-            once: true
+      HTMLMediaElement.prototype.play = new Proxy(play, {
+        apply: (_target, media: HTMLMediaElement) => {
+          if (!media.querySelector('source[src*="hero-video"]')) return play.call(media);
+          media.setAttribute('data-test-play-start', String(media.currentTime));
+          if (!hold) return play.call(media);
+          return new Promise<void>((resolve, reject) => {
+            media.addEventListener(
+              'test-release-play',
+              () => play.call(media).then(resolve, reject),
+              {
+                once: true
+              }
+            );
           });
-        });
-      };
+        }
+      });
       if (holdCover) {
         const decode = HTMLImageElement.prototype.decode;
         const released = new Promise<void>((resolve) => {
           window.addEventListener('test-release-cover', () => resolve(), { once: true });
         });
-        HTMLImageElement.prototype.decode = async function () {
-          if (this.alt === 'hero-cover') {
-            this.setAttribute('data-test-decode-started', 'true');
-            await released;
+        HTMLImageElement.prototype.decode = new Proxy(decode, {
+          apply: async (_target, image: HTMLImageElement) => {
+            if (image.alt === 'hero-cover') {
+              image.setAttribute('data-test-decode-started', 'true');
+              await released;
+            }
+            return decode.call(image);
           }
-          return decode.call(this);
-        };
+        });
       }
     },
     { hold, holdCover }
@@ -39,7 +47,7 @@ const observePlayback = async (page: Page, hold = false, holdCover = false) => {
 
 const returnHome = async (page: Page) => {
   await page.goto('/privacy-policy');
-  await page.waitForFunction(() => history.state?.['sveltekit:navigation'] !== undefined);
+  await page.waitForFunction(() => history.state?.['sveltekit:metadata'] !== undefined);
   await expect(page.locator('header')).toHaveCSS('opacity', '1');
   await page.locator('footer a[href="/"]').click();
   await expect(page).toHaveURL(/\/$/);

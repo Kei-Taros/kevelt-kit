@@ -54,9 +54,9 @@
         <p>{text}</p>
       {/each}
       <p>
-        {constants.PROFILE_CONCEPT_TEXT.before}<a href={resolve('/concept')}
-          >{constants.PROFILE_CONCEPT_TEXT.linkLabel}</a
-        >{constants.PROFILE_CONCEPT_TEXT.after}
+        {constants.PROFILE_CONCEPT_TEXT.before}<a href={resolve('/concept')}>
+          {constants.PROFILE_CONCEPT_TEXT.linkLabel}
+        </a>{constants.PROFILE_CONCEPT_TEXT.after}
       </p>
     </div>
   </div>

@@ -58,18 +58,27 @@ export const summary = style({
 });
 
 export const descriptionBox = style({
+  position: 'relative',
   width: '100%',
-  margin: '24px auto 24px',
-  padding: '18px 20px',
+  margin: '16px auto 24px',
+  padding: '20px 24px',
   borderRadius: '12px',
   border: '1px solid rgba(255, 255, 255, 0.1)',
   background: 'rgba(255, 255, 255, 0.05)',
-  borderLeft: `4px solid ${colors.brand[600]}`,
   boxSizing: 'border-box',
+  '::before': {
+    content: '""',
+    position: 'absolute',
+    top: '-1px',
+    insetInlineStart: '24px',
+    width: '32px',
+    height: '2px',
+    backgroundColor: colors.brand[600]
+  },
   '@media': {
     [media.sp]: {
-      margin: '18px auto',
-      padding: '14px 16px'
+      margin: '14px auto 18px',
+      padding: '16px'
     }
   }
 });

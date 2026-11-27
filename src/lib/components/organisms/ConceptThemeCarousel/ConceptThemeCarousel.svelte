@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
   import EmblaCarousel from 'embla-carousel';
   import type { EmblaCarouselType } from 'embla-carousel';
   import AutoScroll from 'embla-carousel-auto-scroll';
@@ -18,7 +17,7 @@
   let embla: EmblaCarouselType | null = null;
 
   onMount(() => {
-    if (!browser || !viewportEl || items.length === 0) return;
+    if (!viewportEl || items.length === 0) return;
 
     embla = EmblaCarousel(
       viewportEl,

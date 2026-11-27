@@ -20,8 +20,8 @@ export const PRIVACY_POLICY_LIST: PrivacyPolicyData[] = [
   {
     title: 'ストレージの利用について',
     descriptions: [
-      '当サイトでは、表示演出や利便性向上のため、ブラウザのセッションストレージを利用する場合があります。',
-      '保存される情報には個人情報は含まれません。'
+      '当サイトでは、表示演出や利便性向上のため、ブラウザのセッションストレージおよびローカルストレージを利用します。',
+      'これらのストレージに保存する情報に、個人情報は含まれません。'
     ]
   },
   {
@@ -51,6 +51,6 @@ export const PRIVACY_POLICY_DATE = {
   },
   updated: {
     label: '最終改定日',
-    value: '2026年7月01日'
+    value: '2026年12月01日'
   }
 } as const;

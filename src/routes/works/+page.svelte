@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { pushState, replaceState } from '$app/navigation';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { Heading } from '$lib/components/atoms';
   import { WorkCardGrid, WorkModal } from '$lib/components/organisms';
   import type { WorkCardItem } from '$lib/components/molecules';
@@ -10,18 +11,26 @@
 
   const selectedWorkId = $derived(page.state.selectedWorkId ?? null);
   const isOpen = $derived(selectedWorkId !== null);
+  const modalUrl = $derived(
+    page.url.search
+      ? resolve(`/works?${page.url.search.slice(1)}${page.url.hash}`)
+      : page.url.hash
+        ? resolve(`/works#${page.url.hash.slice(1)}`)
+        : resolve('/works')
+  );
 
   const handleCardClick = (item: WorkCardItem) => {
-    pushState('', {
-      ...page.state,
-      selectedWorkId: item.id
+    goto(modalUrl, {
+      shallow: true,
+      state: { ...page.state, selectedWorkId: item.id }
     });
   };
 
   const closeModal = () => {
-    replaceState('', {
-      ...page.state,
-      selectedWorkId: undefined
+    goto(modalUrl, {
+      shallow: true,
+      replace: true,
+      state: { ...page.state, selectedWorkId: undefined }
     });
   };
 

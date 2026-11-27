@@ -1,0 +1,62 @@
+<script lang="ts">
+  import { resolve } from '$app/paths';
+  import { fade } from 'svelte/transition';
+  import { MenuOption } from '$lib/ketria/components/molecules';
+  import * as styles from './TitleScreen.css';
+
+  interface Props {
+    onstart?: () => void;
+    oncontinue?: () => void;
+  }
+
+  let { onstart, oncontinue }: Props = $props();
+  let activeMenu = $state<'start' | 'continue'>('start');
+  let endTouchPressed = $state(false);
+</script>
+
+<div
+  class={styles.titleScreen}
+  in:fade={{ duration: 450, delay: 250 }}
+  out:fade={{ duration: 250 }}
+>
+  <div class={styles.titleBrand}>
+    <div class={styles.titleSymbol}>
+      <img class={styles.titleSymbolImage} src="/images/ketria/logo/logo-ketria.svg" alt="" />
+    </div>
+    <h1 class={styles.titleHeading}>
+      <img
+        class={styles.titleWordmark}
+        src="/images/ketria/logo/logo-text-ketria.svg"
+        alt="KETRIA"
+      />
+    </h1>
+  </div>
+  <nav class={styles.titleMenu} aria-label="Main menu">
+    <MenuOption
+      label="START"
+      variant="primary"
+      active={activeMenu === 'start'}
+      onclick={onstart}
+      onhighlight={() => (activeMenu = 'start')}
+    />
+    <MenuOption
+      label="STAGE SELECT"
+      active={activeMenu === 'continue'}
+      onclick={oncontinue}
+      onhighlight={() => (activeMenu = 'continue')}
+    />
+    <a
+      class={styles.titleEnd}
+      href={resolve('/(home)')}
+      data-touch-pressed={endTouchPressed ? '' : undefined}
+      onpointerdown={(event) => {
+        if (event.pointerType === 'touch') endTouchPressed = true;
+      }}
+      onpointerup={() => (endTouchPressed = false)}
+      onpointercancel={() => (endTouchPressed = false)}
+      onlostpointercapture={() => (endTouchPressed = false)}
+    >
+      END
+    </a>
+  </nav>
+</div>

@@ -8,6 +8,7 @@
 
   const isHome = $derived(page.url.pathname === '/');
   const isConcept = $derived(page.url.pathname === '/concept');
+  const isABreak = $derived(page.url.pathname === '/a-break');
 </script>
 
 <svelte:head>
@@ -18,15 +19,17 @@
 <GridBackground />
 <RouteTransition />
 
-{#if isHome}
-  <Header showOffset={1000} />
-{:else if isConcept}
-  <Header showOffset={100} />
-{:else}
-  <Header />
+{#if !isABreak}
+  {#if isHome}
+    <Header showOffset={1000} />
+  {:else if isConcept}
+    <Header showOffset={100} />
+  {:else}
+    <Header />
+  {/if}
 {/if}
 
-{#if isHome || isConcept}
+{#if isHome || isConcept || isABreak}
   <main>
     {@render children()}
   </main>
@@ -36,4 +39,6 @@
   </main>
 {/if}
 
-<Footer />
+{#if !isABreak}
+  <Footer />
+{/if}

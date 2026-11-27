@@ -15,6 +15,7 @@ export const transitionOverlay = style({
   inset: 0,
   zIndex: 9999,
   pointerEvents: 'auto',
+  touchAction: 'none',
   background: '#000000',
   display: 'flex',
   alignItems: 'center',

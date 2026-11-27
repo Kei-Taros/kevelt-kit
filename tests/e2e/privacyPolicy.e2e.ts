@@ -43,7 +43,7 @@ test.describe('Privacy Policy page', () => {
 
     await expect(
       page.getByText(
-        '当サイトでは、表示演出や利便性向上のため、ブラウザのセッションストレージを利用する場合があります。'
+        '当サイトでは、表示演出や利便性向上のため、ブラウザのセッションストレージおよびローカルストレージを利用します。'
       )
     ).toBeVisible();
 

@@ -1,5 +1,5 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "$app/tsconfig",
   "compilerOptions": {
     "rewriteRelativeImportExtensions": true,
     "allowJs": true,
@@ -11,6 +11,8 @@
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "bundler",
-    "types": ["node", "vite/client"]
-  }
+    "types": ["$app/types", "node", "vite/client"],
+    "paths": { "$lib": ["./src/lib"], "$lib/*": ["./src/lib/*"] }
+  },
+  "include": ["src", "tests", "*"]
 }
