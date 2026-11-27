@@ -10,7 +10,9 @@ describe('HealthStatus', () => {
 
     expect(screen.getByText('50 / 200')).toBeInTheDocument();
     expect(container.firstElementChild).toHaveClass(styles.container);
-    expect(container.querySelector(`.${healthBarStyles.value}`)).toHaveStyle('--health-fill-ratio: 0.25');
+    expect(container.querySelector(`.${healthBarStyles.value}`)).toHaveStyle(
+      '--health-fill-ratio: 0.25'
+    );
     expect(container.querySelector(`.${healthBarStyles.value}`)).toHaveClass(
       healthBarStyles.statusVariants.warning
     );

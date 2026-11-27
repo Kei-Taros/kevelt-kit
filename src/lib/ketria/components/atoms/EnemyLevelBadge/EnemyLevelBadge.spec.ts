@@ -20,7 +20,10 @@ describe('EnemyLevelBadge', () => {
     'element=%sの場合、対応する属性色のクラスが適用される',
     (element) => {
       const { container } = render(EnemyLevelBadge, { props: { element, level: 1 } });
-      expect(container.firstElementChild).toHaveClass(styles.badge, styles.elementVariants[element]);
+      expect(container.firstElementChild).toHaveClass(
+        styles.badge,
+        styles.elementVariants[element]
+      );
     }
   );
 });

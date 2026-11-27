@@ -39,8 +39,9 @@
         class={`${styles.line} ${fading ? styles.lineFadeOut : ''}`}
         style:animation-duration={`${duration}ms`}
         style:animation-delay={`${immediate || fading ? 0 : delay + index * 550}ms`}
-        >{shorten(line)}</span
       >
+        {shorten(line)}
+      </span>
     {/each}
   {/key}
   {#if children}

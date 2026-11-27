@@ -54,12 +54,18 @@ export const loadScreenAssets = async (
   }
   if (stage === '03') {
     pending.push(
-      preload('/images/ketria/enemy/enemy-03-phase2.webp', '/images/ketria/enemy/enemy-03-phase2.png')
+      preload(
+        '/images/ketria/enemy/enemy-03-phase2.webp',
+        '/images/ketria/enemy/enemy-03-phase2.png'
+      )
     );
   }
   if (stage === '04') {
     pending.push(
-      preload('/images/ketria/enemy/enemy-04-phase2.webp', '/images/ketria/enemy/enemy-04-phase2.png'),
+      preload(
+        '/images/ketria/enemy/enemy-04-phase2.webp',
+        '/images/ketria/enemy/enemy-04-phase2.png'
+      ),
       preload(
         '/images/ketria/backgrounds/background-04-phase2.webp',
         '/images/ketria/backgrounds/background-04-phase2.png'

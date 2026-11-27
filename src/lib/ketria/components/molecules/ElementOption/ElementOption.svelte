@@ -25,9 +25,9 @@
   let rippleKey = $state(0);
 
   $effect(() => {
-    previewReset;
-    level;
-    sealed;
+    void previewReset;
+    void level;
+    void sealed;
     previewPinned = false;
   });
 

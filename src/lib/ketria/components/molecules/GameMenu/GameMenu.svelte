@@ -49,8 +49,10 @@
         onclick={() => {
           closeMenu();
           ontitle?.();
-        }}>TITLE</button
+        }}
       >
+        TITLE
+      </button>
     {/if}
     {#if onstageselect}
       <button
@@ -59,9 +61,11 @@
         onclick={() => {
           closeMenu();
           onstageselect?.();
-        }}>STAGES</button
+        }}
       >
+        STAGES
+      </button>
     {/if}
-    <a class={styles.option} href={resolve('/')}>HOME</a>
+    <a class={styles.option} href={resolve('/(home)')}>HOME</a>
   </nav>
 </div>

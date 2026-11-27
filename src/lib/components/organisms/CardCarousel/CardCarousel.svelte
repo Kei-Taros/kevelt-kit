@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
   import EmblaCarousel from 'embla-carousel';
   import type { EmblaCarouselType } from 'embla-carousel';
   import Autoplay from 'embla-carousel-autoplay';
@@ -33,7 +32,7 @@
   const scrollTo = (index: number) => embla?.scrollTo(index);
 
   onMount(() => {
-    if (!browser || !viewportEl) return;
+    if (!viewportEl) return;
 
     embla = EmblaCarousel(
       viewportEl,

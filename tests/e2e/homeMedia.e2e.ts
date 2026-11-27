@@ -47,7 +47,7 @@ const observePlayback = async (page: Page, hold = false, holdCover = false) => {
 
 const returnHome = async (page: Page) => {
   await page.goto('/privacy-policy');
-  await page.waitForFunction(() => history.state?.['sveltekit:navigation'] !== undefined);
+  await page.waitForFunction(() => history.state?.['sveltekit:metadata'] !== undefined);
   await expect(page.locator('header')).toHaveCSS('opacity', '1');
   await page.locator('footer a[href="/"]').click();
   await expect(page).toHaveURL(/\/$/);

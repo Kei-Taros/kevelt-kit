@@ -57,6 +57,7 @@ describe('RouteTransition', () => {
       from: createTarget(fromPath),
       to: createTarget(toPath),
       type: 'goto',
+      shallow: false,
       event: null,
       willUnload: false,
       complete: Promise.resolve()

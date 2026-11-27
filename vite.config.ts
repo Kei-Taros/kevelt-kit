@@ -2,11 +2,18 @@ import devtoolsJson from 'vite-plugin-devtools-json';
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { mdsvex } from 'mdsvex';
+import svelteConfig from './sveltekit.config.js';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [sveltekit(), devtoolsJson(), vanillaExtractPlugin()],
+  plugins: [
+    mdsvex({ extensions: ['.svx'] }),
+    sveltekit(svelteConfig),
+    devtoolsJson(),
+    vanillaExtractPlugin()
+  ],
   test: {
     expect: { requireAssertions: true },
     projects: [

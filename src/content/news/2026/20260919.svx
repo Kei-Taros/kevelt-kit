@@ -6,6 +6,10 @@ tags: ['news', 'game']
 published: true
 ---
 
+<script>
+  import NewsImg from '$lib/components/atoms/NewsImg/NewsImg.svelte';
+</script>
+
 ### ずっと工事中
 
 サイトをリリースする前から薄々感じていたことですが。。。

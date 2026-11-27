@@ -62,6 +62,7 @@ export const createBattleSequence = (
   );
   let ultimatePhase = $state<'fadeIn' | 'hold' | 'fadeOut' | null>(null);
   let pendingTransformation: (() => void) | undefined;
+  // eslint-disable-next-line svelte/prefer-svelte-reactivity -- Tracks pending callbacks without rendering state.
   const pendingHealthUpdates = new Set<'player' | 'enemy'>();
   let nextEnemyMove = snapshot
     ? snapshot.nextEnemyMove
@@ -76,15 +77,16 @@ export const createBattleSequence = (
   let moveWinner = $state<'player' | 'enemy' | 'draw' | null>(null);
   let screenShakeActive = $state(false);
   let winPhase = $state<'clash' | 'resolve' | 'winner' | null>(null);
-  let battleLogs = $state<BattleLogEntry[]>(snapshot?.battleLogs ?? []);
+  const initialBattleLogs = snapshot?.battleLogs ?? [];
+  let battleLogs = $state<BattleLogEntry[]>(initialBattleLogs);
   const initialMessageLines =
     snapshot?.messageLines ??
     selectMessage(nextEnemyMove, {
-      enemyHp: enemy.hp,
+      enemyHp: initialEnemy.hp,
       enemyMaxHp,
       draw: 0,
       opening: snapshot === undefined,
-      turn: battleLogs.length + 1
+      turn: initialBattleLogs.length + 1
     });
   let messageLines = $state<readonly string[]>(initialMessageLines);
   let messageReady = $state(snapshot !== undefined);

@@ -43,7 +43,10 @@ describe('BattleLogRow', () => {
         Array.from(container.querySelectorAll('source[type="image/webp"]')).map((source) =>
           source.getAttribute('srcset')
         )
-      ).toEqual([`/images/ketria/elements/${player}.webp`, `/images/ketria/elements/${enemy}.webp`]);
+      ).toEqual([
+        `/images/ketria/elements/${player}.webp`,
+        `/images/ketria/elements/${enemy}.webp`
+      ]);
     }
   );
 });

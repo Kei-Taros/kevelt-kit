@@ -47,7 +47,7 @@
     />
     <a
       class={styles.titleEnd}
-      href={resolve('/')}
+      href={resolve('/(home)')}
       data-touch-pressed={endTouchPressed ? '' : undefined}
       onpointerdown={(event) => {
         if (event.pointerType === 'touch') endTouchPressed = true;
@@ -55,7 +55,8 @@
       onpointerup={() => (endTouchPressed = false)}
       onpointercancel={() => (endTouchPressed = false)}
       onlostpointercapture={() => (endTouchPressed = false)}
-      >END</a
     >
+      END
+    </a>
   </nav>
 </div>

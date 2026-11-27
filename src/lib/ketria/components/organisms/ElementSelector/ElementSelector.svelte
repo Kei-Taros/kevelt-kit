@@ -17,7 +17,7 @@
 </script>
 
 <div class={styles.selector} role="group" aria-label="Element selection">
-  {#each elements as element}
+  {#each elements as element (element)}
     <ElementOption
       {element}
       level={levels[element]}

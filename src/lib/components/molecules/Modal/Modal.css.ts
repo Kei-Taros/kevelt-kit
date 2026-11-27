@@ -125,7 +125,7 @@ export const closeIcon = style({
   }
 });
 
-// スクロールバ�E
+// スクロールバー
 globalStyle(`${contentInner}::-webkit-scrollbar`, {
   height: '8px',
   width: '8px'

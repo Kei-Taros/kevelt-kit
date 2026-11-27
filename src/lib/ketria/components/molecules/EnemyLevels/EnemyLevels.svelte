@@ -15,7 +15,7 @@
 </script>
 
 <div class={styles.levels} aria-label="Enemy Levels">
-  {#each elements as element}
+  {#each elements as element (element)}
     <div class={styles.level} role="group" aria-label={element.toUpperCase()}>
       <span class={`${styles.icon} ${levels[element] === 0 ? styles.iconUnavailable : ''}`}>
         <ElementIcon {element} />

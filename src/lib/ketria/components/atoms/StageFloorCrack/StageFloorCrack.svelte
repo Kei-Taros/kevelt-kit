@@ -39,6 +39,7 @@
 
     let nextBurst: ReturnType<typeof setTimeout>;
     let nextId = 0;
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity -- Tracks timer handles for cleanup only.
     const cleanupTimers = new Set<ReturnType<typeof setTimeout>>();
 
     const showBurst = () => {

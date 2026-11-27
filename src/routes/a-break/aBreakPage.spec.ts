@@ -667,9 +667,9 @@ describe('aBreakPage', () => {
       const { container } = render(Page);
       await finishEntrance();
 
-      expect(container.querySelector(`.${styles.enemyHealth} .${healthBarStyles.value}`)).toHaveClass(
-        healthBarStyles.statusVariants[status]
-      );
+      expect(
+        container.querySelector(`.${styles.enemyHealth} .${healthBarStyles.value}`)
+      ).toHaveClass(healthBarStyles.statusVariants[status]);
     }
   );
 
@@ -769,7 +769,7 @@ describe('aBreakPage', () => {
     { move: 'STONE', hpUpdate: 4600, hp: 50, initialImage: 'Trinity-ultimate' },
     { move: 'FIRE', hpUpdate: 3300, hp: 50, initialImage: 'Trinity-ultimate' }
   ])(
-    'STAGE 04で$moveを選んでHP$hpになると、白転後に画像05とメッセージを表示する',
+    'STAGE 04で$moveを選んでHPが$hpになった場合、白転後に第2形態の画像とメッセージを表示する',
     async ({ move, hpUpdate, hp, initialImage }) => {
       localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(['01', '02', '03']));
       const first = await renderBattlePage();
@@ -843,7 +843,7 @@ describe('aBreakPage', () => {
       }
       expect(content).not.toHaveClass(styles.victoryShake);
       expect(message()?.querySelector('p')).toHaveClass(immediateBackground);
-      expect(message()?.querySelector('span')).toHaveStyle({ animationDelay: '1000ms' });
+      expect(message()?.querySelector('span')?.style.animationDelay).toBe('1000ms');
       expect(screen.getByRole('button', { name: move })).toBeEnabled();
 
       await vi.advanceTimersByTimeAsync(1000);

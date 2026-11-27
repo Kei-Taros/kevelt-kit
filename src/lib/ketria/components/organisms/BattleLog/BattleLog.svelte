@@ -40,7 +40,7 @@
         </clipPath>
       </defs>
       <g class={styles.borderTraceGroup}>
-        {#each traceOpacities as opacity, index}
+        {#each traceOpacities as opacity, index (index)}
           <rect
             class={styles.borderTraceLine}
             x="1"

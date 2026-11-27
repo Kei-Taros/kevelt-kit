@@ -38,7 +38,11 @@ export const lightburstChestGlow = style({
   opacity: 0.8,
   mixBlendMode: 'screen',
   '::before': { ...lightburstWave, rotate: 'var(--lightburst-angle)' },
-  '::after': { ...lightburstWave, rotate: 'var(--lightburst-offset-angle)', animationDelay: '-0.7s' },
+  '::after': {
+    ...lightburstWave,
+    rotate: 'var(--lightburst-offset-angle)',
+    animationDelay: '-0.7s'
+  },
   '@media': {
     '(prefers-reduced-motion: reduce)': {
       '::before': { display: 'none' },

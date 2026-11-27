@@ -146,11 +146,11 @@ export const BATTLE_MESSAGES = {
     },
     {
       lines: ['エネルギージュウテンカイシ'],
-      moves: ['mist'],
+      moves: ['mist']
     },
     {
       lines: ['エネルギージュウテンカンリョウ'],
-      moves: ['mist'],
+      moves: ['mist']
     },
     {
       lines: ['コウドウパターンヲカイセキ'],
@@ -164,7 +164,7 @@ export const BATTLE_MESSAGES = {
     },
     {
       lines: ['ハカイリョクサイダイ'],
-      moves: ['fire', 'stone', 'mist'],
+      moves: ['fire', 'stone', 'mist']
     },
     {
       lines: ['パターンイッチヲカクニン'],
@@ -197,7 +197,7 @@ export const BATTLE_MESSAGES = {
       when: { enemyHp: 50 }
     },
     {
-      lines: ['カツドウゲンカイマデ','セン​​トウヲケイゾク'],
+      lines: ['カツドウゲンカイマデ', 'セン​​トウヲケイゾク'],
       moves: ['fire', 'stone', 'mist'],
       when: { enemyHp: 50 }
     },
@@ -212,7 +212,7 @@ export const BATTLE_MESSAGES = {
       when: { enemyHp: 50 }
     }
   ],
-  '04':  [
+  '04': [
     {
       lines: ['よくぞここまでたどり着いた'],
       moves: ['fire', 'stone', 'mist'],
@@ -233,19 +233,19 @@ export const BATTLE_MESSAGES = {
     },
     {
       lines: ['真実は闇の中に隠してきた'],
-      moves: ['mist'],
+      moves: ['mist']
     },
     {
       lines: ['これが天の裁きだ'],
-      moves: ['fire', 'stone', 'mist'],
+      moves: ['fire', 'stone', 'mist']
     },
     {
       lines: ['その攻撃は我には届かぬ'],
-      moves: ['fire', 'stone', 'mist'],
+      moves: ['fire', 'stone', 'mist']
     },
     {
       lines: ['その身で知るがよい', '絶対なる力を'],
-      moves: ['fire', 'stone', 'mist'],
+      moves: ['fire', 'stone', 'mist']
     },
     {
       lines: ['変わらぬ結末', 'それもまた運命'],
@@ -291,6 +291,6 @@ export const BATTLE_MESSAGES = {
       lines: ['我こそが最強なのだ！！！'],
       moves: ['fire', 'stone', 'mist'],
       when: { enemyHp: 50 }
-    },
-  ],
+    }
+  ]
 } as const satisfies Record<StageId, readonly BattleMessagePattern[]>;

@@ -33,7 +33,7 @@ for (const device of [
       }) => {
         await page.clock.install();
         await page.goto('/privacy-policy');
-        await page.waitForFunction(() => history.state?.['sveltekit:navigation'] !== undefined);
+        await page.waitForFunction(() => history.state?.['sveltekit:metadata'] !== undefined);
         await expect(page.locator('header')).toHaveCSS('opacity', '1');
         const homeLink = page.locator('footer a[href="/"]');
         await homeLink.scrollIntoViewIfNeeded();
@@ -110,7 +110,7 @@ for (const device of [
       context
     }) => {
       await page.goto('/privacy-policy');
-      await page.waitForFunction(() => history.state?.['sveltekit:navigation'] !== undefined);
+      await page.waitForFunction(() => history.state?.['sveltekit:metadata'] !== undefined);
       await expect(page.locator('header')).toHaveCSS('opacity', '1');
       const homeLink = page.locator('footer a[href="/"]');
       await homeLink.scrollIntoViewIfNeeded();

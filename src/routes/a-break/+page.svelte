@@ -99,8 +99,7 @@
     }
     try {
       const entry = performance.getEntriesByType('navigation')[0] as
-        | PerformanceNavigationTiming
-        | undefined;
+        PerformanceNavigationTiming | undefined;
       const isReload = type === null || (type === 'enter' && entry?.type === 'reload');
       const session = isReload
         ? parseBattleSession(sessionStorage.getItem(SESSION_STORAGE_KEY))

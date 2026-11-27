@@ -7,7 +7,7 @@
   import * as spacing from '$lib/styles/spacing.css';
 
   const handleClick = () => {
-    goto(resolve('/'));
+    goto(resolve('/(home)'));
   };
 </script>
 
